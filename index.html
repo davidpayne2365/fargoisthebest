@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>I Love You Bria</title>
 
-    <!-- Inline manifest as a data URI -->
+    <!-- Simple manifest linking -->
     <link rel="manifest" href="data:application/manifest+json,{
       &quot;name&quot;: &quot;I Love You Bria&quot;,
       &quot;short_name&quot;: &quot;LoveBria&quot;,
@@ -14,19 +14,7 @@
       &quot;start_url&quot;: &quot;/&quot;,
       &quot;display&quot;: &quot;standalone&quot;,
       &quot;background_color&quot;: &quot;#b428a8&quot;,
-      &quot;theme_color&quot;: &quot;#6f8fd5&quot;,
-      &quot;icons&quot;: [
-        {
-          &quot;src&quot;: &quot;data:image/png;base64,iVBORw0...&quot;,  <!-- Add base64-encoded icon here -->
-          &quot;sizes&quot;: &quot;192x192&quot;,
-          &quot;type&quot;: &quot;image/png&quot;
-        },
-        {
-          &quot;src&quot;: &quot;data:image/png;base64,iVBORw0...&quot;,  <!-- Add base64-encoded icon here -->
-          &quot;sizes&quot;: &quot;512x512&quot;,
-          &quot;type&quot;: &quot;image/png&quot;
-        }
-      ]
+      &quot;theme_color&quot;: &quot;#6f8fd5&quot;
     }">
 
     <meta name="theme-color" content="#6f8fd5" />
@@ -60,36 +48,14 @@
     <h1>Hello Bria,</h1>
     <p>I love you very much and I'm happy that we met and fell in love and grew a beautiful life together. I'm thankful for everything we've been through, and I look forward to what comes next!</p>
 
-    <!-- Add the script at the bottom of the body -->
+    <!-- JavaScript to handle PWA installation -->
     <script>
       let love = 'true';
       if (love === 'true') alert('Bria I love you forever! Click to accept');
 
       // Service worker registration
-      const serviceWorkerScript = `
-        const CACHE_NAME = 'love-bria-cache-v1';
-        const urlsToCache = ['/', 'index.html'];
-
-        self.addEventListener('install', event => {
-          event.waitUntil(
-            caches.open(CACHE_NAME)
-              .then(cache => cache.addAll(urlsToCache))
-          );
-        });
-
-        self.addEventListener('fetch', event => {
-          event.respondWith(
-            caches.match(event.request)
-              .then(response => response || fetch(event.request))
-          );
-        });
-      `;
-
-      const blob = new Blob([serviceWorkerScript], { type: 'application/javascript' });
-      const serviceWorkerScriptURL = URL.createObjectURL(blob);
-
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register(serviceWorkerScriptURL)
+        navigator.serviceWorker.register('service-worker.js')
           .then(registration => {
             console.log('ServiceWorker registration successful with scope: ', registration.scope);
           })
