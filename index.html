@@ -55,12 +55,17 @@
         margin-top: -20px;
       }
     </style>
+  </head>
+  <body>
+    <h1>Hello Bria,</h1>
+    <p>I love you very much and I'm happy that we met and fell in love and grew a beautiful life together. I'm thankful for everything we've been through, and I look forward to what comes next!</p>
 
+    <!-- Add the script at the bottom of the body -->
     <script>
       let love = 'true';
       if (love === 'true') alert('Bria I love you forever! Click to accept');
 
-      // Inline service worker script as a data URI
+      // Service worker registration
       const serviceWorkerScript = `
         const CACHE_NAME = 'love-bria-cache-v1';
         const urlsToCache = ['/', 'index.html'];
@@ -97,25 +102,24 @@
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        if (love === 'true') {
-          let installPrompt = confirm('Would you like to install this site as an app?');
-          if (installPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then(choiceResult => {
-              if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-              } else {
-                console.log('User dismissed the install prompt');
-              }
-              deferredPrompt = null;
-            });
-          }
-        }
+        const installButton = document.createElement('button');
+        installButton.textContent = 'Install App';
+        installButton.style.cssText = 'position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background: #6f8fd5; color: white; border: none; border-radius: 5px;';
+        document.body.appendChild(installButton);
+
+        installButton.addEventListener('click', () => {
+          installButton.style.display = 'none';
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+            } else {
+              console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+          });
+        });
       });
     </script>
-  </head>
-  <body>
-    <h1>Hello Bria,</h1>
-    <p>I love you very much and I'm happy that we met and fell in love and grew a beautiful life together. I'm thankful for everything we've been through, and I look forward to what comes next!</p>
   </body>
 </html>
