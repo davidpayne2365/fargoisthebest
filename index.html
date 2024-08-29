@@ -1,3 +1,121 @@
-<h1>Fargo Is The Best<h1>
-<h2>That's all for now</h2>
-<h3>website in progress</h3>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>I Love You Bria</title>
+
+    <!-- Inline manifest as a data URI -->
+    <link rel="manifest" href="data:application/manifest+json,{
+      &quot;name&quot;: &quot;I Love You Bria&quot;,
+      &quot;short_name&quot;: &quot;LoveBria&quot;,
+      &quot;description&quot;: &quot;A beautiful message of love for Bria.&quot;,
+      &quot;start_url&quot;: &quot;/&quot;,
+      &quot;display&quot;: &quot;standalone&quot;,
+      &quot;background_color&quot;: &quot;#b428a8&quot;,
+      &quot;theme_color&quot;: &quot;#6f8fd5&quot;,
+      &quot;icons&quot;: [
+        {
+          &quot;src&quot;: &quot;data:image/png;base64,iVBORw0...&quot;,  <!-- Add base64-encoded icon here -->
+          &quot;sizes&quot;: &quot;192x192&quot;,
+          &quot;type&quot;: &quot;image/png&quot;
+        },
+        {
+          &quot;src&quot;: &quot;data:image/png;base64,iVBORw0...&quot;,  <!-- Add base64-encoded icon here -->
+          &quot;sizes&quot;: &quot;512x512&quot;,
+          &quot;type&quot;: &quot;image/png&quot;
+        }
+      ]
+    }">
+
+    <meta name="theme-color" content="#6f8fd5" />
+
+    <style>
+      body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(to top left, #b428a8, #6f8fd5);
+        margin: 0;
+        font-family: sans-serif;
+      }
+      h1 {
+        font-size: 50px;
+        line-height: 1.3;
+        width: 100%;
+        padding: 30px;
+        text-align: center;
+        color: white;
+      }
+      p {
+        font-size: 20px;
+        text-align: center;
+        color: white;
+        margin-top: -20px;
+      }
+    </style>
+
+    <script>
+      let love = 'true';
+      if (love === 'true') alert('Bria I love you forever! Click to accept');
+
+      // Inline service worker script as a data URI
+      const serviceWorkerScript = `
+        const CACHE_NAME = 'love-bria-cache-v1';
+        const urlsToCache = ['/', 'index.html'];
+
+        self.addEventListener('install', event => {
+          event.waitUntil(
+            caches.open(CACHE_NAME)
+              .then(cache => cache.addAll(urlsToCache))
+          );
+        });
+
+        self.addEventListener('fetch', event => {
+          event.respondWith(
+            caches.match(event.request)
+              .then(response => response || fetch(event.request))
+          );
+        });
+      `;
+
+      const blob = new Blob([serviceWorkerScript], { type: 'application/javascript' });
+      const serviceWorkerScriptURL = URL.createObjectURL(blob);
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register(serviceWorkerScriptURL)
+          .then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          })
+          .catch(err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      }
+
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (love === 'true') {
+          let installPrompt = confirm('Would you like to install this site as an app?');
+          if (installPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(choiceResult => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+              } else {
+                console.log('User dismissed the install prompt');
+              }
+              deferredPrompt = null;
+            });
+          }
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Hello Bria,</h1>
+    <p>I love you very much and I'm happy that we met and fell in love and grew a beautiful life together. I'm thankful for everything we've been through, and I look forward to what comes next!</p>
+  </body>
+</html>
