@@ -4,7 +4,8 @@ self.addEventListener('install', (event) => {
       return cache.addAll([
         '/index.html',
         '/styles.css',
-        '/app.js'
+        '/app.js',
+        '/NCLE ASTIGMATISM MADE EASY #1 [ ezmp3.cc ].mp3'
       ]);
     })
   );
