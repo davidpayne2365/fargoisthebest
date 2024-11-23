@@ -22,6 +22,21 @@
             font-weight: bold;
             margin-bottom: 5px;
         }
+        .audio-controls {
+            margin-top: 5px;
+        }
+        .audio-controls button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .audio-controls button:hover {
+            background-color: #0056b3;
+        }
         #install-button {
             padding: 10px 20px;
             background-color: #007bff;
@@ -74,15 +89,38 @@
             const li = document.createElement('li');
             li.className = 'audio-container';
             const audioId = `audio-${index}`;
-            li.innerHTML = `<div class="audio-title">${item.title}</div>
-                            <audio id="${audioId}" controls>
-                                <source src="${item.src}" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>`;
+            li.innerHTML = `
+                <div class="audio-title">${item.title}</div>
+                <audio id="${audioId}" controls>
+                    <source src="${item.src}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <div class="audio-controls">
+                    <button class="rewind" data-audio-id="${audioId}">⏪ Rewind 10s</button>
+                    <button class="forward" data-audio-id="${audioId}">⏩ Forward 10s</button>
+                </div>
+            `;
             listElement.appendChild(li);
 
             // Add the audio element to an array for reference
             audioElements.push(document.getElementById(audioId));
+        });
+
+        // Add functionality for rewind and fast-forward
+        document.querySelectorAll('.rewind').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const audioId = e.target.dataset.audioId;
+                const audio = document.getElementById(audioId);
+                audio.currentTime = Math.max(audio.currentTime - 10, 0);
+            });
+        });
+
+        document.querySelectorAll('.forward').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const audioId = e.target.dataset.audioId;
+                const audio = document.getElementById(audioId);
+                audio.currentTime = Math.min(audio.currentTime + 10, audio.duration);
+            });
         });
 
         // Automatically play the next audio when one ends
