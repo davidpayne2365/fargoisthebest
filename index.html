@@ -5,155 +5,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MY NEW APP!</title>
-
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        .audio-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        .audio-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        #install-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        #install-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <button id="install-button" style="display: none;">Install App</button>
-    <script src="/app.js"></script>
     <h1>NCLE MP3 PLAYER APP</h1>
-    <ol>
-        <li class="audio-container">
-            <div class="audio-title">UNDERSTANDING K READINGS</div>
-            <audio controls>
-                <source src="NCLE UNDERSTANDING _K_ READINGS [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">ASTIGMATISM MADE EASY 1</div>
-            <audio controls>
-                <source src="NCLE ASTIGMATISM MADE EASY %231 [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">ASTIGMATISM MADE EASY 2</div>
-            <audio controls>
-                <source src="NCLE ASTIGMATISM MADE EASY %232 [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">ASTIGMATISM MADE EASY 3</div>
-            <audio controls>
-                <source src="NCLE ASTIGMATISM MADE EASY %233 [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">BASE CURVE, DIAMETER, & SAGITTAL DEPTH</div>
-            <audio controls>
-                <source src="NCLE BASE CURVE, DIAMETER, & SAGITTAL DEPTH RELATIONSHIP [ ezmp3.cc ] (1).mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">BEYOND TRANSPOSITION</div>
-            <audio controls>
-                <source src="NCLE BEYOND TRANSPOSITION [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">CONTACT LENS FITTING TIPS</div>
-            <audio controls>
-                <source src="NCLE CONTACT LENS FITTING TIPS [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">FRONT TORIC RGP</div>
-            <audio controls>
-                <source src="NCLE FRONT TORIC RGP [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">SAM FAP</div>
-            <audio controls>
-                <source src="NCLE SAM  FAP [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">SAM FAP 2</div>
-            <audio controls>
-                <source src="NCLE GP FITTING (SAMFAP %232) [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">FLUORESCEIN PATTERNS</div>
-            <audio controls>
-                <source src="NCLE GP FLUORESCEIN PATTERNS [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">LENS ROTATION</div>
-            <audio controls>
-                <source src="NCLE LENS ROTATION [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">OVER REFRACTION</div>
-            <audio controls>
-                <source src="NCLE OVER REFRACTION [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">RGP SPHERICAL, FRONT, BACK, BI-TORIC</div>
-            <audio controls>
-                <source src="NCLE RGP SPHERICAL, FRONT, BACK, AND BI-TORIC SELECTION [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">SLIT LAMP</div>
-            <audio controls>
-                <source src="NCLE SLIT LAMP [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">SPHERICAL EQUIVALENT </div>
-            <audio controls>
-                <source src="NCLE SOFT LENSES AND SPHERICAL EQUIVALENT [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">VERTEX DISTANCE 1 </div>
-            <audio controls>
-                <source src="NCLE VERTEX DISTANCE [ ezmp3.cc ] (1).mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">VERTEX DISTANCE 2 CYLINDRICAL</div>
-            <audio controls>
-                <source src="NCLE VERTEX DISTANCE - CYLINDRICAL LENSES [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-        <li class="audio-container">
-            <div class="audio-title">TEST QUESTION REVIEW</div>
-            <audio controls>
-                <source src="NCLE TEST QUESTION REVIEW [ ezmp3.cc ].mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </li>
-
-        <!-- Add more audio players with titles as needed -->
+    <ol id="audio-list">
+        <!-- Audio items will be dynamically added here -->
     </ol>
     <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(() => console.log('Service Worker Registered'))
-      .catch(error => console.error('Service Worker Error:', error));
-  }
-</script>
+        // List of audio files
+        const audioList = [
+            { title: "UNDERSTANDING K READINGS", src: "NCLE UNDERSTANDING _K_ READINGS [ ezmp3.cc ].mp3" },
+            { title: "ASTIGMATISM MADE EASY 1", src: "NCLE ASTIGMATISM MADE EASY %231 [ ezmp3.cc ].mp3" },
+            { title: "ASTIGMATISM MADE EASY 2", src: "NCLE ASTIGMATISM MADE EASY %232 [ ezmp3.cc ].mp3" },
+            { title: "ASTIGMATISM MADE EASY 3", src: "NCLE ASTIGMATISM MADE EASY %233 [ ezmp3.cc ].mp3" },
+            { title: "BASE CURVE, DIAMETER, & SAGITTAL DEPTH", src: "NCLE BASE CURVE, DIAMETER, & SAGITTAL DEPTH RELATIONSHIP [ ezmp3.cc ] (1).mp3" },
+            { title: "BEYOND TRANSPOSITION", src: "NCLE BEYOND TRANSPOSITION [ ezmp3.cc ].mp3" },
+            { title: "CONTACT LENS FITTING TIPS", src: "NCLE CONTACT LENS FITTING TIPS [ ezmp3.cc ].mp3" },
+            { title: "FRONT TORIC RGP", src: "NCLE FRONT TORIC RGP [ ezmp3.cc ].mp3" },
+            { title: "SAM FAP", src: "NCLE SAM  FAP [ ezmp3.cc ].mp3" },
+            { title: "SAM FAP 2", src: "NCLE GP FITTING (SAMFAP %232) [ ezmp3.cc ].mp3" },
+            { title: "FLUORESCEIN PATTERNS", src: "NCLE GP FLUORESCEIN PATTERNS [ ezmp3.cc ].mp3" },
+            { title: "LENS ROTATION", src: "NCLE LENS ROTATION [ ezmp3.cc ].mp3" },
+            { title: "OVER REFRACTION", src: "NCLE OVER REFRACTION [ ezmp3.cc ].mp3" },
+            { title: "RGP SPHERICAL, FRONT, BACK, BI-TORIC", src: "NCLE RGP SPHERICAL, FRONT, BACK, AND BI-TORIC SELECTION [ ezmp3.cc ].mp3" },
+            { title: "SLIT LAMP", src: "NCLE SLIT LAMP [ ezmp3.cc ].mp3" },
+            { title: "SPHERICAL EQUIVALENT", src: "NCLE SOFT LENSES AND SPHERICAL EQUIVALENT [ ezmp3.cc ].mp3" },
+            { title: "VERTEX DISTANCE 1", src: "NCLE VERTEX DISTANCE [ ezmp3.cc ] (1).mp3" },
+            { title: "VERTEX DISTANCE 2 CYLINDRICAL", src: "NCLE VERTEX DISTANCE - CYLINDRICAL LENSES [ ezmp3.cc ].mp3" },
+            { title: "TEST QUESTION REVIEW", src: "NCLE TEST QUESTION REVIEW [ ezmp3.cc ].mp3" }
+        ];
+
+        // Dynamically add audio items
+        const listElement = document.getElementById('audio-list');
+        const audioElements = [];
+
+        audioList.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.className = 'audio-container';
+            const audioId = `audio-${index}`;
+            li.innerHTML = `<div class="audio-title">${item.title}</div>
+                            <audio id="${audioId}" controls>
+                                <source src="${item.src}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>`;
+            listElement.appendChild(li);
+
+            // Add the audio element to an array for reference
+            audioElements.push(document.getElementById(audioId));
+        });
+
+        // Automatically play the next audio when one ends
+        audioElements.forEach((audio, index) => {
+            audio.addEventListener('ended', () => {
+                if (index + 1 < audioElements.length) {
+                    audioElements[index + 1].play();
+                }
+            });
+        });
+
+        // PWA install button functionality
+        let deferredPrompt;
+        const installButton = document.getElementById('install-button');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installButton.style.display = 'block';
+
+            installButton.addEventListener('click', () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(choiceResult => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        });
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(() => console.log('Service Worker Registered'))
+                .catch(error => console.error('Service Worker Error:', error));
+        }
+    </script>
 </body>
 </html>
