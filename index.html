@@ -3,36 +3,1216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NCLE Resources</title>
+    <title>Avengers Contact Lens Academy</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-            background-color: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+            background-color: #f5f5f5;
+            color: #333;
+            touch-action: none; /* Prevent browser handling of swipes */
         }
-        a {
-            display: inline-block;
-            text-decoration: none;
-            color: #ffffff;
-            background-color: #007BFF;
-            padding: 15px 25px;
+        
+        #book-container {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .page {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            transform: translateX(100%);
+            transition: transform 0.5s ease;
+            background-color: #fff;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page.active {
+            transform: translateX(0);
+        }
+        
+        .page-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 60px; /* Space for navigation */
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-top: 1px solid #ddd;
+            z-index: 100;
+        }
+        
+        .nav-button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
             border-radius: 5px;
-            font-size: 18px;
+            cursor: pointer;
             font-weight: bold;
-            transition: background-color 0.3s;
         }
-        a:hover {
-            background-color: #0056b3;
+        
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .progress {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .bookmark-button {
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .menu-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 200;
+            background-color: #e23636;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .topics-menu {
+            position: fixed;
+            top: 0;
+            right: -80%;
+            width: 80%;
+            height: 100%;
+            background-color: white;
+            z-index: 150;
+            transition: right 0.3s ease;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+            padding: 60px 20px 20px;
+        }
+        
+        .topics-menu.open {
+            right: 0;
+        }
+        
+        .topic-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        
+        .topic-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 140;
+            display: none;
+        }
+        
+        .overlay.open {
+            display: block;
+        }
+        
+        /* Content Styling */
+        h1 {
+            text-align: center;
+            color: #0066cc;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        h2 {
+            color: #e23636;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        h3 {
+            color: #f39c12;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .speaker {
+            font-weight: bold;
+            color: #0066cc;
+        }
+        
+        .stark, .tony, .ironman {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        
+        .banner {
+            color: #006633;
+            font-weight: bold;
+        }
+        
+        .cap {
+            color: #0066cc;
+            font-weight: bold;
+        }
+        
+        .spiderman {
+            color: #e23636;
+            font-weight: bold;
+        }
+        
+        .thor {
+            color: #cc9900;
+            font-weight: bold;
+        }
+        
+        .dialogue {
+            margin-bottom: 15px;
+            border-left: 3px solid #eaeaea;
+            padding-left: 15px;
+        }
+        
+        .key-point, .clinical-pearl, .lab-note, .stark-note {
+            background-color: #f9f9f9;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .key-point::before, .clinical-pearl::before {
+            content: "💡 Key Point: ";
+            font-weight: bold;
+            color: #0066cc;
+        }
+        
+        .lab-note::before {
+            content: "🧪 Lab Note: ";
+            font-weight: bold;
+            color: #006633;
+        }
+        
+        .stark-note::before {
+            content: "💡 Stark Innovation: ";
+            font-weight: bold;
+            color: #f39c12;
+        }
+        
+        .formula, .equation {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-left: 4px solid #e23636;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            border-radius: 4px;
+        }
+        
+        .warning, .error-warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .warning::before, .error-warning::before {
+            content: "⚠️ Warning: ";
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .steps {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        
+        .step {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .step::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #e23636;
+            font-weight: bold;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 4px;
+            font-weight: bold;
+        }
+        
+        /* Theme switch */
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background-color: #333;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Dark theme */
+        body.dark-theme {
+            background-color: #222;
+            color: #eee;
+        }
+        
+        body.dark-theme .page {
+            background-color: #333;
+        }
+        
+        body.dark-theme .navigation {
+            background-color: rgba(51, 51, 51, 0.9);
+            border-top: 1px solid #444;
+        }
+        
+        body.dark-theme .progress {
+            color: #ccc;
+        }
+        
+        body.dark-theme .topics-menu {
+            background-color: #333;
+        }
+        
+        body.dark-theme .topic-item {
+            border-bottom: 1px solid #444;
+        }
+        
+        body.dark-theme .topic-item:hover {
+            background-color: #444;
+        }
+        
+        body.dark-theme .key-point, 
+        body.dark-theme .clinical-pearl, 
+        body.dark-theme .lab-note, 
+        body.dark-theme .stark-note,
+        body.dark-theme .formula, 
+        body.dark-theme .equation {
+            background-color: #444;
+            border-color: #666;
         }
     </style>
 </head>
 <body>
-    <h1>NCLE Resources</h1>
-    <p>Click the button below to access NCLE training materials.</p>
-    <a href="https://www.youtube.com/watch?v=jeZDUsNzSbU&list=PLbkyEcKUyrE0SIyg58tNlSj6nlclFO_ne&ab_channel=NCLECONTACTLENSTRAINING" target="_blank">
-        CLICK HERE FOR NCLE STUFF BRO
-    </a>
-    <a href="https://script.google.com/a/macros/costco.com/s/AKfycbwr6n5XXO3NY84p-cBAsODvTNCwt1kiypSvs1R1BpSgyNOcJ-4HWPlQq5nj71Wd0sE/exec" target="_blank">
+    <div id="book-container">
+        <!-- Cover Page -->
+        <div class="page active" id="page-1" data-topic="introduction">
+            <div class="page-content">
+                <h1>Avengers Contact Lens Academy</h1>
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="height: 200px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                        <span style="font-size: 24px; color: #888;">Avengers Logo</span>
+                    </div>
+                </div>
+                <p style="text-align: center; font-size: 18px; margin-bottom: 30px;">
+                    A Comprehensive Guide to Contact Lens Fitting
+                </p>
+                <p style="text-align: center; font-style: italic;">
+                    Featuring Dr. Banner, Tony Stark, Steve Rogers, and Peter Parker
+                </p>
+                <div style="text-align: center; margin-top: 40px;">
+                    <p>Swipe left to begin your journey</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: #666;">
+                        You can access topics and bookmark your progress using the buttons at the top
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Introduction Page -->
+        <div class="page" id="page-2" data-topic="introduction">
+            <div class="page-content">
+                <h1>How to Use This Guide</h1>
+                <p>Welcome to the Avengers Contact Lens Academy! This interactive guide combines the knowledge of Earth's mightiest heroes to help you master contact lens fitting principles.</p>
+                
+                <h2>Navigation Instructions</h2>
+                <ul style="margin-left: 20px; line-height: 1.6;">
+                    <li><strong>Swipe left/right</strong> to navigate between pages</li>
+                    <li>Use the <strong>Previous/Next</strong> buttons at the bottom</li>
+                    <li>Tap the <strong>menu icon</strong> (top right) to jump to specific topics</li>
+                    <li>Use the <strong>bookmark button</strong> to save your place</li>
+                    <li>Toggle <strong>light/dark mode</strong> with the button in the top left</li>
+                </ul>
+                
+                <h2>Topics Covered</h2>
+                <ul style="margin-left: 20px; line-height: 1.6;">
+                    <li>K Readings and Corneal Topography</li>
+                    <li>Vertex Distance Calculation</li>
+                    <li>SAM/FAP Principles</li>
+                    <li>Astigmatism Analysis</li>
+                    <li>Base Curve Selection</li>
+                    <li>Lens Rotation (LARS)</li>
+                    <li>Case Studies and Practice Problems</li>
+                </ul>
+                
+                <p style="margin-top: 20px;">Each section includes dialogues between Avengers characters, clinical pearls, formulas, and practice exercises to reinforce your learning.</p>
+                
+                <p style="margin-top: 20px; font-style: italic;">Swipe left to begin with K Readings, or use the menu to jump to your topic of interest.</p>
+            </div>
+        </div>
+        
+        <!-- K Readings Section -->
+        <div class="page" id="page-3" data-topic="k-readings">
+            <div class="page-content">
+                <h1>K Readings: The Basics</h1>
+                
+                <div class="dialogue">
+                    <p class="banner">Dr. Banner: The cornea is fascinating from a biomechanical perspective. It provides about 2/3 of the eye's focusing power - approximately 43 diopters.</p>
+                    
+                    <p class="stark">Tony Stark: So it's like the primary lens in a multi-lens system. Got it. What's with these K readings everyone keeps talking about?</p>
+                    
+                    <p class="banner">Dr. Banner: K readings measure the curvature of the cornea in different meridians. They're expressed either as diopters or millimeters of radius.</p>
+                </div>
+                
+                <div class="key-point">
+                    K readings show the flattest and steepest curvatures of the cornea, indicating if astigmatism is present. They are typically formatted as:
+                    <p style="text-align: center; margin-top: 10px;">
+                        <span class="highlight">43.00 @ 180 / 44.25 @ 90</span>
+                    </p>
+                </div>
+                
+                <p>The first number is the dioptric power, and the second is the axis or meridian. In the example above:</p>
+                <ul style="margin-left: 20px; line-height: 1.6;">
+                    <li>43.00 diopters at the 180° meridian (horizontal)</li>
+                    <li>44.25 diopters at the 90° meridian (vertical)</li>
+                    <li>Corneal astigmatism = 44.25 - 43.00 = 1.25 diopters</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- K Readings - Continued -->
+        <div class="page" id="page-4" data-topic="k-readings">
+            <div class="page-content">
+                <h1>K Readings: Astigmatism Types</h1>
+                
+                <div class="dialogue">
+                    <p class="spiderman">Peter Parker: So if my cornea was perfectly spherical, like one of your repulsor spheres, the K readings would be the same all around?</p>
+                    
+                    <p class="ironman">Tony Stark: Exactly! If your cornea was perfectly spherical, you might see something like 43.50 at 90 and 43.50 at 180. Same power all around. No astigmatism.</p>
+                    
+                    <p class="spiderman">Peter Parker: But if there's a difference in the readings?</p>
+                    
+                    <p class="ironman">Tony Stark: That's astigmatism, kid. When one meridian is steeper than another.</p>
+                </div>
+                
+                <h3>Types of Corneal Astigmatism</h3>
+                <div style="overflow-x: auto; margin: 15px 0;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <tr style="background-color: #f2f2f2;">
+                            <th style="padding: 8px; border: 1px solid #ddd;">Type</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Steepest Meridian</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Visualization</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">With-the-rule (WTR)</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">90° (±30°)</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Football standing upright</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Against-the-rule (ATR)</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">180° (±30°)</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Football lying on its side</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Oblique</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">31°-59° or 121°-149°</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Football at an angle</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="lab-note">
+                    When analyzing K readings, always remember:
+                    <ul style="margin-left: 20px; line-height: 1.6; margin-top: 10px;">
+                        <li>Steeper K reading = higher diopter value</li>
+                        <li>Corneal astigmatism = difference between steepest and flattest readings</li>
+                        <li>WTR astigmatism is most common in younger patients</li>
+                        <li>ATR becomes more common with age</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vertex Distance Section -->
+        <div class="page" id="page-5" data-topic="vertex-distance">
+            <div class="page-content">
+                <h1>Vertex Distance Fundamentals</h1>
+                
+                <div class="dialogue">
+                    <p class="stark">Tony Stark: Here's what I don't get. Why does the power change when we move from spectacles to contacts?</p>
+                    
+                    <p class="banner">Dr. Banner: It's an optical principle called vertex distance. When a lens moves relative to the eye, its effective power changes.</p>
+                    
+                    <p class="stark">Tony Stark: Like focusing a projector - same image, different size based on distance.</p>
+                </div>
+                
+                <div class="key-point">
+                    Vertex distance is the space between the cornea and the back of the lens. When you switch from glasses to contacts, this distance changes from typically 12mm to zero (lens on eye).
+                </div>
+                
+                <p>When a lens moves closer to the eye:</p>
+                <ul style="margin-left: 20px; line-height: 1.6;">
+                    <li>Minus lenses become less minus (more plus)</li>
+                    <li>Plus lenses become more plus</li>
+                </ul>
+                
+                <div class="formula">
+                    <strong>Vertex Distance Formula:</strong><br><br>
+                    F2 = F1 / (1 - d × F1)<br><br>
+                    Where:<br>
+                    F1 = Original power (spectacle)<br>
+                    F2 = New power (contact lens)<br>
+                    d = Change in distance in meters (typically 0.012m)
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vertex Distance - Continued -->
+        <div class="page" id="page-6" data-topic="vertex-distance">
+            <div class="page-content">
+                <h1>Vertex Distance: Rules of Thumb</h1>
+                
+                <div class="dialogue">
+                    <p class="tony">Tony Stark: When a -10.00 diopter lens in glasses would be about a -9.00 diopter in contacts. The rule of thumb is a 10 diopter lens traveling 12mm gains about 1 diopter of strength.</p>
+                    
+                    <p class="cap">Steve Rogers: So for both minus and plus lenses, we move toward more plus power?</p>
+                    
+                    <p class="tony">Tony Stark: Exactly. For the NCLE, don't bother with the formula. Just remember your rules of thumb.</p>
+                </div>
+                
+                <div style="overflow-x: auto; margin: 15px 0;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <tr style="background-color: #f2f2f2;">
+                            <th style="padding: 8px; border: 1px solid #ddd;">Spectacle Rx</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Contact Lens Rx</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Change</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">-4.00D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">-3.75D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">+0.25D</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">-6.00D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">-5.75D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">+0.25D</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">-8.00D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">-7.50D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">+0.50D</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">-10.00D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">-9.00D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">+1.00D</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">+4.00D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">+4.25D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">+0.25D</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">+6.00D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">+6.50D</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">+0.50D</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="error-warning">
+                    Don't just look at the sphere value when deciding if vertex compensation is needed. You must check the total power in both major meridians. For example, with an Rx of -3.00 -2.00 x 180, the power at 90° is -5.00D (-3.00 + -2.00), which exceeds 4.00D and requires compensation.
+                </div>
+            </div>
+        </div>
+        
+        <!-- SAM/FAP Principles -->
+        <div class="page" id="page-7" data-topic="sam-fap">
+            <div class="page-content">
+                <h1>SAM/FAP Principles</h1>
+                
+                <div class="dialogue">
+                    <p class="banner">Dr. Banner: Now let's talk about fitting rigid gas permeable (RGP) lenses. When we fit these lenses, we need to account for the tear lens that forms between the lens and cornea.</p>
+                    
+                    <p class="stark">Tony Stark: Right, because that tear layer acts like an additional lens in the system.</p>
+                    
+                    <p class="banner">Dr. Banner: ...we create a tear lens with optical power. This is where SAM and FAP come in.</p>
+                </div>
+                
+                <div class="steps">
+                    <div class="step"><span class="formula">SAM</span>: <span class="highlight">S</span>teeper <span class="highlight">A</span>dd <span class="highlight">M</span>inus</div>
+                    <div class="step"><span class="formula">FAP</span>: <span class="highlight">F</span>latter <span class="highlight">A</span>dd <span class="highlight">P</span>lus</div>
+                </div>
+                
+                <div class="dialogue">
+                    <p class="tony">Tony Stark: When we fit an RGP lens, we create a tear lens between the back of the contact lens and the cornea. This tear lens acts like a real lens with power.</p>
+                    
+                    <p class="cap">Steve Rogers: Like how my shield creates a shock wave when it bounces?</p>
+                    
+                    <p class="tony">Tony Stark: When we fit steeper than K, we create a plus tear lens. To neutralize it, we add minus power to the contact lens prescription. SAM: Steeper Add Minus.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SAM/FAP - Continued -->
+        <div class="page" id="page-8" data-topic="sam-fap">
+            <div class="page-content">
+                <h1>SAM/FAP Application</h1>
+                
+                <div class="stark-note">
+                    The SAM/FAP adjustment is always the last step in your calculation sequence, after you've done all other conversions and compensations. This adjustment ensures that the final optical system (cornea + tear lens + contact lens) has the correct net power.
+                </div>
+                
+                <div class="formula">
+                    <strong>SAM/FAP Application:</strong><br><br>
+                    If fitting 0.50D steeper than K:<br>
+                    Final power = Base power + (-0.50D)<br><br>
+                    
+                    If fitting 0.75D flatter than K:<br>
+                    Final power = Base power + (+0.75D)
+                </div>
+                
+                <div class="warning">
+                    A common error is applying SAM/FAP before vertex compensation. Always follow the proper sequence: convert to minus cylinder → compensate for vertex distance → analyze corneal/refractive astigmatism → apply SAM/FAP.
+                </div>
+                
+                <div class="dialogue">
+                    <p class="banner">Dr. Banner: So why would we choose to fit steeper or flatter than K?</p>
+                    
+                    <p class="stark">Tony Stark: Steeper fits provide more lens stability but less tear exchange. Flatter fits allow better tear exchange but might result in excessive lens movement. It's a balance - like calibrating thrust in my suits.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Astigmatism Analysis -->
+        <div class="page" id="page-9" data-topic="astigmatism">
+            <div class="page-content">
+                <h1>Astigmatism Analysis</h1>
+                
+                <div class="dialogue">
+                    <p class="thor">Thor: On Asgard, we study the storms in the sky. Here, we study the storms in the eye - astigmatism!</p>
+                    
+                    <p class="stark">Tony Stark: That's... actually not a terrible analogy.</p>
+                    
+                    <p class="thor">Thor: The K readings are like Heimdall's vision - they see the true shape of the cornea!</p>
+                </div>
+                
+                <h3>Corneal vs. Lenticular Astigmatism</h3>
+                
+                <p>There are two main sources of astigmatism:</p>
+                <ul style="margin-left: 20px; line-height: 1.6;">
+                    <li><strong>Corneal astigmatism:</strong> Irregularity in the corneal shape</li>
+                    <li><strong>Lenticular astigmatism:</strong> Irregularity in the crystalline lens</li>
+                </ul>
+                
+                <div class="clinical-pearl">
+                    RGP lenses can mask corneal astigmatism because they create a new refracting surface with the tear lens. They can correct up to 3.00D of with-the-rule and 2.00D of against-the-rule corneal astigmatism with a spherical lens.
+                </div>
+                
+                <div class="stark-note">
+                    RGP lenses can mask corneal astigmatism, but not lenticular (internal) astigmatism. This is why comparing K readings with refractive astigmatism is crucial for lens selection.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Astigmatism - Continued -->
+        <div class="page" id="page-10" data-topic="astigmatism">
+            <div class="page-content">
+                <h1>Masking Astigmatism with RGPs</h1>
+                
+                <div style="overflow-x: auto; margin: 15px 0;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <tr style="background-color: #f2f2f2;">
+                            <th style="padding: 8px; border: 1px solid #ddd;">Astigmatism Type</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Maximum Maskable with Spherical RGP</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">With-the-rule</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Up to 3.00D</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Against-the-rule</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Up to 2.00D</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Oblique</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Up to 2.00D</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Lenticular (internal)</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">None (requires front toric design)</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="dialogue">
+                    <p class="stark">Tony Stark: Last thing you need to know: RGP lenses can mask some corneal astigmatism, but soft lenses can't.</p>
+                    
+                    <p class="cap">Steve Rogers: So RGPs create a new optical surface with the tear film?</p>
+                    
+                    <p class="stark">Tony Stark: Exactly. They can mask up to 3.00D of with-the-rule and 2.00D of against-the-rule astigmatism. Like how my suit compensates for atmospheric pressure changes.</p>
+                    
+                    <p class="cap">Steve Rogers: But soft lenses just conform to the cornea, so they need toric designs to correct astigmatism.</p>
+                </div>
+                
+                <div class="error-warning">
+                    Be careful when the K readings show astigmatism but the refraction does not. This suggests compensating lenticular astigmatism. Using an RGP lens could actually INDUCE astigmatism in this case.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Lens Rotation and LARS -->
+        <div class="page" id="page-11" data-topic="lens-rotation">
+            <div class="page-content">
+                <h1>Lens Rotation and LARS</h1>
+                
+                <div class="dialogue">
+                    <p class="spiderman">Peter Parker: Mr. Stark! These toric lenses you gave me keep rotating on my eye!</p>
+                    
+                    <p class="ironman">Tony Stark: Of course they do. You're constantly swinging and flipping around the city. We need to account for lens rotation.</p>
+                    
+                    <p class="spiderman">Peter Parker: How do we do that?</p>
+                    
+                    <p class="ironman">Tony Stark: We use the LARS rule: Left Add, Right Subtract.</p>
+                </div>
+                
+                <div class="key-point">
+                    <strong>LARS Rule:</strong><br>
+                    Left Add, Right Subtract<br><br>
+                    When looking at the eye through the slit lamp, if the lens marker has rotated to the left (clockwise), we add to the prescribed axis. If it's rotated to the right (counterclockwise), we subtract.
+                </div>
+                
+                <div class="dialogue">
+                    <p class="ironman">Tony Stark: For example, if your prescription is -3.00 -1.75 x180, and the lens rotates 20 degrees to the right (counterclockwise), we subtract 20 from 180 and prescribe -3.00 -1.75 x160.</p>
+                    
+                    <p class="spiderman">Peter Parker: And if it rotates to the left?</p>
+                    
+                    <p class="ironman">Tony Stark: Say it rotates 30 degrees clockwise, we add 30 to 180. But since we can't go beyond 180, we'd wrap around to axis 30.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Comprehensive Problem #1 -->
+        <div class="page" id="page-12" data-topic="case-studies">
+            <div class="page-content">
+                <h1>Comprehensive Problem #1</h1>
+                
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3>Case Information:</h3>
+                    <p>A 45-year-old patient has the following information:</p>
+                    <ul style="margin-left: 20px; line-height: 1.6;">
+                        <li>Spectacle Rx (given in plus cylinder): -7.00 +2.50 x 30</li>
+                        <li>K readings: 41.75 @ 180 / 44.25 @ 90</li>
+                        <li>Vertex distance: 12mm</li>
+                    </ul>
+                    <p>You need to fit an RGP lens 0.50D flatter than K. What would be the best lens power for this patient?</p>
+                </div>
+                
+                <div class="dialogue">
+                    <p class="spiderman">Peter Parker: Let me solve this step by step:</p>
+                    
+                    <p>1. First, I need to convert to minus cylinder form:<br>
+                    Sphere: -7.00 + 2.50 = -4.50<br>
+                    Cylinder: -2.50<br>
+                    Axis: 30 + 90 = 120<br>
+                    Rx in minus form: -4.50 -2.50 x 120</p>
+                    
+                    <p>2. Next, check for vertex compensation:<br>
+                    Meridian 1: -4.50D (exceeds 4.00D)<br>
+                    Meridian 2: -7.00D (-4.50 + -2.50) (exceeds 4.00D)<br>
+                    Vertex compensation needed</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Comprehensive Problem #1 - Continued -->
+        <div class="page" id="page-13" data-topic="case-studies">
+            <div class="page-content">
+                <h1>Comprehensive Problem #1 (continued)</h1>
+                
+                <div class="dialogue">
+                    <p class="spiderman">Peter Parker: Continuing with our solution:</p>
+                    
+                    <p>3. Apply vertex compensation:<br>
+                    For -4.50D: approximately -4.25D<br>
+                    For -7.00D: approximately -6.50D</p>
+                    
+                    <p>4. Analyze astigmatism:<br>
+                    Corneal astigmatism: 44.25 - 41.75 = 2.50D<br>
+                    Refractive astigmatism: 2.50D<br>
+                    All astigmatism is corneal<br>
+                    Astigmatism type: With-the-rule (steepest at 90°)</p>
+                    
+                    <p>5. Determine lens options:<br>
+                    With-the-rule astigmatism of 2.50D can be corrected with a spherical RGP<br>
+                    Base power: -4.25D (the less minus meridian after compensation)</p>
+                    
+                    <p>6. Apply FAP (Flatter Add Plus):<br>
+                    Final power = -4.25 + (+0.50) = -3.75D</p>
+                </div>
+                
+                <div class="ironman" style="margin-top: 20px;">
+                    Tony Stark: Great work, kid! But let's double-check our calculation. If we use the average of the two meridians instead:
+                    <p>(-4.25 + -6.50) ÷ 2 = -5.38D<br>
+                    Plus FAP adjustment (+0.50) = -4.88D</p>
+                    
+                    <p>Or if we use the spherical equivalent:<br>
+                    -4.50 + (-2.50 ÷ 2) = -5.75D<br>
+                    After vertex compensation: approximately -5.25D<br>
+                    Plus FAP adjustment (+0.50) = -4.75D</p>
+                    
+                    <p>The answer is likely closer to -5.00D. Remember, these are approximations!</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Comprehensive Problem #2 -->
+        <div class="page" id="page-14" data-topic="case-studies">
+            <div class="page-content">
+                <h1>Comprehensive Problem #2</h1>
+                
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3>Case Information:</h3>
+                    <p>A 35-year-old patient has the following information:</p>
+                    <ul style="margin-left: 20px; line-height: 1.6;">
+                        <li>Refraction: -4.50 -1.00 x 90</li>
+                        <li>K readings: 43.00 @ 180 / 44.00 @ 90</li>
+                    </ul>
+                    <p>If fitting an RGP lens 0.75D steeper than K, what would be the final lens power?</p>
+                </div>
+                
+                <div class="dialogue">
+                    <p class="cap">Steve Rogers: Let me work through this methodically:</p>
+                    
+                    <p>1. First, check for vertex compensation:<br>
+                    Horizontal: -4.50D (exceeds 4.00D)<br>
+                    Vertical: -5.50D (-4.50 + -1.00) (exceeds 4.00D)<br>
+                    Vertex compensation needed</p>
+                    
+                    <p>2. Approximate vertex compensation:<br>
+                    For -4.50D: approximately -4.25D<br>
+                    For -5.50D: approximately -5.25D</p>
+                    
+                    <p>3. Analyze astigmatism:<br>
+                    Corneal astigmatism: 44.00 - 43.00 = 1.00D<br>
+                    Refractive astigmatism: 1.00D<br>
+                    All astigmatism is corneal, so a spherical RGP can be used</p>
+                    
+                    <p>4. Apply SAM (Steeper Add Minus):<br>
+                    Final power = -4.25 + (-0.75) = -5.00D</p>
+                    
+                    <p><strong>Result: -5.00D spherical RGP</strong></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Prescription Format Conversion -->
+        <div class="page" id="page-15" data-topic="prescription-conversion">
+            <div class="page-content">
+                <h1>Prescription Format Conversion</h1>
+                
+                <div class="dialogue">
+                    <p class="tony">Tony Stark: Now for prescriptions. We always work with minus cylinder form for contact lenses.</p>
+                    
+                    <p class="cap">Steve Rogers: But what if we get a prescription in plus cylinder?</p>
+                    
+                    <p class="tony">Tony Stark: Then we convert it. It's like... decrypting HYDRA codes.</p>
+                </div>
+                
+                <div class="formula">
+                    <strong>Plus to Minus Cylinder Conversion:</strong><br><br>
+                    Original Rx: -3.00 +1.50 x 45<br><br>
+                    Step 1: Add cylinder to sphere<br>
+                    -3.00 + (+1.50) = -1.50<br><br>
+                    Step 2: Change cylinder sign<br>
+                    +1.50 becomes -1.50<br><br>
+                    Step 3: Rotate axis 90°<br>
+                    45° + 90° = 135°<br><br>
+                    Result: -1.50 -1.50 x 135
+                </div>
+                
+                <div class="error-warning">
+                    A common error is forgetting to rotate the axis. Remember, when converting from plus to minus cylinder, you MUST rotate the axis by 90 degrees. If this puts you over 180, subtract 180 to get the correct axis.
+                </div>
+                
+                <div class="clinical-pearl">
+                    To quickly verify your conversion, check that the sum of spherical power and cylindrical power remains the same in both formats. For example, -3.00 + 1.50 = -1.50 in the original, and -1.50 + (-1.50) = -3.00 in the converted format.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Decision Tree and Process Flow -->
+        <div class="page" id="page-16" data-topic="process-flow">
+            <div class="page-content">
+                <h1>Decision Tree & Process Flow</h1>
+                
+                <div class="dialogue">
+                    <p class="banner">Bruce Banner: Today we're going to use a scientific approach to contact lens fitting. I find that organizing the process into a decision tree helps prevent... incidents.</p>
+                    
+                    <p class="stark">Tony Stark: By incidents, he means turning into a giant green rage monster when a contact lens calculation goes wrong.</p>
+                </div>
+                
+                <div class="steps">
+                    <div class="step">Check if prescription is in minus cylinder form</div>
+                    <div class="step">Verify if vertex distance compensation is needed (≥4.00D)</div>
+                    <div class="step">Compare K readings with refractive astigmatism</div>
+                    <div class="step">Determine lens type based on astigmatism source</div>
+                    <div class="step">Apply SAM/FAP principle if fitting steeper/flatter than K</div>
+                </div>
+                
+                <h3>Lens Selection Guidelines</h3>
+                <ul style="margin-left: 20px; line-height: 1.6;">
+                    <li>For spherical corneas (astigmatism < 0.75D): Fit on K to 0.50D flatter</li>
+                    <li>For with-the-rule astigmatism (0.75D - 2.00D): Fit 0.25D flatter than flat K</li>
+                    <li>For with-the-rule astigmatism (> 2.00D): Consider toric back surface design</li>
+                    <li>For against-the-rule astigmatism: Fit on K to 0.25D steeper</li>
+                </ul>
+                
+                <div class="lab-note">
+                    The SAM/FAP adjustment is always the last step in your calculation sequence, after you've done all other conversions and compensations. This adjustment ensures that the final optical system (cornea + tear lens + contact lens) has the correct net power.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Final Review and Summary -->
+        <div class="page" id="page-17" data-topic="summary">
+            <div class="page-content">
+                <h1>Final Review & Summary</h1>
+                
+                <div class="dialogue">
+                    <p class="tony">Tony Stark: So, to recap our contact lens fitting protocol:</p>
+                </div>
+                
+                <h3>1. K Readings</h3>
+                <ul style="margin-left: 20px; line-height: 1.6;">
+                    <li>Measure corneal curvature in different meridians</li>
+                    <li>Calculate corneal astigmatism as the difference between readings</li>
+                    <li>Identify astigmatism type (WTR, ATR, or oblique)</li>
+                </ul>
+                
+                <h3>2. Vertex Distance</h3>
+                <ul style="margin-left: 20px; line-height: 1.6;">
+                    <li>Compensate prescriptions ≥4.00D</li>
+                    <li>All lenses move toward more plus power when on the eye</li>
+                    <li>Check both major meridians in astigmatic prescriptions</li>
+                </ul>
+                
+                <h3>3. SAM/FAP Principles</h3>
+                <ul style="margin-left: 20px; line-height: 1.6;">
+                    <li>Steeper Add Minus (SAM)</li>
+                    <li>Flatter Add Plus (FAP)</li>
+                    <li>Apply as the final step after all other calculations</li>
+                </ul>
+                
+                <h3>4. Astigmatism Management</h3>
+                <ul style="margin-left: 20px; line-height: 1.6;">
+                    <li>RGPs can mask corneal but not lenticular astigmatism</li>
+                    <li>Soft lenses conform to the cornea and require toric designs</li>
+                    <li>Use LARS rule for rotated toric lenses</li>
+                </ul>
+                
+                <div style="text-align: center; margin-top: 30px; font-style: italic;">
+                    <p>"Remember these formulas like Captain America remembers his shield-throwing angles."</p>
+                    <p>- Tony Stark</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Credits and Final Page -->
+        <div class="page" id="page-18" data-topic="credits">
+            <div class="page-content">
+                <h1>Avengers Contact Lens Academy</h1>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="height: 200px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                        <span style="font-size: 24px; color: #888;">Avengers Logo</span>
+                    </div>
+                </div>
+                
+                <p style="text-align: center; font-size: 18px; margin-bottom: 30px;">
+                    Thank you for using the Avengers Contact Lens Academy Guide!
+                </p>
+                
+                <p style="text-align: center; font-style: italic;">
+                    Created with content featuring the teaching styles of:
+                </p>
+                
+                <ul style="list-style-type: none; text-align: center; margin: 20px 0;">
+                    <li style="margin: 10px 0;"><span class="banner">Dr. Bruce Banner</span> - The Scientific Approach</li>
+                    <li style="margin: 10px 0;"><span class="stark">Tony Stark</span> - The Tech-Savvy Instructor</li>
+                    <li style="margin: 10px 0;"><span class="cap">Steve Rogers</span> - The Methodical Guide</li>
+                    <li style="margin: 10px 0;"><span class="spiderman">Peter Parker</span> - The Curious Student</li>
+                    <li style="margin: 10px 0;"><span class="thor">Thor</span> - The Enthusiastic Helper</li>
+                </ul>
+                
+                <div style="text-align: center; margin-top: 40px; font-size: 14px; color: #666;">
+                    <p>© 2025 Avengers Contact Lens Academy</p>
+                    <p><em>Note: No actual superheroes were harmed in the making of this educational material.</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <button class="menu-button" id="topicsButton">☰</button>
+    <button class="theme-switch" id="themeButton">☀</button>
+    
+    <div class="topics-menu" id="topicsMenu">
+        <div class="topic-item" data-topic="introduction">Introduction</div>
+        <div class="topic-item" data-topic="k-readings">K Readings</div>
+        <div class="topic-item" data-topic="vertex-distance">Vertex Distance</div>
+        <div class="topic-item" data-topic="sam-fap">SAM/FAP Principles</div>
+        <div class="topic-item" data-topic="astigmatism">Astigmatism Analysis</div>
+        <div class="topic-item" data-topic="lens-rotation">Lens Rotation & LARS</div>
+        <div class="topic-item" data-topic="case-studies">Case Studies</div>
+        <div class="topic-item" data-topic="prescription-conversion">Prescription Conversion</div>
+        <div class="topic-item" data-topic="process-flow">Decision Tree</div>
+        <div class="topic-item" data-topic="summary">Final Review</div>
+        <div class="topic-item" data-topic="credits">Credits</div>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="navigation">
+        <button class="nav-button" id="prevButton" disabled>Previous</button>
+        <div class="progress">Page <span id="currentPage">1</span> of <span id="totalPages">18</span></div>
+        <button class="bookmark-button" id="bookmarkButton">Bookmark</button>
+        <button class="nav-button" id="nextButton">Next</button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const bookContainer = document.getElementById('book-container');
+            const pages = document.querySelectorAll('.page');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            const currentPageSpan = document.getElementById('currentPage');
+            const totalPagesSpan = document.getElementById('totalPages');
+            const bookmarkButton = document.getElementById('bookmarkButton');
+            const topicsButton = document.getElementById('topicsButton');
+            const topicsMenu = document.getElementById('topicsMenu');
+            const overlay = document.getElementById('overlay');
+            const topicItems = document.querySelectorAll('.topic-item');
+            const themeButton = document.getElementById('themeButton');
+            
+            // Set total pages
+            totalPagesSpan.textContent = pages.length;
+            
+            // Current page index
+            let currentPageIndex = 0;
+            
+            // Check for stored bookmark
+            const storedPage = localStorage.getItem('avengersGuideBookmark');
+            if (storedPage) {
+                currentPageIndex = parseInt(storedPage);
+                if (currentPageIndex >= pages.length) {
+                    currentPageIndex = 0;
+                }
+            }
+            
+            // Initialize pages
+            function updatePageDisplay() {
+                pages.forEach((page, index) => {
+                    if (index < currentPageIndex) {
+                        page.style.transform = 'translateX(-100%)';
+                        page.classList.remove('active');
+                    } else if (index === currentPageIndex) {
+                        page.style.transform = 'translateX(0)';
+                        page.classList.add('active');
+                    } else {
+                        page.style.transform = 'translateX(100%)';
+                        page.classList.remove('active');
+                    }
+                });
+                
+                currentPageSpan.textContent = currentPageIndex + 1;
+                
+                // Update button states
+                prevButton.disabled = currentPageIndex === 0;
+                nextButton.disabled = currentPageIndex === pages.length - 1;
+            }
+            
+            // Initialize
+            updatePageDisplay();
+            
+            // Navigation functions
+            function goToPage(index) {
+                if (index >= 0 && index < pages.length) {
+                    currentPageIndex = index;
+                    updatePageDisplay();
+                }
+            }
+            
+            function goToPrevPage() {
+                if (currentPageIndex > 0) {
+                    goToPage(currentPageIndex - 1);
+                }
+            }
+            
+            function goToNextPage() {
+                if (currentPageIndex < pages.length - 1) {
+                    goToPage(currentPageIndex + 1);
+                }
+            }
+            
+            // Event listeners for buttons
+            prevButton.addEventListener('click', goToPrevPage);
+            nextButton.addEventListener('click', goToNextPage);
+            
+            // Bookmark functionality
+            bookmarkButton.addEventListener('click', function() {
+                localStorage.setItem('avengersGuideBookmark', currentPageIndex);
+                alert(`Bookmarked at page ${currentPageIndex + 1}`);
+            });
+            
+            // Topics menu functionality
+            topicsButton.addEventListener('click', function() {
+                topicsMenu.classList.toggle('open');
+                overlay.classList.toggle('open');
+            });
+            
+            overlay.addEventListener('click', function() {
+                topicsMenu.classList.remove('open');
+                overlay.classList.remove('open');
+            });
+            
+            topicItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const topic = this.getAttribute('data-topic');
+                    const targetPage = document.querySelector(`.page[data-topic="${topic}"]`);
+                    
+                    if (targetPage) {
+                        const pageIndex = Array.from(pages).indexOf(targetPage);
+                        goToPage(pageIndex);
+                        topicsMenu.classList.remove('open');
+                        overlay.classList.remove('open');
+                    }
+                });
+            });
+            
+            // Theme toggle
+            themeButton.addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+                
+                if (document.body.classList.contains('dark-theme')) {
+                    themeButton.textContent = '☽';
+                    localStorage.setItem('avengersGuideTheme', 'dark');
+                } else {
+                    themeButton.textContent = '☀';
+                    localStorage.setItem('avengersGuideTheme', 'light');
+                }
+            });
+            
+            // Check for stored theme preference
+            const storedTheme = localStorage.getItem('avengersGuideTheme');
+            if (storedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeButton.textContent = '☽';
+            }
+            
+            // Swipe gesture handling
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            function handleTouchStart(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            }
+            
+            function handleTouchEnd(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }
+            
+            function handleSwipe() {
+                const swipeThreshold = 50; // Minimum distance for a swipe
+                
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    // Swipe left - next page
+                    goToNextPage();
+                } else if (touchEndX > touchStartX + swipeThreshold) {
+                    // Swipe right - previous page
+                    goToPrevPage();
+                }
+            }
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+                    goToNextPage();
+                } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                    goToPrevPage();
+                }
+            });
+            
+            // Add touch event listeners
+            bookContainer.addEventListener('touchstart', handleTouchStart, false);
+            bookContainer.addEventListener('touchend', handleTouchEnd, false);
+        });
+    </script>
 </body>
 </html>
