@@ -2273,47 +2273,59 @@
             <div class="page-content">
                 <h1>Practice Test: Questions 1-10</h1>
                 
-                <div style="display: flex; flex-direction: column; gap: 25px;">
-                    <div>
-                        <p><strong>1. A patient has K readings of 43.00 @ 180 / 45.00 @ 90. What is the corneal astigmatism?</strong></p>
-                        <p>A) 2.00D with-the-rule</p>
-                        <p>B) 2.00D against-the-rule</p>
-                        <p>C) 45.00D with-the-rule</p>
-                        <p>D) 43.00D against-the-rule</p>
+                <form id="testForm1">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>1. A patient has K readings of 43.00 @ 180 / 45.00 @ 90. What is the corneal astigmatism?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q1" value="A"> A) 2.00D with-the-rule</label>
+                                <label><input type="radio" name="q1" value="B"> B) 2.00D against-the-rule</label>
+                                <label><input type="radio" name="q1" value="C"> C) 45.00D with-the-rule</label>
+                                <label><input type="radio" name="q1" value="D"> D) 43.00D against-the-rule</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>2. Convert the following prescription to minus cylinder form: +1.50 -2.75 x 30</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q2" value="A"> A) -1.25 +2.75 x 120</label>
+                                <label><input type="radio" name="q2" value="B"> B) -1.25 -2.75 x 120</label>
+                                <label><input type="radio" name="q2" value="C"> C) +1.50 +2.75 x 120</label>
+                                <label><input type="radio" name="q2" value="D"> D) +4.25 -2.75 x 30</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>3. A patient's spectacle prescription is -7.50D sphere. What would the approximate contact lens power be?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q3" value="A"> A) -7.50D</label>
+                                <label><input type="radio" name="q3" value="B"> B) -7.00D</label>
+                                <label><input type="radio" name="q3" value="C"> C) -8.00D</label>
+                                <label><input type="radio" name="q3" value="D"> D) -6.50D</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>4. When fitting an RGP lens 0.75D steeper than K, what power adjustment would be made to the final lens?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q4" value="A"> A) Add -0.75D</label>
+                                <label><input type="radio" name="q4" value="B"> B) Add +0.75D</label>
+                                <label><input type="radio" name="q4" value="C"> C) Subtract 0.75D</label>
+                                <label><input type="radio" name="q4" value="D"> D) No adjustment needed</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>5. A patient has a refractive astigmatism of 1.00D and a corneal astigmatism of 2.50D, both with-the-rule. What does this indicate?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q5" value="A"> A) All astigmatism is corneal</label>
+                                <label><input type="radio" name="q5" value="B"> B) All astigmatism is lenticular</label>
+                                <label><input type="radio" name="q5" value="C"> C) There is compensating internal astigmatism</label>
+                                <label><input type="radio" name="q5" value="D"> D) There is additional internal astigmatism</label>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <p><strong>2. Convert the following prescription to minus cylinder form: +1.50 -2.75 x 30</strong></p>
-                        <p>A) -1.25 +2.75 x 120</p>
-                        <p>B) -1.25 -2.75 x 120</p>
-                        <p>C) +1.50 +2.75 x 120</p>
-                        <p>D) +4.25 -2.75 x 30</p>
-                    </div>
-                    
-                    <div>
-                        <p><strong>3. A patient's spectacle prescription is -7.50D sphere. What would the approximate contact lens power be?</strong></p>
-                        <p>A) -7.50D</p>
-                        <p>B) -7.00D</p>
-                        <p>C) -8.00D</p>
-                        <p>D) -6.50D</p>
-                    </div>
-                    
-                    <div>
-                        <p><strong>4. When fitting an RGP lens 0.75D steeper than K, what power adjustment would be made to the final lens?</strong></p>
-                        <p>A) Add -0.75D</p>
-                        <p>B) Add +0.75D</p>
-                        <p>C) Subtract 0.75D</p>
-                        <p>D) No adjustment needed</p>
-                    </div>
-                    
-                    <div>
-                        <p><strong>5. A patient has a refractive astigmatism of 1.00D and a corneal astigmatism of 2.50D, both with-the-rule. What does this indicate?</strong></p>
-                        <p>A) All astigmatism is corneal</p>
-                        <p>B) All astigmatism is lenticular</p>
-                        <p>C) There is compensating internal astigmatism</p>
-                        <p>D) There is additional internal astigmatism</p>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
         
@@ -2322,47 +2334,59 @@
             <div class="page-content">
                 <h1>Practice Test: Questions 6-10</h1>
                 
-                <div style="display: flex; flex-direction: column; gap: 25px;">
-                    <div>
-                        <p><strong>6. A toric soft lens rotates 15° clockwise (to the left). If the prescribed axis is 180°, what should the new axis be?</strong></p>
-                        <p>A) 15°</p>
-                        <p>B) 165°</p>
-                        <p>C) 195°</p>
-                        <p>D) 345°</p>
+                <form id="testForm2">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>6. A toric soft lens rotates 15° clockwise (to the left). If the prescribed axis is 180°, what should the new axis be?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q6" value="A"> A) 15°</label>
+                                <label><input type="radio" name="q6" value="B"> B) 165°</label>
+                                <label><input type="radio" name="q6" value="C"> C) 195°</label>
+                                <label><input type="radio" name="q6" value="D"> D) 345°</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>7. Which of the following RGP fitting relationships would be most appropriate for a patient with 2.50D of with-the-rule corneal astigmatism?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q7" value="A"> A) On flat K</label>
+                                <label><input type="radio" name="q7" value="B"> B) 0.50D steeper than K</label>
+                                <label><input type="radio" name="q7" value="C"> C) 0.50D flatter than K</label>
+                                <label><input type="radio" name="q7" value="D"> D) Consider back-surface toric design</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>8. For which of the following prescriptions is vertex distance compensation NOT required?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q8" value="A"> A) -3.75 -0.50 x 180</label>
+                                <label><input type="radio" name="q8" value="B"> B) -4.25 sphere</label>
+                                <label><input type="radio" name="q8" value="C"> C) -2.50 -1.75 x 90</label>
+                                <label><input type="radio" name="q8" value="D"> D) +5.00 sphere</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>9. What type of astigmatism can be masked by a spherical RGP lens?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q9" value="A"> A) Corneal astigmatism only</label>
+                                <label><input type="radio" name="q9" value="B"> B) Lenticular astigmatism only</label>
+                                <label><input type="radio" name="q9" value="C"> C) Both corneal and lenticular astigmatism</label>
+                                <label><input type="radio" name="q9" value="D"> D) Neither corneal nor lenticular astigmatism</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>10. If a base curve is listed as 8.4mm, this is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q10" value="A"> A) Steeper than 8.6mm</label>
+                                <label><input type="radio" name="q10" value="B"> B) Flatter than 8.6mm</label>
+                                <label><input type="radio" name="q10" value="C"> C) Equal to 8.6mm</label>
+                                <label><input type="radio" name="q10" value="D"> D) Cannot be compared without knowing the diameter</label>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <p><strong>7. Which of the following RGP fitting relationships would be most appropriate for a patient with 2.50D of with-the-rule corneal astigmatism?</strong></p>
-                        <p>A) On flat K</p>
-                        <p>B) 0.50D steeper than K</p>
-                        <p>C) 0.50D flatter than K</p>
-                        <p>D) Consider back-surface toric design</p>
-                    </div>
-                    
-                    <div>
-                        <p><strong>8. For which of the following prescriptions is vertex distance compensation NOT required?</strong></p>
-                        <p>A) -3.75 -0.50 x 180</p>
-                        <p>B) -4.25 sphere</p>
-                        <p>C) -2.50 -1.75 x 90</p>
-                        <p>D) +5.00 sphere</p>
-                    </div>
-                    
-                    <div>
-                        <p><strong>9. What type of astigmatism can be masked by a spherical RGP lens?</strong></p>
-                        <p>A) Corneal astigmatism only</p>
-                        <p>B) Lenticular astigmatism only</p>
-                        <p>C) Both corneal and lenticular astigmatism</p>
-                        <p>D) Neither corneal nor lenticular astigmatism</p>
-                    </div>
-                    
-                    <div>
-                        <p><strong>10. If a base curve is listed as 8.4mm, this is:</strong></p>
-                        <p>A) Steeper than 8.6mm</p>
-                        <p>B) Flatter than 8.6mm</p>
-                        <p>C) Equal to 8.6mm</p>
-                        <p>D) Cannot be compared without knowing the diameter</p>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
         
@@ -2665,47 +2689,59 @@
             <div class="page-content">
                 <h1>Practice Test: Questions 41-50</h1>
                 
-                <div style="display: flex; flex-direction: column; gap: 25px;">
-                    <div>
-                        <p><strong>41. A patient has spectacle Rx +6.00 sphere. The approximate contact lens power would be:</strong></p>
-                        <p>A) +6.00D</p>
-                        <p>B) +6.25D</p>
-                        <p>C) +6.50D</p>
-                        <p>D) +5.75D</p>
+                <form id="testForm9">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>41. A patient has spectacle Rx +6.00 sphere. The approximate contact lens power would be:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q41" value="A"> A) +6.00D</label>
+                                <label><input type="radio" name="q41" value="B"> B) +6.25D</label>
+                                <label><input type="radio" name="q41" value="C"> C) +6.50D</label>
+                                <label><input type="radio" name="q41" value="D"> D) +5.75D</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>42. The SAM/FAP adjustment is applied:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q42" value="A"> A) Before vertex compensation</label>
+                                <label><input type="radio" name="q42" value="B"> B) After vertex compensation</label>
+                                <label><input type="radio" name="q42" value="C"> C) Instead of vertex compensation</label>
+                                <label><input type="radio" name="q42" value="D"> D) Only for soft lenses</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>43. A patient's lens moves excessively and decenters inferiorly. The appropriate adjustment would be:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q43" value="A"> A) Steeper base curve</label>
+                                <label><input type="radio" name="q43" value="B"> B) Flatter base curve</label>
+                                <label><input type="radio" name="q43" value="C"> C) Smaller diameter</label>
+                                <label><input type="radio" name="q43" value="D"> D) Lower power</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>44. A patient with refractive Rx -3.00 -1.50 x 90 has K readings 42.50 @ 180 / 44.00 @ 90. What type of astigmatism is present?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q44" value="A"> A) All corneal, all with-the-rule</label>
+                                <label><input type="radio" name="q44" value="B"> B) All corneal, all against-the-rule</label>
+                                <label><input type="radio" name="q44" value="C"> C) Mixed corneal and internal, both with-the-rule</label>
+                                <label><input type="radio" name="q44" value="D"> D) Mixed corneal and internal, in opposite directions</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>45. For a spherical RGP, which of the following astigmatism combinations would be most problematic?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q45" value="A"> A) 1.50D WTR corneal, 0.50D WTR internal</label>
+                                <label><input type="radio" name="q45" value="B"> B) 1.50D WTR corneal, 0.50D ATR internal</label>
+                                <label><input type="radio" name="q45" value="C"> C) 1.50D ATR corneal, no internal</label>
+                                <label><input type="radio" name="q45" value="D"> D) 0.50D WTR corneal, 1.50D WTR internal</label>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <p><strong>42. The SAM/FAP adjustment is applied:</strong></p>
-                        <p>A) Before vertex compensation</p>
-                        <p>B) After vertex compensation</p>
-                        <p>C) Instead of vertex compensation</p>
-                        <p>D) Only for soft lenses</p>
-                    </div>
-                    
-                    <div>
-                        <p><strong>43. A patient's lens moves excessively and decenters inferiorly. The appropriate adjustment would be:</strong></p>
-                        <p>A) Steeper base curve</p>
-                        <p>B) Flatter base curve</p>
-                        <p>C) Smaller diameter</p>
-                        <p>D) Lower power</p>
-                    </div>
-                    
-                    <div>
-                        <p><strong>44. A patient with refractive Rx -3.00 -1.50 x 90 has K readings 42.50 @ 180 / 44.00 @ 90. What type of astigmatism is present?</strong></p>
-                        <p>A) All corneal, all with-the-rule</p>
-                        <p>B) All corneal, all against-the-rule</p>
-                        <p>C) Mixed corneal and internal, both with-the-rule</p>
-                        <p>D) Mixed corneal and internal, in opposite directions</p>
-                    </div>
-                    
-                    <div>
-                        <p><strong>45. For a spherical RGP, which of the following astigmatism combinations would be most problematic?</strong></p>
-                        <p>A) 1.50D WTR corneal, 0.50D WTR internal</p>
-                        <p>B) 1.50D WTR corneal, 0.50D ATR internal</p>
-                        <p>C) 1.50D ATR corneal, no internal</p>
-                        <p>D) 0.50D WTR corneal, 1.50D WTR internal</p>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
         
@@ -2714,63 +2750,711 @@
             <div class="page-content">
                 <h1>Practice Test: Questions 46-50</h1>
                 
-                <div style="display: flex; flex-direction: column; gap: 25px;">
-                    <div>
-                        <p><strong>46. Which lens parameter has the GREATEST impact on lens movement?</strong></p>
-                        <p>A) Base curve</p>
-                        <p>B) Power</p>
-                        <p>C) Center thickness</p>
-                        <p>D) Edge design</p>
+                <form id="testForm10">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>46. Which lens parameter has the GREATEST impact on lens movement?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q46" value="A"> A) Base curve</label>
+                                <label><input type="radio" name="q46" value="B"> B) Power</label>
+                                <label><input type="radio" name="q46" value="C"> C) Center thickness</label>
+                                <label><input type="radio" name="q46" value="D"> D) Edge design</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>47. A patient with high myopia and astigmatism reports ghosting with their RGP lenses. The most likely cause is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q47" value="A"> A) Lens flexure on the eye</label>
+                                <label><input type="radio" name="q47" value="B"> B) Residual internal astigmatism</label>
+                                <label><input type="radio" name="q47" value="C"> C) Excessive lens movement</label>
+                                <label><input type="radio" name="q47" value="D"> D) Incorrect lens power</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>48. A patient with K readings 45.00 @ 90 / 41.00 @ 180 has corneal astigmatism that is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q48" value="A"> A) 4.00D with-the-rule</label>
+                                <label><input type="radio" name="q48" value="B"> B) 4.00D against-the-rule</label>
+                                <label><input type="radio" name="q48" value="C"> C) 45.00D with-the-rule</label>
+                                <label><input type="radio" name="q48" value="D"> D) 41.00D against-the-rule</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>49. A patient is being fit with an RGP 0.75D flatter than K. Their spectacle Rx is -2.00D sphere. The final lens power should be:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q49" value="A"> A) -2.00D</label>
+                                <label><input type="radio" name="q49" value="B"> B) -1.25D</label>
+                                <label><input type="radio" name="q49" value="C"> C) -2.75D</label>
+                                <label><input type="radio" name="q49" value="D"> D) -1.75D</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>50. A patient complains of discomfort and reduced wearing time with their new daily disposable lenses. The FIRST recommendation should be:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q50" value="A"> A) Switch to a different brand</label>
+                                <label><input type="radio" name="q50" value="B"> B) Add rewetting drops throughout the day</label>
+                                <label><input type="radio" name="q50" value="C"> C) Change to a steeper base curve</label>
+                                <label><input type="radio" name="q50" value="D"> D) Refit with RGP lenses</label>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <p><strong>47. A patient with high myopia and astigmatism reports ghosting with their RGP lenses. The most likely cause is:</strong></p>
-                        <p>A) Lens flexure on the eye</p>
-                        <p>B) Residual internal astigmatism</p>
-                        <p>C) Excessive lens movement</p>
-                        <p>D) Incorrect lens power</p>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Practice Test Questions 51-60 -->
+        <div class="page" id="page-61" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Practice Test: Questions 51-60</h1>
+                
+                <form id="testForm11">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>51. A contact lens with an 8.4mm base curve is described as:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q51" value="A"> A) Steep fit</label>
+                                <label><input type="radio" name="q51" value="B"> B) Flat fit</label>
+                                <label><input type="radio" name="q51" value="C"> C) Impossible to determine without K readings</label>
+                                <label><input type="radio" name="q51" value="D"> D) Impossible to determine without diameter</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>52. A patient has K readings of 46.50 @ 90 / 44.00 @ 180. What would be the recommended base curve for an RGP lens?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q52" value="A"> A) 46.50D</label>
+                                <label><input type="radio" name="q52" value="B"> B) 44.00D</label>
+                                <label><input type="radio" name="q52" value="C"> C) 44.25D</label>
+                                <label><input type="radio" name="q52" value="D"> D) Consider a back-surface toric lens</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>53. A new multifocal contact lens wearer with a +2.25D add reports poor near vision. The MOST likely cause is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q53" value="A"> A) Insufficient add power</label>
+                                <label><input type="radio" name="q53" value="B"> B) Lens centration issues</label>
+                                <label><input type="radio" name="q53" value="C"> C) Poor adaptation/neural adjustment</label>
+                                <label><input type="radio" name="q53" value="D"> D) Incorrect distance prescription</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>54. Which of the following is a characteristic of periballast toric lens stabilization?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q54" value="A"> A) Uses gravity for orientation</label>
+                                <label><input type="radio" name="q54" value="B"> B) Most commonly used in rigid lenses</label>
+                                <label><input type="radio" name="q54" value="C"> C) Uses eyelid forces to stabilize the lens</label>
+                                <label><input type="radio" name="q54" value="D"> D) Relies on truncation of the lower edge</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>55. Convert the following to plus cylinder form: -5.25 -1.00 x 75</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q55" value="A"> A) -6.25 +1.00 x 165</label>
+                                <label><input type="radio" name="q55" value="B"> B) -4.25 +1.00 x 165</label>
+                                <label><input type="radio" name="q55" value="C"> C) -5.25 +1.00 x 165</label>
+                                <label><input type="radio" name="q55" value="D"> D) -6.25 +1.00 x 75</label>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <p><strong>48. A patient with K readings 45.00 @ 90 / 41.00 @ 180 has corneal astigmatism that is:</strong></p>
-                        <p>A) 4.00D with-the-rule</p>
-                        <p>B) 4.00D against-the-rule</p>
-                        <p>C) 45.00D with-the-rule</p>
-                        <p>D) 41.00D against-the-rule</p>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Practice Test Questions 61-70 -->
+        <div class="page" id="page-62" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Practice Test: Questions 56-60</h1>
+                
+                <form id="testForm12">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>56. A scleral lens with excessive central clearance might result in:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q56" value="A"> A) Corneal bearing</label>
+                                <label><input type="radio" name="q56" value="B"> B) Hypoxia</label>
+                                <label><input type="radio" name="q56" value="C"> C) Excessive movement</label>
+                                <label><input type="radio" name="q56" value="D"> D) Increased comfort</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>57. A patient with oblique astigmatism would have their steepest corneal meridian at:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q57" value="A"> A) 90° (±30°)</label>
+                                <label><input type="radio" name="q57" value="B"> B) 45° (±15°)</label>
+                                <label><input type="radio" name="q57" value="C"> C) 180° (±30°)</label>
+                                <label><input type="radio" name="q57" value="D"> D) 0° (±15°)</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>58. Which parameter has the LEAST effect on soft lens fitting relationship?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q58" value="A"> A) Base curve</label>
+                                <label><input type="radio" name="q58" value="B"> B) Diameter</label>
+                                <label><input type="radio" name="q58" value="C"> C) Edge design</label>
+                                <label><input type="radio" name="q58" value="D"> D) Power</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>59. A patient has a spectacle Rx of -3.25 -1.75 x 180 and is fit with a toric soft lens. Upon examination, the lens is rotating 25° counterclockwise. What would be the adjusted axis?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q59" value="A"> A) 155°</label>
+                                <label><input type="radio" name="q59" value="B"> B) 205°</label>
+                                <label><input type="radio" name="q59" value="C"> C) 25°</label>
+                                <label><input type="radio" name="q59" value="D"> D) 335°</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>60. A patient with keratoconus is being fit with RGP lenses. The MOST important fitting characteristic would be:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q60" value="A"> A) Overall diameter</label>
+                                <label><input type="radio" name="q60" value="B"> B) Alignment of the lens over the cone</label>
+                                <label><input type="radio" name="q60" value="C"> C) Lens power</label>
+                                <label><input type="radio" name="q60" value="D"> D) Edge design</label>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <p><strong>49. A patient is being fit with an RGP 0.75D flatter than K. Their spectacle Rx is -2.00D sphere. The final lens power should be:</strong></p>
-                        <p>A) -2.00D</p>
-                        <p>B) -1.25D</p>
-                        <p>C) -2.75D</p>
-                        <p>D) -1.75D</p>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Practice Test Questions 61-70 -->
+        <div class="page" id="page-63" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Practice Test: Questions 61-65</h1>
+                
+                <form id="testForm13">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>61. A patient has K readings of 45.00 @ 90 / 42.00 @ 180 and refractive astigmatism of -3.50 x 90. How much internal astigmatism is present?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q61" value="A"> A) None</label>
+                                <label><input type="radio" name="q61" value="B"> B) 0.50D</label>
+                                <label><input type="radio" name="q61" value="C"> C) 1.50D</label>
+                                <label><input type="radio" name="q61" value="D"> D) 3.00D</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>62. An RGP lens shows an alignment fluorescein pattern with appropriate movement. Which of the following is TRUE?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q62" value="A"> A) The lens is fitted too steep</label>
+                                <label><input type="radio" name="q62" value="B"> B) The lens is fitted optimally</label>
+                                <label><input type="radio" name="q62" value="C"> C) The lens is fitted too flat</label>
+                                <label><input type="radio" name="q62" value="D"> D) The lens diameter is too large</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>63. A patient has been fitted with a center-distance multifocal lens. Where would the reading portion of the lens be located?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q63" value="A"> A) The top half of the lens</label>
+                                <label><input type="radio" name="q63" value="B"> B) The bottom half of the lens</label>
+                                <label><input type="radio" name="q63" value="C"> C) The peripheral zone of the lens</label>
+                                <label><input type="radio" name="q63" value="D"> D) The lens must be rotated to access the reading portion</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>64. Which of the following would be a contraindication for orthokeratology?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q64" value="A"> A) Myopia of -2.50D</label>
+                                <label><input type="radio" name="q64" value="B"> B) Astigmatism of 1.00D</label>
+                                <label><input type="radio" name="q64" value="C"> C) Active corneal inflammation</label>
+                                <label><input type="radio" name="q64" value="D"> D) Age 12 years</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>65. A child's myopia is progressing at -0.75D per year. Which contact lens option would be MOST appropriate to help slow progression?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q65" value="A"> A) Standard single vision soft lenses</label>
+                                <label><input type="radio" name="q65" value="B"> B) Myopia control multifocal soft lenses</label>
+                                <label><input type="radio" name="q65" value="C"> C) RGP lenses</label>
+                                <label><input type="radio" name="q65" value="D"> D) Colored contact lenses</label>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <p><strong>50. A patient complains of discomfort and reduced wearing time with their new daily disposable lenses. The FIRST recommendation should be:</strong></p>
-                        <p>A) Switch to a different brand</p>
-                        <p>B) Add rewetting drops throughout the day</p>
-                        <p>C) Change to a steeper base curve</p>
-                        <p>D) Refit with RGP lenses</p>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Practice Test Questions 66-70 -->
+        <div class="page" id="page-64" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Practice Test: Questions 66-70</h1>
+                
+                <form id="testForm14">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>66. A patient with severe dry eye would benefit MOST from which of the following?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q66" value="A"> A) High water content soft lenses</label>
+                                <label><input type="radio" name="q66" value="B"> B) Silicone hydrogel lenses</label>
+                                <label><input type="radio" name="q66" value="C"> C) Scleral lenses</label>
+                                <label><input type="radio" name="q66" value="D"> D) Extended wear lenses</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>67. Which of the following is the MOST important criterion for evaluating a soft contact lens fit?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q67" value="A"> A) Movement on blink</label>
+                                <label><input type="radio" name="q67" value="B"> B) Corneal coverage</label>
+                                <label><input type="radio" name="q67" value="C"> C) Patient comfort</label>
+                                <label><input type="radio" name="q67" value="D"> D) Visual acuity</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>68. A patient's refraction shows -2.00D in one meridian and -3.50D in the opposite meridian. How much astigmatism is present?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q68" value="A"> A) 1.50D</label>
+                                <label><input type="radio" name="q68" value="B"> B) 2.00D</label>
+                                <label><input type="radio" name="q68" value="C"> C) 3.50D</label>
+                                <label><input type="radio" name="q68" value="D"> D) 5.50D</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>69. A presbyopic patient with a full distance correction and a +2.00D add is fit with monovision contacts. What would be the approximate power for the near eye?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q69" value="A"> A) +2.00D add to distance Rx</label>
+                                <label><input type="radio" name="q69" value="B"> B) -2.00D from distance Rx</label>
+                                <label><input type="radio" name="q69" value="C"> C) +1.75D add to distance Rx</label>
+                                <label><input type="radio" name="q69" value="D"> D) -1.50D from distance Rx</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>70. What is the MOST common cause of giant papillary conjunctivitis in contact lens wearers?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q70" value="A"> A) Bacterial infection</label>
+                                <label><input type="radio" name="q70" value="B"> B) Protein deposits on lenses</label>
+                                <label><input type="radio" name="q70" value="C"> C) Overwear of lenses</label>
+                                <label><input type="radio" name="q70" value="D"> D) Solution toxicity</label>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Practice Test Questions 71-80 -->
+        <div class="page" id="page-65" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Practice Test: Questions 71-75</h1>
+                
+                <form id="testForm15">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>71. When determining which patients are good candidates for RGP lenses, which of the following is LEAST important?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q71" value="A"> A) Visual needs</label>
+                                <label><input type="radio" name="q71" value="B"> B) Motivation level</label>
+                                <label><input type="radio" name="q71" value="C"> C) Eye color</label>
+                                <label><input type="radio" name="q71" value="D"> D) Manual dexterity</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>72. A patient's spectacle Rx is -10.00 -2.00 x 180. What is the approximate contact lens power for the horizontal meridian?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q72" value="A"> A) -10.00D</label>
+                                <label><input type="radio" name="q72" value="B"> B) -9.00D</label>
+                                <label><input type="radio" name="q72" value="C"> C) -12.00D</label>
+                                <label><input type="radio" name="q72" value="D"> D) -11.00D</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>73. A patient with a spherical soft contact lens reports fluctuating vision that improves with blinking. The MOST likely cause is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q73" value="A"> A) Uncorrected astigmatism</label>
+                                <label><input type="radio" name="q73" value="B"> B) Lens deposits</label>
+                                <label><input type="radio" name="q73" value="C"> C) Dry eye</label>
+                                <label><input type="radio" name="q73" value="D"> D) Lens inside-out</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>74. Conventional HEMA soft contact lenses are primarily made of:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q74" value="A"> A) Hydroxyethyl methacrylate</label>
+                                <label><input type="radio" name="q74" value="B"> B) Silicone acrylate</label>
+                                <label><input type="radio" name="q74" value="C"> C) Cellulose acetate butyrate</label>
+                                <label><input type="radio" name="q74" value="D"> D) Polymethyl methacrylate</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>75. A presbyopic patient with a spherical refractive error is having trouble deciding between multifocal contact lenses and monovision. Which of the following would be the BEST approach?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q75" value="A"> A) Start with monovision because it's less expensive</label>
+                                <label><input type="radio" name="q75" value="B"> B) Try both options with diagnostic lenses to compare performance</label>
+                                <label><input type="radio" name="q75" value="C"> C) Choose based on the patient's age alone</label>
+                                <label><input type="radio" name="q75" value="D"> D) Recommend progressive spectacles instead</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Practice Test Questions 76-80 -->
+        <div class="page" id="page-66" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Practice Test: Questions 76-80</h1>
+                
+                <form id="testForm16">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>76. For which of the following patients would a silicone hydrogel lens be MOST appropriate?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q76" value="A"> A) A patient with a history of solution sensitivities</label>
+                                <label><input type="radio" name="q76" value="B"> B) A patient who wants to sleep in their lenses</label>
+                                <label><input type="radio" name="q76" value="C"> C) A patient with high water content lens dehydration</label>
+                                <label><input type="radio" name="q76" value="D"> D) All of the above</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>77. A toric soft lens shows excessive rotation. Which of the following would be the LEAST appropriate solution?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q77" value="A"> A) Try a different stabilization method</label>
+                                <label><input type="radio" name="q77" value="B"> B) Adjust the base curve</label>
+                                <label><input type="radio" name="q77" value="C"> C) Increase lens power</label>
+                                <label><input type="radio" name="q77" value="D"> D) Change to a different lens brand</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>78. A patient has a spectacle Rx of -1.25 -0.50 x 90. Which of the following contact lens options would be appropriate?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q78" value="A"> A) Spherical soft lens</label>
+                                <label><input type="radio" name="q78" value="B"> B) Toric soft lens</label>
+                                <label><input type="radio" name="q78" value="C"> C) Spherical RGP</label>
+                                <label><input type="radio" name="q78" value="D"> D) Both A and C</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>79. A patient reports itching, redness, and discomfort with their new contact lenses after 2-3 hours of wear. This is MOST consistent with:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q79" value="A"> A) Solution sensitivity</label>
+                                <label><input type="radio" name="q79" value="B"> B) Contact lens-induced dry eye</label>
+                                <label><input type="radio" name="q79" value="C"> C) Improper lens fit</label>
+                                <label><input type="radio" name="q79" value="D"> D) Corneal warpage</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>80. When fitting a patient with a translating bifocal rigid lens, which of the following is MOST important?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q80" value="A"> A) Base curve</label>
+                                <label><input type="radio" name="q80" value="B"> B) Overall diameter</label>
+                                <label><input type="radio" name="q80" value="C"> C) Lower lid position relative to the limbus</label>
+                                <label><input type="radio" name="q80" value="D"> D) Lens optic zone size</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Practice Test Questions 81-90 -->
+        <div class="page" id="page-67" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Practice Test: Questions 81-85</h1>
+                
+                <form id="testForm17">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>81. A patient with keratoconus has a maximum K reading of 52.00D. Which of the following would be MOST appropriate?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q81" value="A"> A) Spherical soft lens</label>
+                                <label><input type="radio" name="q81" value="B"> B) Standard RGP lens</label>
+                                <label><input type="radio" name="q81" value="C"> C) Scleral lens</label>
+                                <label><input type="radio" name="q81" value="D"> D) Toric soft lens</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>82. A patient is wearing a soft toric lens with a prescription of -3.00 -1.50 x 90. Over-refraction reveals -0.25 -0.75 x 180. What is the issue?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q82" value="A"> A) The cylinder power is too low</label>
+                                <label><input type="radio" name="q82" value="B"> B) The lens has rotated 90 degrees</label>
+                                <label><input type="radio" name="q82" value="C"> C) The sphere power is too low</label>
+                                <label><input type="radio" name="q82" value="D"> D) The lens is inside-out</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>83. Which of the following lens materials has the highest oxygen permeability (Dk)?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q83" value="A"> A) PMMA</label>
+                                <label><input type="radio" name="q83" value="B"> B) Traditional hydrogel</label>
+                                <label><input type="radio" name="q83" value="C"> C) Silicone hydrogel</label>
+                                <label><input type="radio" name="q83" value="D"> D) High water content hydrogel</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>84. A patient with a high plus prescription would experience what effect when switching from spectacles to contact lenses?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q84" value="A"> A) Decreased image size</label>
+                                <label><input type="radio" name="q84" value="B"> B) Increased image size</label>
+                                <label><input type="radio" name="q84" value="C"> C) No change in image size</label>
+                                <label><input type="radio" name="q84" value="D"> D) Distorted peripheral vision</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>85. Which of the following is an advantage of disposable contact lenses over conventional lenses?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q85" value="A"> A) Lower cost</label>
+                                <label><input type="radio" name="q85" value="B"> B) Reduced risk of deposits and complications</label>
+                                <label><input type="radio" name="q85" value="C"> C) Better oxygen permeability</label>
+                                <label><input type="radio" name="q85" value="D"> D) Better visual acuity</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Practice Test Questions 86-90 -->
+        <div class="page" id="page-68" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Practice Test: Questions 86-90</h1>
+                
+                <form id="testForm18">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>86. A patient's K readings are 43.50 @ 180 / 46.50 @ 90. What astigmatism type is present?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q86" value="A"> A) With-the-rule 3.00D</label>
+                                <label><input type="radio" name="q86" value="B"> B) Against-the-rule 3.00D</label>
+                                <label><input type="radio" name="q86" value="C"> C) Oblique 3.00D</label>
+                                <label><input type="radio" name="q86" value="D"> D) Irregular astigmatism</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>87. When using the SAM/FAP rule, if an RGP lens is fit 1.00D steeper than K, the power adjustment would be:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q87" value="A"> A) Add +1.00D</label>
+                                <label><input type="radio" name="q87" value="B"> B) Add -1.00D</label>
+                                <label><input type="radio" name="q87" value="C"> C) Subtract 1.00D</label>
+                                <label><input type="radio" name="q87" value="D"> D) No adjustment needed</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>88. A new contact lens wearer asks when they should remove their lenses. The BEST advice is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q88" value="A"> A) After 12 hours of wear</label>
+                                <label><input type="radio" name="q88" value="B"> B) When the eyes feel uncomfortable</label>
+                                <label><input type="radio" name="q88" value="C"> C) Before swimming or showering</label>
+                                <label><input type="radio" name="q88" value="D"> D) All of the above</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>89. A soft lens with an 8.6 base curve and 14.2mm diameter would have a sagittal depth that is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q89" value="A"> A) Deeper than an 8.4/14.0mm lens</label>
+                                <label><input type="radio" name="q89" value="B"> B) Shallower than an 8.4/14.0mm lens</label>
+                                <label><input type="radio" name="q89" value="C"> C) The same as an 8.4/14.0mm lens</label>
+                                <label><input type="radio" name="q89" value="D"> D) Cannot be determined from this information</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>90. A patient with a high plus prescription (+8.00D) experiences headaches with their new contact lenses. The MOST likely cause is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q90" value="A"> A) Incorrect vertex compensation</label>
+                                <label><input type="radio" name="q90" value="B"> B) Too much movement of the lenses</label>
+                                <label><input type="radio" name="q90" value="C"> C) Adaptation to magnification changes</label>
+                                <label><input type="radio" name="q90" value="D"> D) Solution sensitivity</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Practice Test Questions 91-100 -->
+        <div class="page" id="page-69" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Practice Test: Questions 91-95</h1>
+                
+                <form id="testForm19">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>91. PMMA contact lenses differ from RGP lenses primarily because:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q91" value="A"> A) They are more comfortable</label>
+                                <label><input type="radio" name="q91" value="B"> B) They have no oxygen permeability</label>
+                                <label><input type="radio" name="q91" value="C"> C) They are more flexible</label>
+                                <label><input type="radio" name="q91" value="D"> D) They have higher water content</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>92. Optimal soft lens movement on blink should be:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q92" value="A"> A) None</label>
+                                <label><input type="radio" name="q92" value="B"> B) 0.25-0.5mm</label>
+                                <label><input type="radio" name="q92" value="C"> C) 0.5-1.0mm</label>
+                                <label><input type="radio" name="q92" value="D"> D) 1.5-2.0mm</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>93. A patient with refractive Rx -5.00 -0.75 x 70 has corneal toricity of 0.50D WTR. The BEST lens option would be:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q93" value="A"> A) Spherical soft lens</label>
+                                <label><input type="radio" name="q93" value="B"> B) Toric soft lens</label>
+                                <label><input type="radio" name="q93" value="C"> C) Spherical RGP</label>
+                                <label><input type="radio" name="q93" value="D"> D) Either A or C</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>94. Corneal molding in orthokeratology primarily affects which part of the cornea?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q94" value="A"> A) Epithelium</label>
+                                <label><input type="radio" name="q94" value="B"> B) Stroma</label>
+                                <label><input type="radio" name="q94" value="C"> C) Endothelium</label>
+                                <label><input type="radio" name="q94" value="D"> D) Descemet's membrane</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>95. A 55-year-old presbyope with distance Rx -1.50D and near add +2.25D is fit with multifocal lenses. If the lenses have a +2.00D add power, what would the patient likely report?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q95" value="A"> A) Excellent distance vision, poor near vision</label>
+                                <label><input type="radio" name="q95" value="B"> B) Poor distance vision, excellent near vision</label>
+                                <label><input type="radio" name="q95" value="C"> C) Both distance and near vision slightly compromised</label>
+                                <label><input type="radio" name="q95" value="D"> D) Near vision slightly compromised only</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Practice Test Questions 96-100 -->
+        <div class="page" id="page-70" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Practice Test: Questions 96-100</h1>
+                
+                <form id="testForm20">
+                    <div style="display: flex; flex-direction: column; gap: 25px;">
+                        <div class="question-container">
+                            <p><strong>96. A minus-powered soft contact lens will usually show what fluorescein pattern with proper fitting?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q96" value="A"> A) Central pooling</label>
+                                <label><input type="radio" name="q96" value="B"> B) Edge standoff</label>
+                                <label><input type="radio" name="q96" value="C"> C) Alignment across the lens</label>
+                                <label><input type="radio" name="q96" value="D"> D) Fluorescein cannot be used with soft lenses</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>97. When a RGP lens decenters superiorly, the MOST likely cause is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q97" value="A"> A) The base curve is too steep</label>
+                                <label><input type="radio" name="q97" value="B"> B) The base curve is too flat</label>
+                                <label><input type="radio" name="q97" value="C"> C) The lens is too thin</label>
+                                <label><input type="radio" name="q97" value="D"> D) The lens diameter is too small</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>98. A patient has K readings of 45.00 @ 90 / 42.00 @ 180 and a refractive Rx of -4.00 -1.50 x 90. What is the relationship between corneal and refractive astigmatism?</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q98" value="A"> A) Corneal > refractive, with compensation</label>
+                                <label><input type="radio" name="q98" value="B"> B) Corneal < refractive, with additional internal</label>
+                                <label><input type="radio" name="q98" value="C"> C) Corneal = refractive, all corneal</label>
+                                <label><input type="radio" name="q98" value="D"> D) Corneal and refractive are in opposite directions</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>99. A patient has been wearing their monthly replacement lenses for 6 weeks, cleaning with multipurpose solution. The BEST recommendation is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q99" value="A"> A) Continue wearing but increase cleaning duration</label>
+                                <label><input type="radio" name="q99" value="B"> B) Replace the lenses immediately</label>
+                                <label><input type="radio" name="q99" value="C"> C) Switch to a peroxide cleaning system</label>
+                                <label><input type="radio" name="q99" value="D"> D) Add an enzymatic cleaner weekly</label>
+                            </div>
+                        </div>
+                        
+                        <div class="question-container">
+                            <p><strong>100. A patient is complaining of redness, pain, photophobia, and decreased vision after sleeping in their contact lenses. The MOST appropriate initial action is:</strong></p>
+                            <div class="answer-options">
+                                <label><input type="radio" name="q100" value="A"> A) Recommend artificial tears</label>
+                                <label><input type="radio" name="q100" value="B"> B) Discontinue lens wear and refer for immediate evaluation</label>
+                                <label><input type="radio" name="q100" value="C"> C) Switch to daily wear schedule</label>
+                                <label><input type="radio" name="q100" value="D"> D) Try a different lens material</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 
                 <div style="text-align: center; margin-top: 30px;">
-                    <p>You've completed the practice test!</p>
-                    <p style="font-style: italic;">Swipe left to see the answer key and explanations.</p>
+                    <p>You've completed all 100 questions!</p>
+                    <p style="font-style: italic;">Swipe left to submit your test and see your results.</p>
                 </div>
             </div>
         </div>
         
-        <!-- Practice Test Answers -->
+        <!-- Submit Button and Results Page -->
         <div class="page" id="page-57" data-topic="practice-test">
+            <div class="page-content">
+                <h1>Submit Your Test</h1>
+                
+                <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                    <p>You've completed all questions in the practice test. Click the button below to see your results.</p>
+                    <button id="submitTestButton" style="background-color: #0066cc; color: white; border: none; padding: 12px 24px; border-radius: 5px; font-size: 16px; margin-top: 20px; cursor: pointer;">Submit Test</button>
+                </div>
+                
+                <div id="testResults" style="display: none;">
+                    <h2>Your Test Results</h2>
+                    <div class="result-summary" style="background-color: #e3f2fd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                        <p>Score: <span id="scoreDisplay">0</span> / 100</p>
+                        <p>Percentage: <span id="percentageDisplay">0</span>%</p>
+                    </div>
+                    
+                    <h3>Answer Key</h3>
+                    <div id="answerKey" style="margin-top: 20px;"></div>
+                    
+                    <h3>Questions You Missed</h3>
+                    <div id="missedQuestions" style="margin-top: 20px;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Answer Key Page -->
+        <div class="page" id="page-58" data-topic="practice-test">
             <div class="page-content">
                 <h1>Practice Test: Answer Key</h1>
                 
                 <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <h3 style="margin-top: 0;">How to Use These Answers:</h3>
-                    <p>Review each explanation carefully, especially for questions you answered incorrectly. Pay particular attention to the reasoning provided, as understanding the "why" is more important than memorizing the correct answer.</p>
+                    <p>Review each explanation carefully. Pay particular attention to the reasoning provided, as understanding the "why" is more important than memorizing the correct answer.</p>
                 </div>
                 
                 <div style="display: flex; flex-direction: column; gap: 15px;">
@@ -2798,16 +3482,7 @@
                         <p><strong>5. C) There is compensating internal astigmatism</strong></p>
                         <p>When corneal astigmatism (2.50D) is greater than refractive astigmatism (1.00D) in the same direction, it indicates some internal astigmatism is compensating for (reducing) the total astigmatism.</p>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Practice Test Answers (Continued) -->
-        <div class="page" id="page-58" data-topic="practice-test">
-            <div class="page-content">
-                <h1>Practice Test: Answer Key (6-10)</h1>
-                
-                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    
                     <div>
                         <p><strong>6. C) 195°</strong></p>
                         <p>Using LARS (Left Add, Right Subtract), if the lens rotates clockwise (to the left), we add to the axis. 180° + 15° = 195°.</p>
@@ -2919,6 +3594,99 @@
             const overlay = document.getElementById('overlay');
             const topicItems = document.querySelectorAll('.topic-item');
             const themeButton = document.getElementById('themeButton');
+            const submitButton = document.getElementById('submitTestButton');
+            const testResults = document.getElementById('testResults');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const percentageDisplay = document.getElementById('percentageDisplay');
+            const answerKeyDiv = document.getElementById('answerKey');
+            const missedQuestionsDiv = document.getElementById('missedQuestions');
+            
+            // Define correct answers
+            const correctAnswers = {
+                q1: "A", q2: "B", q3: "B", q4: "A", q5: "C",
+                q6: "C", q7: "D", q8: "A", q9: "A", q10: "A",
+                q11: "B", q12: "A", q13: "B", q14: "A", q15: "B",
+                q16: "D", q17: "C", q18: "D", q19: "B", q20: "C",
+                q21: "C", q22: "B", q23: "C", q24: "C", q25: "A",
+                q26: "C", q27: "A", q28: "C", q29: "D", q30: "A",
+                q31: "B", q32: "C", q33: "A", q34: "C", q35: "D",
+                q36: "D", q37: "A", q38: "D", q39: "A", q40: "D",
+                q41: "B", q42: "B", q43: "A", q44: "A", q45: "D",
+                q46: "A", q47: "B", q48: "A", q49: "B", q50: "B",
+                q51: "A", q52: "D", q53: "C", q54: "C", q55: "B",
+                q56: "B", q57: "B", q58: "D", q59: "A", q60: "B",
+                q61: "B", q62: "B", q63: "C", q64: "C", q65: "B",
+                q66: "C", q67: "A", q68: "A", q69: "C", q70: "B",
+                q71: "C", q72: "B", q73: "C", q74: "A", q75: "B",
+                q76: "D", q77: "C", q78: "D", q79: "A", q80: "C",
+                q81: "C", q82: "B", q83: "C", q84: "B", q85: "B",
+                q86: "A", q87: "B", q88: "D", q89: "A", q90: "C",
+                q91: "B", q92: "C", q93: "D", q94: "A", q95: "D",
+                q96: "D", q97: "B", q98: "C", q99: "B", q100: "B"
+            };
+            
+            // Add event listener for the submit button
+            if (submitButton) {
+                submitButton.addEventListener('click', function() {
+                    calculateTestResults();
+                });
+            }
+            
+            // Function to calculate and display test results
+            function calculateTestResults() {
+                let score = 0;
+                let missedQuestions = [];
+                
+                // Check each answer
+                for (let i = 1; i <= 50; i++) {
+                    const questionName = `q${i}`;
+                    const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                    
+                    if (selectedOption) {
+                        if (selectedOption.value === correctAnswers[questionName]) {
+                            score++;
+                        } else {
+                            missedQuestions.push({
+                                question: i,
+                                selected: selectedOption.value,
+                                correct: correctAnswers[questionName]
+                            });
+                        }
+                    } else {
+                        missedQuestions.push({
+                            question: i,
+                            selected: "Not answered",
+                            correct: correctAnswers[questionName]
+                        });
+                    }
+                }
+                
+                // Update the results display
+                scoreDisplay.textContent = score;
+                percentageDisplay.textContent = Math.round((score / 50) * 100);
+                
+                // Build answer key display
+                answerKeyDiv.innerHTML = '<ul style="margin-left: 20px; line-height: 1.6;">';
+                for (let i = 1; i <= 50; i++) {
+                    answerKeyDiv.innerHTML += `<li>Question ${i}: ${correctAnswers['q'+i]}</li>`;
+                }
+                answerKeyDiv.innerHTML += '</ul>';
+                
+                // Build missed questions display
+                if (missedQuestions.length > 0) {
+                    missedQuestionsDiv.innerHTML = '<ul style="margin-left: 20px; line-height: 1.6;">';
+                    missedQuestions.forEach(q => {
+                        missedQuestionsDiv.innerHTML += `<li>Question ${q.question}: You selected ${q.selected}, correct answer is ${q.correct}</li>`;
+                    });
+                    missedQuestionsDiv.innerHTML += '</ul>';
+                } else {
+                    missedQuestionsDiv.innerHTML = '<p>Congratulations! You answered all questions correctly.</p>';
+                }
+                
+                // Show the results
+                testResults.style.display = 'block';
+                submitButton.style.display = 'none';
+            }
             
             // Set total pages
             totalPagesSpan.textContent = pages.length;
