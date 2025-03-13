@@ -86,11 +86,11 @@
 
         header {
             background-color: var(--header-bg);
-            padding: 10px;
-            border-bottom: 1px solid var(--header-border);
+            padding: 6px 15px;
+            border-bottom: 2px solid var(--header-border);
             display: flex;
             align-items: center;
-            height: 40px;
+            height: 45px;
         }
 
         .page-controls {
@@ -98,6 +98,7 @@
             width: 100%;
             align-items: center;
             gap: 10px;
+            justify-content: center;
         }
 
         .page-selector {
@@ -105,34 +106,40 @@
             align-items: center;
             gap: 10px;
             flex-grow: 1;
+            justify-content: center;
         }
 
         .page-label {
             font-weight: bold;
+            font-size: 18px;
         }
 
         .page-dropdown {
             position: relative;
             flex-grow: 1;
-            max-width: 300px;
+            max-width: 400px;
         }
 
         .current-page {
             width: 100%;
-            padding: 8px;
+            padding: 12px 15px;
             background-color: var(--dropdown-bg);
-            border: 1px solid var(--dropdown-border);
-            border-radius: 4px;
+            border: 2px solid var(--dropdown-border);
+            border-radius: 6px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             color: var(--text-color);
+            font-size: 18px;
+            font-weight: 600;
             -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .current-page::after {
             content: '▼';
             font-size: 0.8em;
+            margin-left: 10px;
         }
 
         .dropdown-content {
@@ -154,9 +161,10 @@
         }
 
         .page-option {
-            padding: 8px;
+            padding: 12px 15px;
             cursor: pointer;
             color: var(--text-color);
+            font-size: 16px;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -167,12 +175,15 @@
         .rename-button,
         .toggle-button {
             background-color: var(--btn-bg);
-            padding: 8px 12px;
-            border: 1px solid var(--btn-border);
-            border-radius: 4px;
+            padding: 12px 15px;
+            border: 2px solid var(--btn-border);
+            border-radius: 6px;
             cursor: pointer;
             color: var(--text-color);
+            font-size: 16px;
+            font-weight: 600;
             -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .rename-input {
@@ -250,18 +261,21 @@
         .order-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             margin-left: auto;
         }
 
         .order-toggle {
-            padding: 8px 12px;
+            padding: 12px 15px;
             background-color: var(--btn-bg);
-            border: 1px solid var(--btn-border);
-            border-radius: 4px;
+            border: 2px solid var(--btn-border);
+            border-radius: 6px;
             cursor: pointer;
             color: var(--text-color);
+            font-size: 16px;
+            font-weight: 600;
             -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .order-toggle.active {
@@ -269,10 +283,6 @@
             color: white;
         }
 
-        #splitCellButton.active {
-            background-color: var(--blue-color);
-            color: white;
-        }
 
         .order-number {
             position: absolute;
@@ -297,9 +307,6 @@
             padding: 0;
         }
 
-        .split-mode .cell.split {
-            cursor: pointer;
-        }
 
         .subcell {
             width: 100%;
@@ -744,7 +751,6 @@
                 </div>
             </div>
             <div class="order-controls">
-                <button class="rename-button" id="splitCellButton">Split Cell</button>
                 <button class="order-toggle" id="orderToggle">Order Mode</button>
                 <button class="toggle-button" id="darkModeToggle">Dark Mode</button>
                 <button class="toggle-button" id="exitButton" style="background-color: var(--red-color); color: white;">Exit App</button>
@@ -801,11 +807,10 @@
         <!-- Format input modal for Edit mode -->
         <div class="format-modal-overlay" id="formatModalOverlay">
             <div class="format-modal">
-                <div class="value-display" id="valueDisplay" style="margin: 25px 0; font-size: 32px; text-align: center;">+0.00</div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
-                    <div class="format-input-container" style="gap: 10px; justify-content: center;">
+                    <div class="format-input-container" style="gap: 10px; justify-content: center; margin-top: 15px;">
                         <button id="decrementBtn" style="width: 50px; height: 50px; font-size: 24px;">-</button>
-                        <input type="text" id="formatInput" placeholder="+/-x.xx" readonly style="width: 100px; height: 50px; font-size: 20px;">
+                        <input type="text" id="formatInput" placeholder="+/-x.xx" readonly style="width: 120px; height: 60px; font-size: 28px; font-weight: bold; text-align: center;">
                         <button id="incrementBtn" style="width: 50px; height: 50px; font-size: 24px;">+</button>
                     </div>
                     <div style="text-align: center; margin: 10px 0;">
@@ -879,8 +884,13 @@
         // Mode state variables - only one can be true at a time
         let orderMode = false;
         let expirationMode = false;
-        let splitCellMode = false;
         let darkMode = false;
+        
+        // Long press variables
+        let longPressTimer = null;
+        let longPressDuration = 500; // milliseconds before long press is triggered
+        let isLongPress = false;
+        let longPressTarget = null;
         
         // Cache lookup maps for faster checks
         let orderLookup = {};
@@ -906,7 +916,6 @@
             orderPanel: document.getElementById('orderPanel'),
             orderPanelItems: document.getElementById('orderPanelItems'),
             orderPanelClose: document.getElementById('orderPanelClose'),
-            splitCellButton: document.getElementById('splitCellButton'),
             dateModalOverlay: document.getElementById('dateModalOverlay'),
             monthSelect: document.getElementById('monthSelect'),
             yearSelect: document.getElementById('yearSelect'),
@@ -1057,24 +1066,18 @@
             // First, deactivate all modes
             orderMode = false;
             expirationMode = false;
-            splitCellMode = false;
 
             // Update all button states
             els.orderToggle.classList.remove('active');
-            els.splitCellButton.classList.remove('active');
 
-            // Reset button texts
+            // Reset button text
             els.orderToggle.textContent = 'Order Mode';
-            els.splitCellButton.textContent = 'Split Cell';
 
             // Hide panels
             els.orderPanel.classList.remove('show');
 
             // Reset cursor
             document.documentElement.style.cursor = 'default';
-
-            // Remove split-mode class
-            els.grid.classList.remove('split-mode');
 
             // Now activate the requested mode
             switch (mode) {
@@ -1102,16 +1105,6 @@
 
                     // Restore expiration visual indicators when entering expiration mode
                     restoreExpirationVisualIndicators();
-                    break;
-
-                case 'split':
-                    splitCellMode = true;
-                    els.splitCellButton.classList.add('active');
-                    els.splitCellButton.textContent = 'Exit Split Mode';
-                    document.documentElement.style.cursor = 'pointer';
-
-                    // Add split-mode class for visual cues
-                    els.grid.classList.add('split-mode');
                     break;
 
                 default:
@@ -1150,27 +1143,9 @@
                         // Create bottom subcell
                         const bottomSubcell = createSubcell(i, j, 'bottom', currentPage.data[i][j].bottom || '');
                         cell.appendChild(bottomSubcell);
-
-            // Add click handler to the entire cell for merging in split mode
-                        cell.addEventListener('click', function(e) {
-                            // Only process if in split mode
-                            if (splitCellMode) {
-                                e.preventDefault();
-                                e.stopPropagation();
-
-                                const row = parseInt(this.dataset.row);
-                                const col = parseInt(this.dataset.col);
-
-                                // Debounce the click to prevent double processing
-                                if (!this.mergeInProgress) {
-                                    this.mergeInProgress = true;
-                                    splitCell(this, row, col);
-                                    setTimeout(() => {
-                                        this.mergeInProgress = false;
-                                    }, 300);
-                                }
-                            }
-                        }, true);
+                        
+                        // Add long press handling for split cells
+                        addLongPressHandlers(cell);
                     } else {
                         // Regular non-split cell
                         const input = document.createElement('input');
@@ -1220,6 +1195,9 @@
                                 cell.appendChild(expirationLabel);
                             }
                         }
+                        
+                        // Add long press handling for regular cells
+                        addLongPressHandlers(cell);
                     }
 
                     row.appendChild(cell);
@@ -1232,6 +1210,85 @@
             
             // Use event delegation for grid interactions instead of individual listeners
             els.grid.addEventListener('click', handleGridClick);
+        }
+        
+        // Function to add long press handlers to a cell
+        function addLongPressHandlers(cell) {
+            // Mouse events
+            cell.addEventListener('mousedown', handleLongPressStart);
+            cell.addEventListener('mouseup', handleLongPressEnd);
+            cell.addEventListener('mouseleave', handleLongPressCancel);
+            
+            // Touch events for mobile
+            cell.addEventListener('touchstart', handleLongPressStart);
+            cell.addEventListener('touchend', handleLongPressEnd);
+            cell.addEventListener('touchcancel', handleLongPressCancel);
+        }
+        
+        // Handler for starting a long press
+        function handleLongPressStart(e) {
+            // Clear any existing timer
+            if (longPressTimer) {
+                clearTimeout(longPressTimer);
+            }
+            
+            // Reset long press state
+            isLongPress = false;
+            longPressTarget = this;
+            
+            // Start the long press timer
+            longPressTimer = setTimeout(() => {
+                isLongPress = true;
+                // Visual feedback that long press was detected
+                longPressTarget.style.opacity = "0.7";
+                
+                // Reset visual after a brief moment
+                setTimeout(() => {
+                    if (longPressTarget) {
+                        longPressTarget.style.opacity = "1";
+                    }
+                }, 150);
+            }, longPressDuration);
+        }
+        
+        // Handler for ending a long press
+        function handleLongPressEnd(e) {
+            // Clear the timer
+            clearTimeout(longPressTimer);
+            
+            // If this was a long press, handle cell splitting/merging
+            if (isLongPress && longPressTarget) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const row = parseInt(longPressTarget.dataset.row);
+                const col = parseInt(longPressTarget.dataset.col);
+                
+                // Perform the split/merge operation
+                splitCell(longPressTarget, row, col);
+                
+                // Reset long press state
+                isLongPress = false;
+                longPressTarget.style.opacity = "1";
+                longPressTarget = null;
+            }
+            
+            // Reset timer
+            longPressTimer = null;
+        }
+        
+        // Handler for canceling a long press
+        function handleLongPressCancel(e) {
+            // Clear the timer
+            clearTimeout(longPressTimer);
+            
+            // Reset state
+            isLongPress = false;
+            if (longPressTarget) {
+                longPressTarget.style.opacity = "1";
+            }
+            longPressTarget = null;
+            longPressTimer = null;
         }
         
         // Create a subcell element with all its properties
@@ -1315,12 +1372,6 @@
             else if (isSubcell) {
                 handleSubcellClick(e, target);
             }
-            // Handle split cell click (for merging)
-            else if (isCell && target.classList.contains('split') && splitCellMode) {
-                const row = parseInt(target.dataset.row);
-                const col = parseInt(target.dataset.col);
-                splitCell(target, row, col);
-            }
         }
 
         // Cell click handler function
@@ -1339,20 +1390,8 @@
                 cellValue = pages[currentPageIndex].data[row][col];
             }
 
-            // Split cell mode
-            if (splitCellMode) {
-                splitCell(cell, row, col);
-                return;
-            }
-
-            // Split cell mode
-            if (splitCellMode) {
-                splitCell(cell, row, col);
-                return;
-            }
-
             // Show format modal by default unless in a special mode
-            if (!orderMode && !expirationMode && !splitCellMode) {
+            if (!orderMode && !expirationMode) {
                 showFormatModal(cell, row, col);
                 return;
             }
@@ -1706,14 +1745,6 @@
             }
         });
 
-        // Toggle split cell mode
-        els.splitCellButton.addEventListener('click', function() {
-            if (splitCellMode) {
-                setActiveMode('none');
-            } else {
-                setActiveMode('split');
-            }
-        });
 
         // Close dropdown when clicking outside
         document.addEventListener('click', () => {
@@ -2630,10 +2661,9 @@
             return value >= 0 ? `+${formatted}` : formatted;
         }
 
-        // Update both display and input field
+        // Update input field value
         function updateValueDisplay() {
             const formattedValue = formatValue(currentValueNum);
-            els.valueDisplay.textContent = formattedValue;
             els.formatInput.value = formattedValue;
 
             // Always enable confirm button as values are controlled
