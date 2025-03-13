@@ -1,0 +1,17 @@
+{
+  "name": "8x6 Grid with Order Feature",
+  "short_name": "Grid App",
+  "description": "A customizable grid application with ordering features",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f0f0f0",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%234CAF50' rx='32' ry='32'/%3E%3Ctext x='96' y='120' font-family='Arial, sans-serif' font-size='88' font-weight='bold' text-anchor='middle' fill='white'%3EG%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
