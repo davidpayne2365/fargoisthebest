@@ -377,7 +377,6 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            transition: background-color 0.2s;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -1427,19 +1426,8 @@
                     // Find and remove the corresponding item in the order panel
                     const panelItem = document.querySelector(`.order-panel-item[data-row="${row}"][data-col="${col}"][data-part="${part}"]`);
                     if (panelItem && panelItem.parentNode) {
-                        // Visual feedback
-                        panelItem.style.backgroundColor = "#ffdddd";
-                        panelItem.style.opacity = "0.5";
-
-                    // Apply smooth transition for visual feedback
-                    panelItem.style.transition = "background-color 0.3s, opacity 0.3s";
-                    
-                    // Remove the item from the panel with a natural delay for visual feedback
-                    setTimeout(() => {
-                        if (panelItem.parentNode) {
-                            panelItem.parentNode.removeChild(panelItem);
-                        }
-                    }, 300);
+                        // Remove item immediately without animation
+                        panelItem.parentNode.removeChild(panelItem);
                     }
 
                     // Remove selected class if no expiration
@@ -1610,19 +1598,8 @@
                 // Find and remove the corresponding item in the order panel
                 const panelItem = document.querySelector(`.order-panel-item[data-row="${row}"][data-col="${col}"]:not([data-part])`);
                 if (panelItem && panelItem.parentNode) {
-                    // Visual feedback
-                    panelItem.style.backgroundColor = "#ffdddd";
-                    panelItem.style.opacity = "0.5";
-
-                    // Apply smooth transition for visual feedback
-                    panelItem.style.transition = "background-color 0.3s, opacity 0.3s";
-                    
-                    // Remove with more natural delay for visual feedback
-                    setTimeout(() => {
-                        if (panelItem.parentNode) {
-                            panelItem.parentNode.removeChild(panelItem);
-                        }
-                    }, 300);
+                    // Remove item immediately without animation
+                    panelItem.parentNode.removeChild(panelItem);
                 }
 
                 // Only remove selected class if no expiration
@@ -1981,90 +1958,46 @@
             return orderItem;
         }
 
-        // Separated click handler function for order panel items
-        // This significantly improves maintainability and allows for global state management
-        function handleOrderItemClick(event) {
-            event.preventDefault();
-            event.stopPropagation();
+            // Separated click handler function for order panel items
+            // This significantly improves maintainability and allows for global state management
+            function handleOrderItemClick(event) {
+                event.preventDefault();
+                event.stopPropagation();
 
-            // Use global lock to prevent multiple concurrent operations
-            if (isProcessingOrderOperation) {
-                console.log("Operation in progress, please wait");
-                return false;
-            }
+                // Just disable pointer events to prevent further clicks
+                this.style.pointerEvents = "none";
 
-            // Set global lock
-            isProcessingOrderOperation = true;
-
-            // Immediate visual feedback to show the item is being processed
-            this.style.backgroundColor = "#ffdddd";
-            this.style.opacity = "0.5";
-            this.style.pointerEvents = "none"; // Prevent additional clicks
-
-            try {
-                // Get the basic data for this item
-                const currentIdx = parseInt(this.dataset.itemIndex);
-                const itemRow = parseInt(this.dataset.row);
-                const itemCol = parseInt(this.dataset.col);
-                const itemPart = this.dataset.part;
-                
-                // Check if the index is still valid (might have changed due to race conditions)
-                if (currentIdx < 0 || currentIdx >= orderItems.length) {
-                    throw new Error("Invalid item index - item may have been removed already");
-                }
-
-                // Make a copy of the item data before removing it
-                const removedItem = { ...orderItems[currentIdx] };
-                
-                // Remove from data structure immediately
-                orderItems.splice(currentIdx, 1);
-                
-                // Save the parent node for later removal
-                const parentNode = this.parentNode;
-                const element = this;
-                
-                // Immediately update lookup tables to reflect current state
-                rebuildLookupTables();
-
-                // Force a complete grid refresh to ensure UI is consistent
-                // This is crucial for rapid clicking - using requestAnimationFrame to optimize rendering
-                requestAnimationFrame(() => {
-                    try {
-                        // First, remove this item from the panel
-                        if (parentNode && element.parentNode === parentNode) {
-                            parentNode.removeChild(element);
-                        }
-                        
-                        // Then completely refresh the grid which ensures everything is in sync
-                        // Alternative to updateOrderNumbers which can get out of sync
-                        forceGridRefresh();
-                        
-                        // Release the global lock with a slight delay
-                        // This prevents too many operations in quick succession
-                        setTimeout(() => {
-                            isProcessingOrderOperation = false;
-                            // Save changes to localStorage
-                            saveToLocalStorage();
-                        }, 50);
-                    } catch (renderError) {
-                        console.error("Error updating UI:", renderError);
-                        // In case of any rendering error, force a complete rebuild to recover
-                        createGrid();
-                        updateOrderPanel();
-                        isProcessingOrderOperation = false;
+                try {
+                    // Get the basic data for this item
+                    const currentIdx = parseInt(this.dataset.itemIndex);
+                    const itemRow = parseInt(this.dataset.row);
+                    const itemCol = parseInt(this.dataset.col);
+                    const itemPart = this.dataset.part;
+                    
+                    // Remove from data structure immediately
+                    if (currentIdx >= 0 && currentIdx < orderItems.length) {
+                        orderItems.splice(currentIdx, 1);
                     }
-                });
-            } catch (error) {
-                console.error("Error in order item click handler:", error);
-                // Force a complete refresh to recover from error
-                createGrid();
-                updateOrderPanel();
-                // Release the lock
-                isProcessingOrderOperation = false;
+                    
+                    // Remove from DOM immediately
+                    if (this.parentNode) {
+                        this.parentNode.removeChild(this);
+                    }
+                    
+                    // Update lookup tables and refresh grid
+                    rebuildLookupTables();
+                    forceGridRefresh();
+                    
+                    // Save changes to localStorage
+                    saveToLocalStorage();
+                } catch (error) {
+                    console.error("Error in order item click handler:", error);
+                    createGrid();
+                    updateOrderPanel();
+                }
+                
+                return false; // Prevent event bubbling
             }
-            
-            return false; // Prevent event bubbling
-        }
         
         // New function to force a complete grid refresh - more reliable than updateOrderNumbers
         function forceGridRefresh() {
@@ -2189,9 +2122,8 @@
 
             // Add click handler to remove this item
             expirationItem.addEventListener('click', function() {
-                // Visual feedback before removal
-                this.style.backgroundColor = "#ffdddd";
-                this.style.opacity = "0.5";
+                // Disable pointer events to prevent multiple clicks
+                this.style.pointerEvents = "none";
                 
                 const idx = parseInt(this.dataset.index);
                 
@@ -2239,17 +2171,12 @@
                         }
                     }
                 }
-
-                // Apply smooth transition for visual feedback
-                this.style.transition = "background-color 0.3s, opacity 0.3s";
                 
-                // Remove with visual delay - increased for smoother animation
-                setTimeout(() => {
-                    if (this.parentNode) {
-                        this.parentNode.removeChild(this);
-                        updateExpirationPanel();
-                    }
-                }, 300);
+                // Remove item immediately without animation
+                if (this.parentNode) {
+                    this.parentNode.removeChild(this);
+                    updateExpirationPanel();
+                }
             });
 
             return expirationItem;
@@ -2289,9 +2216,8 @@
 
             // Optimized click handler to delete item
             expirationItem.addEventListener('click', function() {
-                // Visual feedback before deletion
-                this.style.backgroundColor = "#ffdddd";
-                this.style.opacity = "0.5";
+                // Disable pointer events to prevent multiple clicks
+                this.style.pointerEvents = "none";
 
                 // Find indices in respective arrays
                 let orderIndex = -1;
@@ -2356,18 +2282,13 @@
                         });
                     }
                 }
-
-                // Apply smooth transition for visual feedback
-                this.style.transition = "background-color 0.3s, opacity 0.3s";
                 
-                // Remove with smoother animation delay
-                setTimeout(() => {
-                    if (this.parentNode) {
-                        this.parentNode.removeChild(this);
-                        updateOrderPanel();
-                        updateOrderNumbers();
-                    }
-                }, 300);
+                // Remove item immediately without animation
+                if (this.parentNode) {
+                    this.parentNode.removeChild(this);
+                    updateOrderPanel();
+                    updateOrderNumbers();
+                }
             });
 
             return expirationItem;
@@ -3036,16 +2957,13 @@
         // Add event listener for dark mode toggle
         els.darkModeToggle.addEventListener('click', toggleDarkMode);
 
-        // Add event listener for exit button - direct exit without confirmation
+        // Add event listener for exit button - force close without confirmation
         document.getElementById('exitButton').addEventListener('click', function() {
             try {
                 window.close();
-                // If window.close() doesn't work (common in many browsers), show a message
-                setTimeout(function() {
-                    alert('Please close the browser tab or window manually to exit the app.');
-                }, 300);
+                // No fallback message - just attempt to close
             } catch (e) {
-                alert('Please close the browser tab or window manually to exit the app.');
+                // Silent fail - no alert
             }
         });
 
