@@ -41,6 +41,12 @@
             --purple-color: #6200ee;
         }
 
+        /* Universal rule to prevent blue flash highlight on all interactive elements */
+        * {
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none !important;
+        }
+
         /* Dark mode theme variables */
         body.dark-mode {
             --bg-color: #121212;
