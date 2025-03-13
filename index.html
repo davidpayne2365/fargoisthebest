@@ -34,7 +34,6 @@
             --selected-bg: rgba(76, 175, 80, 0.3);
             --expired-bg: rgba(220, 53, 69, 0.3);
             --soon-bg: rgba(255, 193, 7, 0.3);
-            --future-bg: rgba(200, 200, 200, 0.2);
             --green-color: #4CAF50;
             --red-color: #dc3545;
             --yellow-color: #FFC107;
@@ -76,6 +75,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
+            -webkit-tap-highlight-color: transparent;
         }
 
         header {
@@ -121,6 +121,7 @@
             display: flex;
             justify-content: space-between;
             color: var(--text-color);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .current-page::after {
@@ -150,6 +151,7 @@
             padding: 8px;
             cursor: pointer;
             color: var(--text-color);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .page-option:hover {
@@ -164,6 +166,7 @@
             border-radius: 4px;
             cursor: pointer;
             color: var(--text-color);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .rename-input {
@@ -252,6 +255,7 @@
             border-radius: 4px;
             cursor: pointer;
             color: var(--text-color);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .order-toggle.active {
@@ -355,6 +359,7 @@
         .order-panel-close {
             cursor: pointer;
             font-size: 16px;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .order-panel-items {
@@ -373,6 +378,7 @@
             display: flex;
             align-items: center;
             transition: background-color 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .order-panel-item:hover {
@@ -418,11 +424,6 @@
         .soon-header {
             background-color: #fff3cd;
             color: #856404;
-        }
-
-        .future-header {
-            background-color: #e2e3e5;
-            color: #383d41;
         }
 
         /* Date input modal styles */
@@ -496,6 +497,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #confirmDateBtn {
@@ -557,6 +559,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .format-input-container button:hover {
@@ -588,6 +591,7 @@
             align-items: center;
             justify-content: center;
             margin-left: 5px;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #bcBtn:hover {
@@ -614,6 +618,7 @@
             padding: 8px 16px;
             cursor: pointer;
             color: var(--text-color);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .bc-option:hover {
@@ -684,6 +689,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #confirmFormatBtn {
@@ -736,6 +742,7 @@
                 <button class="rename-button" id="splitCellButton">Split Cell</button>
                 <button class="order-toggle" id="orderToggle">Order Mode</button>
                 <button class="toggle-button" id="darkModeToggle">Dark Mode</button>
+                <button class="toggle-button" id="exitButton" style="background-color: var(--red-color); color: white;">Exit App</button>
             </div>
         </div>
     </header>
@@ -1195,8 +1202,6 @@
                                 cell.style.backgroundColor = "var(--expired-bg)";
                             } else if (isItemDueSoon(expirationItem)) {
                                 cell.style.backgroundColor = "var(--soon-bg)";
-                            } else {
-                                cell.style.backgroundColor = "var(--future-bg)";
                             }
 
                             // Only add calendar icon in expiration mode
@@ -1265,8 +1270,6 @@
                     subcell.style.backgroundColor = "var(--expired-bg)";
                 } else if (isItemDueSoon(expirationItem)) {
                     subcell.style.backgroundColor = "var(--soon-bg)";
-                } else {
-                    subcell.style.backgroundColor = "var(--future-bg)";
                 }
 
                 // Only add the calendar icon if in expiration mode
@@ -1787,8 +1790,6 @@
                         targetCell.style.backgroundColor = "var(--expired-bg)";
                     } else if (isItemDueSoon(item)) {
                         targetCell.style.backgroundColor = "var(--soon-bg)";
-                    } else {
-                        targetCell.style.backgroundColor = "var(--future-bg)";
                     }
 
                     // Add calendar icon if it doesn't exist
@@ -2905,8 +2906,6 @@
                     cell.style.backgroundColor = "var(--expired-bg)";
                 } else if (isItemDueSoon(expirationItem)) {
                     cell.style.backgroundColor = "var(--soon-bg)";
-                } else {
-                    cell.style.backgroundColor = "var(--future-bg)";
                 }
 
                 // Add calendar indicator to cell if in expiration mode
@@ -2974,6 +2973,21 @@
 
         // Add event listener for dark mode toggle
         els.darkModeToggle.addEventListener('click', toggleDarkMode);
+
+        // Add event listener for exit button
+        document.getElementById('exitButton').addEventListener('click', function() {
+            if (confirm('Are you sure you want to exit the app?')) {
+                try {
+                    window.close();
+                    // If window.close() doesn't work (common in many browsers), show a message
+                    setTimeout(function() {
+                        alert('Please close the browser tab or window manually to exit the app.');
+                    }, 300);
+                } catch (e) {
+                    alert('Please close the browser tab or window manually to exit the app.');
+                }
+            }
+        });
 
         // Populate year dropdowns once during initialization
         function populateYearDropdowns() {
