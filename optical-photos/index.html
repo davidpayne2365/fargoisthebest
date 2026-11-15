@@ -37,6 +37,8 @@
   #lb img.z{cursor:grab}
   #lb img.anim{transition:transform .25s ease}
   #lb button{z-index:2}
+  #hdb{position:absolute;top:20px;left:16px;z-index:2;background:rgba(255,255,255,.15);color:#fff;font:600 13px system-ui;padding:5px 10px;border-radius:999px}
+  #hdb.ok{background:#1f9d55}
   #lb p{color:#ddd;margin:10px 0 0;text-align:center;max-width:800px}
   #lb button{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer}
   #lb button:hover{background:rgba(255,255,255,.25)}
@@ -57,6 +59,7 @@
   <button id="x" aria-label="Close">✕</button>
   <button id="prev" aria-label="Previous">‹</button>
   <button id="next" aria-label="Next">›</button>
+  <span id="hdb">Loading HD…</span>
   <img id="lbimg" alt="">
   <p id="lbcap"></p>
 </div>
@@ -109,7 +112,7 @@ for(const s of sections){
   main.appendChild(sec);
 }
 const lb=document.getElementById('lb'), li=document.getElementById('lbimg'), lc=document.getElementById('lbcap'); let cur=0;
-function show(i){cur=(i+all.length)%all.length; const p=all[cur]; li.src=`img/${p.t}-thumb.jpg`; const hd=new Image(); hd.onload=()=>{if(all[cur]===p)li.src=hd.src}; hd.src=`img/${p.t}-full.jpg`; li.alt=p.title; lc.innerHTML=`<b>${p.title}</b> — ${p.desc} <span style="opacity:.6">(${cur+1}/${all.length})</span><br><a href="img/${p.t}-full.jpg" style="color:#fff">Open full size (HD) ↗</a>`; if(!lb.classList.contains('open')){lb.classList.add('open'); if(!(history.state&&history.state.lb))history.pushState({lb:1},'');}}
+function show(i){cur=(i+all.length)%all.length; const p=all[cur]; li.src=`img/${p.t}-thumb.jpg`; const hb=document.getElementById('hdb'); hb.textContent='Loading HD…'; hb.classList.remove('ok'); const hd=new Image(); hd.onload=()=>{if(all[cur]===p){li.src=hd.src; hb.textContent='HD ✓'; hb.classList.add('ok');}}; hd.src=`img/${p.t}-full.jpg`; [cur+1,cur-1].forEach(j=>{const n=all[(j+all.length)%all.length]; (new Image()).src=`img/${n.t}-full.jpg`;}); li.alt=p.title; lc.innerHTML=`<b>${p.title}</b> — ${p.desc} <span style="opacity:.6">(${cur+1}/${all.length})</span><br><a href="img/${p.t}-full.jpg" style="color:#fff">Open full size (HD) ↗</a>`; if(!lb.classList.contains('open')){lb.classList.add('open'); if(!(history.state&&history.state.lb))history.pushState({lb:1},'');}}
 const hide=()=>lb.classList.remove('open');
 const close=()=>{if(history.state&&history.state.lb)history.back();else hide();};
 addEventListener('popstate',()=>{if(!(history.state&&history.state.lb))hide();});
