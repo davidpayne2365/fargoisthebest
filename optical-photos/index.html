@@ -104,8 +104,11 @@ for(const s of sections){
   main.appendChild(sec);
 }
 const lb=document.getElementById('lb'), li=document.getElementById('lbimg'), lc=document.getElementById('lbcap'); let cur=0;
-function show(i){cur=(i+all.length)%all.length; const p=all[cur]; li.src=`img/${p.t}-thumb.jpg`; const hd=new Image(); hd.onload=()=>{if(all[cur]===p)li.src=hd.src}; hd.src=`img/${p.t}-full.jpg`; li.alt=p.title; lc.innerHTML=`<b>${p.title}</b> — ${p.desc} <span style="opacity:.6">(${cur+1}/${all.length})</span><br><a href="img/${p.t}-full.jpg" target="_blank" style="color:#fff">Open full size (HD) ↗</a>`; lb.classList.add('open');}
-const close=()=>lb.classList.remove('open');
+function show(i){cur=(i+all.length)%all.length; const p=all[cur]; li.src=`img/${p.t}-thumb.jpg`; const hd=new Image(); hd.onload=()=>{if(all[cur]===p)li.src=hd.src}; hd.src=`img/${p.t}-full.jpg`; li.alt=p.title; lc.innerHTML=`<b>${p.title}</b> — ${p.desc} <span style="opacity:.6">(${cur+1}/${all.length})</span><br><a href="img/${p.t}-full.jpg" style="color:#fff">Open full size (HD) ↗</a>`; if(!lb.classList.contains('open')){lb.classList.add('open'); if(!(history.state&&history.state.lb))history.pushState({lb:1},'');}}
+const hide=()=>lb.classList.remove('open');
+const close=()=>{if(history.state&&history.state.lb)history.back();else hide();};
+addEventListener('popstate',()=>{if(!(history.state&&history.state.lb))hide();});
+if(history.state&&history.state.lb)history.replaceState(null,'');
 document.getElementById('x').onclick=close;
 document.getElementById('prev').onclick=e=>{e.stopPropagation();show(cur-1)};
 document.getElementById('next').onclick=e=>{e.stopPropagation();show(cur+1)};
