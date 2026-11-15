@@ -3,157 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Optical Department Photos</title>
-<meta name="description" content="Photo walkthrough of the optical department — dispensing floor, frame boards, lab bench and back counter. Taken Nov 14, 2026.">
+<title>Photos</title>
 <style>
-  :root{--bg:#f6f5f3;--fg:#1c1c1c;--muted:#666;--card:#fff;--line:#e3e0dc;--accent:#c8102e}
-  @media (prefers-color-scheme:dark){:root{--bg:#141414;--fg:#eee;--muted:#a3a3a3;--card:#1f1f1f;--line:#2e2e2e;--accent:#ff4d5e}}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-  header{padding:40px 16px 8px;max-width:1200px;margin:auto}
-  h1{margin:0;font-size:clamp(1.6rem,4vw,2.4rem);letter-spacing:-.02em}
-  h1 span{color:var(--accent)}
-  header p{margin:.4rem 0 0;color:var(--muted)}
-  nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
-  nav div{max-width:1200px;margin:auto;padding:10px 16px;display:flex;gap:8px;overflow-x:auto}
-  nav a{white-space:nowrap;text-decoration:none;color:var(--fg);border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:999px;font-size:.9rem}
-  nav a:hover{border-color:var(--accent)}
-  main{max-width:1200px;margin:auto;padding:0 16px 48px}
-  section{scroll-margin-top:60px}
-  h2{font-size:1.2rem;margin:36px 0 12px;display:flex;align-items:baseline;gap:8px}
-  h2 small{color:var(--muted);font-weight:400;font-size:.85rem}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-  figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:zoom-in;transition:transform .15s}
-  @media (hover:hover){figure:hover{transform:translateY(-2px)}}
-  figure{touch-action:manipulation}
-  figure img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--line)}
-  figcaption{padding:10px 12px;font-size:.92rem}
-  figcaption b{display:block}
-  figcaption span{color:var(--muted);font-size:.85rem}
-  #lb{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:10;flex-direction:column;padding:16px}
-  #lb.open{display:flex}
-  #lb{touch-action:none;overflow:hidden}
-  #lb img{max-width:100%;max-height:calc(100vh - 110px);object-fit:contain;border-radius:6px;transform-origin:center;cursor:zoom-in;user-select:none;-webkit-user-drag:none;position:relative;z-index:1}
-  #lb img.z{cursor:grab}
-  #lb img.anim{transition:transform .25s ease}
-  #lb button{z-index:2}
-  #hdb{position:absolute;top:20px;left:16px;z-index:2;background:rgba(255,255,255,.15);color:#fff;font:600 13px system-ui;padding:5px 10px;border-radius:999px}
-  #hdb.ok{background:#1f9d55}
-  #lb p{color:#ddd;margin:10px 0 0;text-align:center;max-width:800px}
-  #lb button{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer}
-  #lb button:hover{background:rgba(255,255,255,.25)}
-  #x{top:14px;right:14px} #prev{left:10px;top:50%} #next{right:10px;top:50%}
-  footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px 16px 40px}
+html,body{margin:0;background:#fff}
+img{display:block;width:auto;height:auto;max-width:100%;max-height:100vh;margin:0 auto 8px}
 </style>
 </head>
 <body>
-<header>
-  <h1>Optical Department <span>Walkthrough</span></h1>
-  <p>20 photos · November 14, 2026 · tap a photo to open, double-tap or pinch to zoom</p>
-</header>
-<nav><div id="nav"></div></nav>
-<main id="main"></main>
-<footer>Photos taken Nov 14, 2026</footer>
-
-<div id="lb" role="dialog" aria-modal="true">
-  <button id="x" aria-label="Close">✕</button>
-  <button id="prev" aria-label="Previous">‹</button>
-  <button id="next" aria-label="Next">›</button>
-  <span id="hdb">Loading HD…</span>
-  <img id="lbimg" alt="">
-  <p id="lbcap"></p>
-</div>
-
-<script>
-const sections = [
-  {id:"floor", title:"Dispensing Floor", photos:[
-    ["185808","Dispensing floor","Fitting desks with mirrors, tint demo frames and lens menus; frame boards along the right wall."],
-    ["185655","Dispensing floor — other angle","Desks facing the frame wall, with the pickup counter and printer in the back."],
-    ["185647","Check-in station","QR-code check-in sign and iPad kiosk: pick up, buy glasses/contacts, adjustments, questions."],
-    ["185751","Register & printer","Toshiba register, HP printer and card terminal at the counter."],
-  ]},
-  {id:"frames", title:"Frame Boards", photos:[
-    ["185708","Frame cabinet — full view","Sunglasses up top, men's frames below; Tumi, Burberry and Kirkland boards on either side."],
-    ["185716","Sunglasses","Shaquille O'Neal, Hobie and others ($74.99–$109.99), plus I·Talia, IZOD and Tom Ford frames."],
-    ["185718","Men's frames","Perry Ellis, Nike, Colours, Bulova, Van Heusen, Oakley; Ray-Ban and Police on the door."],
-    ["185725","Men's frames","Badgley Mischka, Hugo, Shaquille O'Neal, Bulova, IZOD; McLaren, Republica, Artiste on the door."],
-    ["185724","Men's frames","Hobie, Shaquille O'Neal, G Sport and more."],
-    ["185736","Metal & kids' frames","Eddie Bauer and IZOD metal frames; kids' Ray-Ban and Transformers on the door."],
-    ["185737","Kids' frames","Transformers, Ray-Ban, Oakley, Nike and Kirkland kids' frames."],
-    ["185446","Overstock frame bins","Bagged frames in pull-out bins below the metal frame board (Givenchy, Ray-Ban, Gucci, Stetson…)."],
-  ]},
-  {id:"lab", title:"Lab & Adjustment Tools", photos:[
-    ["185536","Adjustment drawer","Pliers, screwdrivers, files, tweezers and jars of nose pads and screws."],
-    ["185557","Lab corner","Tool drawer, rimless repair / lens paddles / lens clocks bins, and the lens power chart."],
-    ["185559","Back bench","Pliers drawer, Hot Box frame warmer, iSonic ultrasonic cleaner, phone and Rolodex."],
-    ["185617","Hot Box frame warmer","Glass-bead frame heater for adjusting plastic frames."],
-  ]},
-  {id:"office", title:"Back Counter & Paperwork", photos:[
-    ["185602","Paperwork shelf","Processing-the-shipment checklist, daily checklist clipboard, file sorters and binders."],
-    ["185620","Daily checklist","Opening / midshift / closing checklist; Redo Log, HILCO catalog, New Hire Training and Damage & Destroy binders."],
-    ["185606","To Be Called tray","\"To Be Called\" tray and rubber-band bins under the tool drawer."],
-  ]},
-  {id:"lenses", title:"Lens Samples", photos:[
-    ["185610","Lens tint sample book","Gen S colors (Gray, Amethyst, Graphite Green, Ruby, Brown, Amber, Sapphire, Emerald), polarized, Drivewear and flash mirrors."],
-  ]},
-];
-const all=[]; const main=document.getElementById('main'), nav=document.getElementById('nav');
-for(const s of sections){
-  nav.insertAdjacentHTML('beforeend',`<a href="#${s.id}">${s.title}</a>`);
-  const sec=document.createElement('section'); sec.id=s.id;
-  sec.innerHTML=`<h2>${s.title} <small>${s.photos.length} photo${s.photos.length>1?'s':''}</small></h2><div class="grid"></div>`;
-  const g=sec.querySelector('.grid');
-  for(const [t,title,desc] of s.photos){
-    const i=all.length; all.push({t,title,desc});
-    const f=document.createElement('figure');
-    f.innerHTML=`<img loading="lazy" src="img/${t}-thumb.jpg" alt="${title}"><figcaption><b>${title}</b><span>${desc}</span></figcaption>`;
-    f.onclick=()=>show(i); g.appendChild(f);
-  }
-  main.appendChild(sec);
-}
-const lb=document.getElementById('lb'), li=document.getElementById('lbimg'), lc=document.getElementById('lbcap'); let cur=0;
-function show(i){cur=(i+all.length)%all.length; const p=all[cur]; li.src=`img/${p.t}-thumb.jpg`; const hb=document.getElementById('hdb'); hb.textContent='Loading HD…'; hb.classList.remove('ok'); const hd=new Image(); hd.onload=()=>{if(all[cur]===p){li.src=hd.src; hb.textContent='HD ✓'; hb.classList.add('ok');}}; hd.src=`img/${p.t}-full.jpg`; [cur+1,cur-1].forEach(j=>{const n=all[(j+all.length)%all.length]; (new Image()).src=`img/${n.t}-full.jpg`;}); li.alt=p.title; lc.innerHTML=`<b>${p.title}</b> — ${p.desc} <span style="opacity:.6">(${cur+1}/${all.length})</span><br><a href="img/${p.t}-full.jpg" style="color:#fff">Open full size (HD) ↗</a>`; if(!lb.classList.contains('open')){lb.classList.add('open'); if(!(history.state&&history.state.lb))history.pushState({lb:1},'');}}
-const hide=()=>lb.classList.remove('open');
-const close=()=>{if(history.state&&history.state.lb)history.back();else hide();};
-addEventListener('popstate',()=>{if(!(history.state&&history.state.lb))hide();});
-if(history.state&&history.state.lb)history.replaceState(null,'');
-document.getElementById('x').onclick=close;
-document.getElementById('prev').onclick=e=>{e.stopPropagation();show(cur-1)};
-document.getElementById('next').onclick=e=>{e.stopPropagation();show(cur+1)};
-lb.onclick=e=>{if(e.target===lb)close()};
-addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return; if(e.key==='Escape')close(); if(e.key==='ArrowLeft')show(cur-1); if(e.key==='ArrowRight')show(cur+1);});
-// --- zoom / pan / swipe ---
-let zs=1,tx=0,ty=0; const pts=new Map(); let pinch=null, drag=null, lastTap=0, lastX=0, lastY=0;
-function apply(anim){li.classList.toggle('anim',!!anim); li.classList.toggle('z',zs>1); li.style.transform=`translate(${tx}px,${ty}px) scale(${zs})`;}
-function clamp(){const w=li.offsetWidth,h=li.offsetHeight; const mx=w*(zs-1)/2, my=h*(zs-1)/2; tx=Math.max(-mx,Math.min(mx,tx)); ty=Math.max(-my,Math.min(my,ty)); if(zs<=1){zs=1;tx=0;ty=0;}}
-function zoomAt(ns,mx,my,anim){const r=li.getBoundingClientRect(); const cx=r.left+r.width/2-tx, cy=r.top+r.height/2-ty; ns=Math.max(1,Math.min(6,ns)); const qx=(mx-cx-tx)/zs, qy=(my-cy-ty)/zs; tx=mx-cx-ns*qx; ty=my-cy-ns*qy; zs=ns; clamp(); apply(anim);}
-function resetZoom(){zs=1;tx=0;ty=0;apply(false);}
-const _show=show; show=function(i){resetZoom(); _show(i);};
-li.addEventListener('dblclick',e=>e.preventDefault());
-lb.addEventListener('pointerdown',e=>{
-  if(e.target.closest('button,a'))return;
-  pts.set(e.pointerId,{x:e.clientX,y:e.clientY,sx:e.clientX,sy:e.clientY,t:Date.now()});
-  if(pts.size===2){const [a,b]=[...pts.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y),s:zs}; drag=null;}
-  else if(pts.size===1){drag={x:e.clientX,y:e.clientY,tx,ty};}
-});
-lb.addEventListener('pointermove',e=>{
-  const p=pts.get(e.pointerId); if(!p)return; p.x=e.clientX; p.y=e.clientY;
-  if(pinch&&pts.size===2){const [a,b]=[...pts.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); zoomAt(pinch.s*d/pinch.d,(a.x+b.x)/2,(a.y+b.y)/2,false);}
-  else if(drag&&zs>1){tx=drag.tx+(e.clientX-drag.x); ty=drag.ty+(e.clientY-drag.y); clamp(); apply(false);}
-});
-function up(e){
-  const p=pts.get(e.pointerId); if(!p)return; pts.delete(e.pointerId);
-  if(pinch){if(pts.size<2)pinch=null; if(zs<1.05)resetZoom(); const r=[...pts.values()][0]; drag=r?{x:r.x,y:r.y,tx,ty}:null; return;}
-  const dx=e.clientX-p.sx, dy=e.clientY-p.sy, moved=Math.hypot(dx,dy)>10, quick=Date.now()-p.t<500;
-  if(!moved&&e.target===li){ // tap on image
-    const now=Date.now();
-    if(now-lastTap<300&&Math.hypot(e.clientX-lastX,e.clientY-lastY)<40){ lastTap=0; if(zs>1){zs=1;tx=0;ty=0;apply(true);} else zoomAt(3,e.clientX,e.clientY,true); }
-    else {lastTap=now; lastX=e.clientX; lastY=e.clientY;}
-  } else if(zs===1&&quick&&Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)) show(cur+(dx<0?1:-1));
-  drag=null;
-}
-lb.addEventListener('pointerup',up); lb.addEventListener('pointercancel',up);
-addEventListener('resize',()=>{clamp();apply(false);});
-</script>
+<img src="img/185446-full.jpg" width="3024" height="4032" alt="">
+<img src="img/185536-full.jpg" width="3024" height="4032" alt="">
+<img src="img/185557-full.jpg" width="4032" height="3024" alt="" loading="lazy">
+<img src="img/185559-full.jpg" width="4032" height="3024" alt="" loading="lazy">
+<img src="img/185602-full.jpg" width="4032" height="3024" alt="" loading="lazy">
+<img src="img/185606-full.jpg" width="4032" height="3024" alt="" loading="lazy">
+<img src="img/185610-full.jpg" width="4032" height="3024" alt="" loading="lazy">
+<img src="img/185617-full.jpg" width="4032" height="3024" alt="" loading="lazy">
+<img src="img/185620-full.jpg" width="4032" height="3024" alt="" loading="lazy">
+<img src="img/185647-full.jpg" width="3024" height="4032" alt="" loading="lazy">
+<img src="img/185655-full.jpg" width="4032" height="3024" alt="" loading="lazy">
+<img src="img/185708-full.jpg" width="3024" height="4032" alt="" loading="lazy">
+<img src="img/185716-full.jpg" width="3024" height="4032" alt="" loading="lazy">
+<img src="img/185718-full.jpg" width="3024" height="4032" alt="" loading="lazy">
+<img src="img/185724-full.jpg" width="3024" height="4032" alt="" loading="lazy">
+<img src="img/185725-full.jpg" width="3024" height="4032" alt="" loading="lazy">
+<img src="img/185736-full.jpg" width="3024" height="4032" alt="" loading="lazy">
+<img src="img/185737-full.jpg" width="3024" height="4032" alt="" loading="lazy">
+<img src="img/185751-full.jpg" width="3024" height="4032" alt="" loading="lazy">
+<img src="img/185808-full.jpg" width="4032" height="3024" alt="" loading="lazy">
 </body>
 </html>
