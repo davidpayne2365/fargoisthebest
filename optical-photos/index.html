@@ -24,14 +24,19 @@
   h2 small{color:var(--muted);font-weight:400;font-size:.85rem}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
   figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:zoom-in;transition:transform .15s}
-  figure:hover{transform:translateY(-2px)}
+  @media (hover:hover){figure:hover{transform:translateY(-2px)}}
+  figure{touch-action:manipulation}
   figure img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--line)}
   figcaption{padding:10px 12px;font-size:.92rem}
   figcaption b{display:block}
   figcaption span{color:var(--muted);font-size:.85rem}
   #lb{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:10;flex-direction:column;padding:16px}
   #lb.open{display:flex}
-  #lb img{max-width:100%;max-height:calc(100vh - 110px);object-fit:contain;border-radius:6px}
+  #lb{touch-action:none;overflow:hidden}
+  #lb img{max-width:100%;max-height:calc(100vh - 110px);object-fit:contain;border-radius:6px;transform-origin:center;cursor:zoom-in;user-select:none;-webkit-user-drag:none;position:relative;z-index:1}
+  #lb img.z{cursor:grab}
+  #lb img.anim{transition:transform .25s ease}
+  #lb button{z-index:2}
   #lb p{color:#ddd;margin:10px 0 0;text-align:center;max-width:800px}
   #lb button{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer}
   #lb button:hover{background:rgba(255,255,255,.25)}
@@ -42,7 +47,7 @@
 <body>
 <header>
   <h1>Optical Department <span>Walkthrough</span></h1>
-  <p>20 photos · November 14, 2026 · tap any photo to view full size</p>
+  <p>20 photos · November 14, 2026 · tap a photo to open, double-tap or pinch to zoom</p>
 </header>
 <nav><div id="nav"></div></nav>
 <main id="main"></main>
@@ -114,8 +119,38 @@ document.getElementById('prev').onclick=e=>{e.stopPropagation();show(cur-1)};
 document.getElementById('next').onclick=e=>{e.stopPropagation();show(cur+1)};
 lb.onclick=e=>{if(e.target===lb)close()};
 addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return; if(e.key==='Escape')close(); if(e.key==='ArrowLeft')show(cur-1); if(e.key==='ArrowRight')show(cur+1);});
-let sx=null; lb.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
-lb.addEventListener('touchend',e=>{if(sx==null)return; const d=e.changedTouches[0].clientX-sx; if(Math.abs(d)>50)show(cur+(d<0?1:-1)); sx=null;});
+// --- zoom / pan / swipe ---
+let zs=1,tx=0,ty=0; const pts=new Map(); let pinch=null, drag=null, lastTap=0, lastX=0, lastY=0;
+function apply(anim){li.classList.toggle('anim',!!anim); li.classList.toggle('z',zs>1); li.style.transform=`translate(${tx}px,${ty}px) scale(${zs})`;}
+function clamp(){const w=li.offsetWidth,h=li.offsetHeight; const mx=w*(zs-1)/2, my=h*(zs-1)/2; tx=Math.max(-mx,Math.min(mx,tx)); ty=Math.max(-my,Math.min(my,ty)); if(zs<=1){zs=1;tx=0;ty=0;}}
+function zoomAt(ns,mx,my,anim){const r=li.getBoundingClientRect(); const cx=r.left+r.width/2-tx, cy=r.top+r.height/2-ty; ns=Math.max(1,Math.min(6,ns)); const qx=(mx-cx-tx)/zs, qy=(my-cy-ty)/zs; tx=mx-cx-ns*qx; ty=my-cy-ns*qy; zs=ns; clamp(); apply(anim);}
+function resetZoom(){zs=1;tx=0;ty=0;apply(false);}
+const _show=show; show=function(i){resetZoom(); _show(i);};
+li.addEventListener('dblclick',e=>e.preventDefault());
+lb.addEventListener('pointerdown',e=>{
+  if(e.target.closest('button,a'))return;
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY,sx:e.clientX,sy:e.clientY,t:Date.now()});
+  if(pts.size===2){const [a,b]=[...pts.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y),s:zs}; drag=null;}
+  else if(pts.size===1){drag={x:e.clientX,y:e.clientY,tx,ty};}
+});
+lb.addEventListener('pointermove',e=>{
+  const p=pts.get(e.pointerId); if(!p)return; p.x=e.clientX; p.y=e.clientY;
+  if(pinch&&pts.size===2){const [a,b]=[...pts.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); zoomAt(pinch.s*d/pinch.d,(a.x+b.x)/2,(a.y+b.y)/2,false);}
+  else if(drag&&zs>1){tx=drag.tx+(e.clientX-drag.x); ty=drag.ty+(e.clientY-drag.y); clamp(); apply(false);}
+});
+function up(e){
+  const p=pts.get(e.pointerId); if(!p)return; pts.delete(e.pointerId);
+  if(pinch){if(pts.size<2)pinch=null; if(zs<1.05)resetZoom(); const r=[...pts.values()][0]; drag=r?{x:r.x,y:r.y,tx,ty}:null; return;}
+  const dx=e.clientX-p.sx, dy=e.clientY-p.sy, moved=Math.hypot(dx,dy)>10, quick=Date.now()-p.t<500;
+  if(!moved&&e.target===li){ // tap on image
+    const now=Date.now();
+    if(now-lastTap<300&&Math.hypot(e.clientX-lastX,e.clientY-lastY)<40){ lastTap=0; if(zs>1){zs=1;tx=0;ty=0;apply(true);} else zoomAt(3,e.clientX,e.clientY,true); }
+    else {lastTap=now; lastX=e.clientX; lastY=e.clientY;}
+  } else if(zs===1&&quick&&Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)) show(cur+(dx<0?1:-1));
+  drag=null;
+}
+lb.addEventListener('pointerup',up); lb.addEventListener('pointercancel',up);
+addEventListener('resize',()=>{clamp();apply(false);});
 </script>
 </body>
 </html>
