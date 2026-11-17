@@ -27,7 +27,7 @@ The Pi stays on, so the app just shows the pour as stopped.
 | Pump | Bottle | GPIO (BCM) | Physical pin on Pi header |
 |---|---|---|---|
 | 1 | Vodka | GPIO 17 | 11 |
-| 2 | Gin | GPIO 27 | 13 |
+| 2 | Amaretto | GPIO 27 | 13 |
 | 3 | White rum | GPIO 22 | 15 |
 | 4 | Spiced rum | GPIO 23 | 16 |
 | 5 | Coconut rum | GPIO 24 | 18 |

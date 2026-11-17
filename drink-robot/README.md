@@ -12,7 +12,7 @@ phone buzzes, the bartender hands it over.
 
 | Doc | What's in it |
 |---|---|
-| [docs/BOTTLES.md](docs/BOTTLES.md) | **The 16 bottles and the 22 drinks they make (no fizz)** |
+| [docs/BOTTLES.md](docs/BOTTLES.md) | **The 16 bottles and the 25 drinks they make (no fizz)** |
 | [docs/DESIGN.md](docs/DESIGN.md) | Decisions made, why, and **open questions to scheme on** |
 | [docs/SHOPPING_LIST.md](docs/SHOPPING_LIST.md) | What to buy (~$330–750) |
 | [docs/WIRING.md](docs/WIRING.md) | How to connect it all together |

@@ -35,12 +35,15 @@ def test_default_menu_has_no_fizzy_drinks(cfg):
     assert avail and all(not r.get("top_with") for r in avail)
     ids = {r["id"] for r in avail}
     assert "margarita" in ids and "rum_coke" not in ids
+    assert "amaretto_sour" in ids and "gimlet" not in ids
+    assert len(avail) == 25
 
 
 def test_every_recipe_plans_at_every_strength(fizzy_cfg, cal):
     cfg = fizzy_cfg
     avail = R.available_recipes(cfg)
-    assert len(avail) == len(cfg["recipes"])  # fizz on: everything is loaded
+    missing = [r for r in cfg["recipes"] if r not in avail]
+    assert all("gin" in r["ingredients"] for r in missing)  # only gin isn't on a pump
     for r in avail:
         for st in R.allowed_strengths(cfg, r):
             assert R.plan_pour(cfg, r, st, cal)
@@ -48,24 +51,24 @@ def test_every_recipe_plans_at_every_strength(fizzy_cfg, cal):
 
 def test_menu_hides_drinks_without_loaded_ingredients(fizzy_cfg):
     cfg = fizzy_cfg
-    cfg["pumps"] = [p for p in cfg["pumps"] if p["ingredient"] != "gin"]
+    cfg["pumps"] = [p for p in cfg["pumps"] if p["ingredient"] != "tequila"]
     ids = {r["id"] for r in R.available_recipes(cfg)}
-    assert "margarita" in ids
-    assert "gin_tonic" not in ids and "long_island" not in ids
+    assert "screwdriver" in ids
+    assert "margarita" not in ids and "tequila_sunrise" not in ids
 
 
 def test_out_of_stock_hand_pour_hides_drinks(fizzy_cfg):
     cfg = fizzy_cfg
     cfg["ingredients"]["cola"]["in_stock"] = False
     ids = {r["id"] for r in R.available_recipes(cfg)}
-    assert "rum_coke" not in ids and "long_island" not in ids
-    assert "gin_tonic" in ids
+    assert "rum_coke" not in ids and "whiskey_coke" not in ids
+    assert "vodka_tonic" in ids
 
 
 def test_top_with_leaves_room_in_glass(fizzy_cfg, cal):
     cfg = fizzy_cfg
-    r = dict(R.get_recipe(cfg, "gin_tonic"))
-    r["ingredients"] = {"gin": 400}
+    r = dict(R.get_recipe(cfg, "vodka_tonic"))
+    r["ingredients"] = {"vodka": 400}
     robot = sum(s["ml"] for s in R.plan_pour(cfg, r, "regular", cal))
     assert robot + 150 <= cfg["glasses"]["highball"]["max_ml"] + 0.5
     extras = R.bartender_extras(cfg, r)

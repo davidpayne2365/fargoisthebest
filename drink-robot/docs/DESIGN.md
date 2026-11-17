@@ -51,7 +51,7 @@ margarita/daiquiri are fine served over ice — or give it a quick swirl.
 
 ### 6. 16 pumps, no fizzy drinks
 **16 bottles** (9 spirits/liqueurs + 7 still mixers — see [BOTTLES.md](BOTTLES.md))
-make **22 drinks**, and the robot pours 100% of each one. Fizzy mixers foam and go
+make **25 drinks**, and the robot pours 100% of each one. Fizzy mixers foam and go
 flat in pumps, so they're **switched off**: no bartender top-ups, and cup-stack mode
 works with zero hand work. The fizzy recipes are still in the config (off) in case
 we add a CO₂ soda system later. Grenadine pours *after* everything else
@@ -79,7 +79,7 @@ when it lands).
 3. **Ice.** Options: bartender scoops ice in before POUR (glass mode); pre-iced cups in the stack (melts); or chill all bottles/juices in a mini-fridge with tubes running out (nicest, more work).
 4. **Bottle layout.** Upside-down bottles on a shelf above (gravity helps, but they can siphon when idle!) vs. upright bottles with tubes dipped in (safer — recommended).
 5. ~~Carbonated mixers?~~ **Decided: no fizz.** v2 idea: CO₂ keg + solenoid valve so the robot pours soda itself.
-11. **Gin's only drink is a Gimlet now** — keep it, or swap pump 2 for amaretto / vermouth / blue curaçao? (see BOTTLES.md)
+11. ~~Gin only made a Gimlet~~ **Decided: swapped gin for amaretto** (+4 drinks).
 6. **Juice freshness.** OJ/lime spoil in the tubes over a night — fine for a party, flush after.
 7. **Cup sensor?** A $3 IR sensor confirms a cup is there before pouring. Worth adding in v2.
 8. **Weight sensor?** A load cell (HX711) under the cup could measure exactly what poured and auto-detect pickup. Cool v3 upgrade.

@@ -81,7 +81,7 @@ def create_app(config_path=None, data_dir=None, mock=None):
                 "alcoholic": R.is_alcoholic(cfg, r),
                 "groups": R.menu_groups(cfg, r),
             })
-        order = ["Vodka", "Gin", "Rum", "Tequila", "Whiskey", "Other", "No alcohol"]
+        order = ["Vodka", "Gin", "Rum", "Tequila", "Whiskey", "Amaretto", "Other", "No alcohol"]
         present = {g for d in drinks for g in d["groups"]}
         tabs = [g for g in order if g in present] + sorted(present - set(order))
         return render_template("menu.html", drinks=drinks, tabs=tabs)
