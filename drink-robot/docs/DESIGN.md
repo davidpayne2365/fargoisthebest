@@ -74,7 +74,7 @@ when it lands).
 
 ## ❓ Open questions to scheme on
 
-1. ~~How many bottles?~~ **Decided: 16** + 5 hand-poured fizzy mixers. (Start with 8 if budget's tight — the menu adapts.)
+1. ~~How many bottles?~~ **Decided: 16**, no fizz. (Start with 8 if budget's tight — the menu adapts.)
 2. **Pump speed vs. price.** Start cheap (100 ml/min, ~$10 each) or go straight to ~400 ml/min (~$30–40 each)?
 3. **Ice.** Options: bartender scoops ice in before POUR (glass mode); pre-iced cups in the stack (melts); or chill all bottles/juices in a mini-fridge with tubes running out (nicest, more work).
 4. **Bottle layout.** Upside-down bottles on a shelf above (gravity helps, but they can siphon when idle!) vs. upright bottles with tubes dipped in (safer — recommended).
