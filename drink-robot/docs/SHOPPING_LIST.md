@@ -24,7 +24,7 @@ automatically as their bottles get a pump.
 | 1 | Project box for the electronics (keep it ABOVE the spill zone) | "ABS project box 200x120" | 10 |
 
 ## Bottles & mixers
-See [BOTTLES.md](BOTTLES.md) for the full list of 16 pump bottles + 5 fizzy mixers.
+See [BOTTLES.md](BOTTLES.md) for the full list of 16 bottles.
 
 ## Fluid path
 | Qty | Item | Search for | ~$ |

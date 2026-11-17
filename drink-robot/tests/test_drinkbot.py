@@ -17,33 +17,53 @@ def cfg():
 
 
 @pytest.fixture
+def fizzy_cfg(cfg):
+    """Config with the (default-off) fizzy mixers switched back on."""
+    for v in cfg["ingredients"].values():
+        if v.get("hand_pour"):
+            v["in_stock"] = True
+    return cfg
+
+
+@pytest.fixture
 def cal(tmp_path):
     return R.Calibration(str(tmp_path / "cal.json"))
 
 
-def test_every_recipe_plans_at_every_strength(cfg, cal):
+def test_default_menu_has_no_fizzy_drinks(cfg):
     avail = R.available_recipes(cfg)
-    assert len(avail) == len(cfg["recipes"])  # default config: everything is loaded
+    assert avail and all(not r.get("top_with") for r in avail)
+    ids = {r["id"] for r in avail}
+    assert "margarita" in ids and "rum_coke" not in ids
+
+
+def test_every_recipe_plans_at_every_strength(fizzy_cfg, cal):
+    cfg = fizzy_cfg
+    avail = R.available_recipes(cfg)
+    assert len(avail) == len(cfg["recipes"])  # fizz on: everything is loaded
     for r in avail:
         for st in R.allowed_strengths(cfg, r):
             assert R.plan_pour(cfg, r, st, cal)
 
 
-def test_menu_hides_drinks_without_loaded_ingredients(cfg):
+def test_menu_hides_drinks_without_loaded_ingredients(fizzy_cfg):
+    cfg = fizzy_cfg
     cfg["pumps"] = [p for p in cfg["pumps"] if p["ingredient"] != "gin"]
     ids = {r["id"] for r in R.available_recipes(cfg)}
     assert "margarita" in ids
     assert "gin_tonic" not in ids and "long_island" not in ids
 
 
-def test_out_of_stock_hand_pour_hides_drinks(cfg):
+def test_out_of_stock_hand_pour_hides_drinks(fizzy_cfg):
+    cfg = fizzy_cfg
     cfg["ingredients"]["cola"]["in_stock"] = False
     ids = {r["id"] for r in R.available_recipes(cfg)}
     assert "rum_coke" not in ids and "long_island" not in ids
     assert "gin_tonic" in ids
 
 
-def test_top_with_leaves_room_in_glass(cfg, cal):
+def test_top_with_leaves_room_in_glass(fizzy_cfg, cal):
+    cfg = fizzy_cfg
     r = dict(R.get_recipe(cfg, "gin_tonic"))
     r["ingredients"] = {"gin": 400}
     robot = sum(s["ml"] for s in R.plan_pour(cfg, r, "regular", cal))
@@ -58,7 +78,8 @@ def test_pour_last_gets_later_phase(cfg, cal):
     assert phase == {"tequila": 0, "orange_juice": 0, "grenadine": 1}
 
 
-def test_no_virgin_option_when_robot_pours_only_alcohol(cfg):
+def test_no_virgin_option_when_robot_pours_only_alcohol(fizzy_cfg):
+    cfg = fizzy_cfg
     assert "virgin" not in R.allowed_strengths(cfg, R.get_recipe(cfg, "captain_coke"))
     assert R.allowed_strengths(cfg, R.get_recipe(cfg, "shirley_temple")) == ["regular"]
 
@@ -145,9 +166,8 @@ def test_full_order_flow(tmp_path):
             break
         time.sleep(0.05)
     assert c.get(f"/api/orders/{oid}?t={tok}").json["status"] == "ready"
-    rc = c.post("/api/orders", json={"recipe_id": "rum_coke", "guest": "Jo"}).json
-    extras = c.get(f"/api/orders/{rc['id']}?t={rc['token']}").json["extras"]
-    assert extras["top_with"][0]["name"] == "Cola"
+    # fizzy drinks are off by default, so ordering one is refused
+    assert c.post("/api/orders", json={"recipe_id": "rum_coke", "guest": "Jo"}).status_code == 400
     assert c.post(f"/api/bar/orders/{oid}/picked_up").status_code == 200
     assert c.get(f"/api/orders/{oid}?t={tok}").json["status"] == "done"
 

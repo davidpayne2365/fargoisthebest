@@ -51,7 +51,6 @@ A simple layout that works:
   an idle pump tube.
 * Nozzle: tube ends **pointing straight down, ~2 cm above the cup rim**, all 16 within
   a ~3 cm circle (two rings of 8) so a narrow glass catches everything.
-* Put a small cooler/mini-fridge next to the bar for the 5 fizzy mixers.
 * Mark the cup spot on the drip tray (a small 3D-printed or wooden "U" stop) so the
   cup is always centered.
 * Seal the wood (polyurethane) — it will get sticky.

@@ -1,6 +1,7 @@
 # The bottles
 
-**16 bottles on pumps + 5 fizzy mixers poured by hand = 38 drinks.**
+**16 bottles, all on pumps → 22 drinks. No fizzy mixers.** The robot makes 100% of
+every drink, so the bartender only hands the cup over (perfect for cup-stack mode).
 
 ## On pumps (16)
 
@@ -23,44 +24,49 @@
 | 15 | Pineapple juice | Canned/bottled. |
 | 16 | Grenadine | Pours last in Sunrise drinks so it sinks. |
 
-## Poured by hand — keep in a cooler (5)
-
-Cola · Tonic water · Soda water · Ginger beer · Lemon-lime soda (Sprite/7UP)
-
-Out of something? Set `in_stock: false` on it in `config.yaml` and every drink
-that needs it disappears from the menu.
-
-## Extras behind the bar (optional)
-Bitters (Old Fashioned), oranges for peel, fresh mint (Mojito), maraschino cherries
-(Shirley Temple), limes/lemons for wedges, **lots of ice**.
-
-## The 38-drink menu
+## The 22-drink menu
 
 | Base | Drinks |
 |---|---|
-| **Vodka** (11) | Screwdriver · Vodka Cranberry · Vodka Soda* · Vodka Tonic* · Moscow Mule* · Madras · Bay Breeze · Sex on the Beach · Cosmopolitan · Lemon Drop · Kamikaze |
-| **Gin** (3) | Gin & Tonic* · Tom Collins* · Gimlet |
-| **Rum** (9) | Rum & Coke* · Spiced Rum & Coke* · Mojito* · Daiquiri · Rum & Ginger (Stormy)* · Garage Mai Tai · Rum Punch · Coconut Rum & Pineapple · Malibu Bay Breeze |
-| **Tequila** (4) | Margarita · Tequila Sunrise · Ranch Water* · Mexican Mule* |
-| **Whiskey** (5) | Whiskey & Coke* · Whiskey Ginger* · Whiskey Sour · Old Fashioned · Lynchburg Lemonade* |
-| **Mixed** (2) | Long Island Iced Tea* · Fuzzy Navel |
-| **No alcohol** (4) | Shirley Temple* · Sunrise · Tropical Cooler · Cran-Orange Cooler |
+| **Vodka** (8) | Screwdriver · Vodka Cranberry · Madras · Bay Breeze · Sex on the Beach · Cosmopolitan · Lemon Drop · Kamikaze |
+| **Gin** (1) | Gimlet |
+| **Rum** (5) | Daiquiri · Garage Mai Tai · Rum Punch · Coconut Rum & Pineapple · Malibu Bay Breeze |
+| **Tequila** (2) | Margarita · Tequila Sunrise |
+| **Whiskey** (2) | Whiskey Sour · Old Fashioned (bartender adds a dash of bitters if you have them — optional) |
+| **Other** (1) | Fuzzy Navel |
+| **No alcohol** (3) | Sunrise · Tropical Cooler · Cran-Orange Cooler |
 
-\* = bartender tops with a fizzy mixer after the robot pours.
+Most alcoholic drinks also offer **Light / Regular / Strong**, and ones with juice
+offer **No alcohol**.
 
-Most alcoholic drinks also offer **Light / Regular / Strong**, and drinks with a
-pumped mixer offer **No alcohol**.
+## Extras behind the bar (optional)
+Ice (lots), limes/oranges for garnish, bitters for the Old Fashioned.
 
-## Common drinks we *can't* do (yet)
-| Drink | Missing | Fix |
-|---|---|---|
-| White Russian, Mudslide, Piña Colada | Cream / coconut cream | Dairy spoils & clogs tubes — pour by hand |
-| Martini, Manhattan, Negroni | Vermouth, Campari | Swap peach schnapps or coconut rum for sweet vermouth |
-| Paloma | Grapefruit soda | Add it as a 6th hand-pour mixer |
-| Amaretto Sour | Amaretto | Swap it in for peach schnapps |
-| Blue Hawaiian, AMF | Blue curaçao | Swap it in for coconut rum |
-| Shots (Lemon Drop shot, etc.) | — | Easy to add as recipes — ask! |
-| Frozen drinks | Blender | Out of scope 😄 |
+## Want fizzy drinks back later?
+The 5 fizzy mixers (cola, tonic, soda water, ginger beer, lemon-lime) and their 16
+recipes are still in `config.yaml`, just switched off. Change `in_stock: false` →
+`true` on any of them and those drinks return (Rum & Coke, Gin & Tonic, Moscow Mule,
+Long Island, …) — the bartender screen then says "top with ~150 ml Cola".
+The proper v2 fix is a CO₂ keg + solenoid valve so the robot pours soda itself.
+
+## Gin is a bit lonely
+With no tonic, gin only makes a Gimlet. Options: keep it for a future Gin & Tonic,
+or swap pump 2 for something that adds more still drinks:
+
+| Swap gin for… | Adds |
+|---|---|
+| Amaretto | Amaretto Sour, Godfather (with whiskey), Alabama Slammer-ish |
+| Sweet vermouth | Manhattan (with whiskey) |
+| Blue curaçao | Blue Hawaiian-style, Blue Lagoon (no soda) |
+| Melon liqueur (Midori) | Midori Sour, Japanese Slipper |
+
+## Common drinks we *can't* do
+| Drink | Why |
+|---|---|
+| Anything with soda (Rum & Coke, G&T, Mule, Long Island…) | Fizz switched off — see above |
+| White Russian, Mudslide, Piña Colada | Cream spoils & clogs tubes |
+| Martini, Manhattan, Negroni | Need vermouth / Campari |
+| Frozen drinks | Needs a blender 😄 |
 
 To swap a bottle: change that pump's `ingredient` in `config.yaml`, restart, prime and
 calibrate that pump. Recipes for the new bottle appear automatically.

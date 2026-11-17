@@ -110,12 +110,14 @@ ingredients:
   cranberry_juice: { name: Cranberry Juice, alcoholic: false }
   pineapple_juice: { name: Pineapple Juice, alcoholic: false }
   grenadine:       { name: Grenadine,       alcoholic: false }
-  # fizzy — kept cold in a fridge/cooler next to the bar, poured by hand
-  cola:            { name: Cola,             alcoholic: false, hand_pour: true, in_stock: true }
-  tonic:           { name: Tonic Water,      alcoholic: false, hand_pour: true, in_stock: true }
-  soda_water:      { name: Soda Water,       alcoholic: false, hand_pour: true, in_stock: true }
-  ginger_beer:     { name: Ginger Beer,      alcoholic: false, hand_pour: true, in_stock: true }
-  lemon_lime_soda: { name: Lemon-Lime Soda,  alcoholic: false, hand_pour: true, in_stock: true }
+  # Fizzy mixers — TURNED OFF (in_stock: false) so the robot makes 100% of
+  # every drink. Flip any of these to true to bring back the drinks that need
+  # them (the bartender then tops the drink up by hand).
+  cola:            { name: Cola,             alcoholic: false, hand_pour: true, in_stock: false }
+  tonic:           { name: Tonic Water,      alcoholic: false, hand_pour: true, in_stock: false }
+  soda_water:      { name: Soda Water,       alcoholic: false, hand_pour: true, in_stock: false }
+  ginger_beer:     { name: Ginger Beer,      alcoholic: false, hand_pour: true, in_stock: false }
+  lemon_lime_soda: { name: Lemon-Lime Soda,  alcoholic: false, hand_pour: true, in_stock: false }
 
 # ---------------------------------------------------------------------
 # Glasses.  max_ml = total liquid INCLUDING any hand-poured top-up
