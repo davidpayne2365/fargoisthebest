@@ -92,33 +92,34 @@ pumps:
 #   hand_pour: true   -> NOT on a pump. Fizzy stuff foams and goes flat in a
 #                        pump, so the bartender screen says "top with ~150 ml Cola".
 #   in_stock: false   -> hides every drink that needs it (hand-pour items only)
+#   color / tint      -> used to draw the drink pictures (tint = how strongly it colors the drink)
 # ---------------------------------------------------------------------
 ingredients:
-  vodka:           { name: Vodka,           alcoholic: true, group: Vodka }
-  gin:             { name: Gin,             alcoholic: true, group: Gin }   # not on a pump (swapped for amaretto)
-  amaretto:        { name: Amaretto,        alcoholic: true, group: Amaretto }
-  white_rum:       { name: White Rum,       alcoholic: true, group: Rum }
-  spiced_rum:      { name: Spiced Rum,      alcoholic: true, group: Rum }
-  coconut_rum:     { name: Coconut Rum,     alcoholic: true, group: Rum }
-  tequila:         { name: Tequila,         alcoholic: true, group: Tequila }
-  whiskey:         { name: Whiskey,         alcoholic: true, group: Whiskey }
-  triple_sec:      { name: Triple Sec,      alcoholic: true }
-  peach_schnapps:  { name: Peach Schnapps,  alcoholic: true }
-  lime_juice:      { name: Lime Juice,      alcoholic: false }
-  lemon_juice:     { name: Lemon Juice,     alcoholic: false }
-  simple_syrup:    { name: Simple Syrup,    alcoholic: false }
-  orange_juice:    { name: Orange Juice,    alcoholic: false }
-  cranberry_juice: { name: Cranberry Juice, alcoholic: false }
-  pineapple_juice: { name: Pineapple Juice, alcoholic: false }
-  grenadine:       { name: Grenadine,       alcoholic: false }
+  vodka:           { name: Vodka,           alcoholic: true, group: Vodka, color: "#e8eef2", tint: 0.04 }
+  gin:             { name: Gin,             alcoholic: true, group: Gin, color: "#e8eef2", tint: 0.04 }   # not on a pump (swapped for amaretto)
+  amaretto:        { name: Amaretto,        alcoholic: true, group: Amaretto, color: "#a85a1c", tint: 0.7 }
+  white_rum:       { name: White Rum,       alcoholic: true, group: Rum, color: "#efece4", tint: 0.05 }
+  spiced_rum:      { name: Spiced Rum,      alcoholic: true, group: Rum, color: "#9a5a2a", tint: 0.6 }
+  coconut_rum:     { name: Coconut Rum,     alcoholic: true, group: Rum, color: "#f2efe6", tint: 0.06 }
+  tequila:         { name: Tequila,         alcoholic: true, group: Tequila, color: "#efe8cc", tint: 0.08 }
+  whiskey:         { name: Whiskey,         alcoholic: true, group: Whiskey, color: "#b8661f", tint: 0.75 }
+  triple_sec:      { name: Triple Sec,      alcoholic: true, color: "#f0ead8", tint: 0.05 }
+  peach_schnapps:  { name: Peach Schnapps,  alcoholic: true, color: "#f3d9b5", tint: 0.15 }
+  lime_juice:      { name: Lime Juice,      alcoholic: false, color: "#cfe0a0", tint: 0.35 }
+  lemon_juice:     { name: Lemon Juice,     alcoholic: false, color: "#f1e7a0", tint: 0.35 }
+  simple_syrup:    { name: Simple Syrup,    alcoholic: false, color: "#f5f2ea", tint: 0.02 }
+  orange_juice:    { name: Orange Juice,    alcoholic: false, color: "#ff9d1c", tint: 1.0 }
+  cranberry_juice: { name: Cranberry Juice, alcoholic: false, color: "#b8152f", tint: 1.0 }
+  pineapple_juice: { name: Pineapple Juice, alcoholic: false, color: "#f5cf3b", tint: 0.9 }
+  grenadine:       { name: Grenadine,       alcoholic: false, color: "#b80f2a", tint: 1.6 }
   # Fizzy mixers — TURNED OFF (in_stock: false) so the robot makes 100% of
   # every drink. Flip any of these to true to bring back the drinks that need
   # them (the bartender then tops the drink up by hand).
-  cola:            { name: Cola,             alcoholic: false, hand_pour: true, in_stock: false }
-  tonic:           { name: Tonic Water,      alcoholic: false, hand_pour: true, in_stock: false }
-  soda_water:      { name: Soda Water,       alcoholic: false, hand_pour: true, in_stock: false }
-  ginger_beer:     { name: Ginger Beer,      alcoholic: false, hand_pour: true, in_stock: false }
-  lemon_lime_soda: { name: Lemon-Lime Soda,  alcoholic: false, hand_pour: true, in_stock: false }
+  cola:            { name: Cola,             alcoholic: false, hand_pour: true, in_stock: false, color: "#3b1d0e", tint: 1.0 }
+  tonic:           { name: Tonic Water,      alcoholic: false, hand_pour: true, in_stock: false, color: "#f1f4f6", tint: 0.03 }
+  soda_water:      { name: Soda Water,       alcoholic: false, hand_pour: true, in_stock: false, color: "#f1f4f6", tint: 0.02 }
+  ginger_beer:     { name: Ginger Beer,      alcoholic: false, hand_pour: true, in_stock: false, color: "#e9d9a6", tint: 0.4 }
+  lemon_lime_soda: { name: Lemon-Lime Soda,  alcoholic: false, hand_pour: true, in_stock: false, color: "#f1f4f6", tint: 0.02 }
 
 # ---------------------------------------------------------------------
 # Glasses.  max_ml = total liquid INCLUDING any hand-poured top-up
@@ -138,6 +139,8 @@ glasses:
 #   pour_last   : these pumps wait until the others finish (e.g. grenadine
 #                 sinks for the "sunrise" look)
 #   finish      : extra instruction shown to the bartender
+#   garnish     : optional picture garnish (lime, lemon, orange, cherry, pineapple, none)
+#                 — otherwise picked automatically from the ingredients
 # Drinks only show on the menu when every ingredient is available.
 # ---------------------------------------------------------------------
 recipes:
@@ -243,7 +246,7 @@ recipes:
       ingredients: { whiskey: 60, lemon_juice: 30, simple_syrup: 20 } }
   - { id: old_fashioned, name: Old Fashioned, glass: rocks, price: 8,
       description: "Whiskey, sugar, bitters, orange peel.",
-      ingredients: { whiskey: 60, simple_syrup: 10 },
+      ingredients: { whiskey: 60, simple_syrup: 10 }, garnish: orange,
       finish: "Add 2–3 dashes of bitters and an orange peel. Big ice cube." }
   - { id: lynchburg_lemonade, name: Lynchburg Lemonade, glass: highball, price: 7,
       description: "Whiskey, triple sec, lemon, lemon-lime soda.",
@@ -255,7 +258,7 @@ recipes:
       ingredients: { amaretto: 50, whiskey: 15, lemon_juice: 30, simple_syrup: 5 } }
   - { id: godfather, name: Godfather, glass: rocks, price: 8,
       description: "Whiskey and amaretto. Smooth sipper.",
-      ingredients: { whiskey: 45, amaretto: 20 } }
+      ingredients: { whiskey: 45, amaretto: 20 }, garnish: none }
   - { id: amaretto_sunrise, name: Amaretto Sunrise, glass: highball, price: 6,
       description: "Amaretto, orange juice, grenadine sunrise.",
       ingredients: { amaretto: 45, orange_juice: 120, grenadine: 10 }, pour_last: [grenadine] }

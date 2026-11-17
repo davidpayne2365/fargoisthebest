@@ -8,16 +8,20 @@
 <div class="grid">
   {% for d in drinks %}
   <button class="card drink" data-id="{{ d.id }}" data-groups="{{ d.groups|join('|') }}">
+    <div class="art" data-art="{{ d.id }}"></div>
+    <div class="drink-body">
     <div class="row"><h3>{{ d.name }}</h3>{% if cfg.payment_mode != 'none' %}<span class="price">{{ money(d.price) }}</span>{% endif %}</div>
     <div class="muted small">{{ d.description }}</div>
     <div style="margin-top:6px">{% for i in d.ingredients %}<span class="tag">{{ i }}</span>{% endfor %}</div>
     <div class="small muted" style="margin-top:4px">Served in: {{ d.glass }}</div>
+    </div>
   </button>
   {% endfor %}
 </div>
 
 <div class="sheet-bg" id="bg"></div>
 <div class="sheet" id="sheet">
+  <div class="sheet-art" id="s-art"></div>
   <div class="row"><h2 id="s-name" style="margin:0"></h2><span class="price" id="s-price"></span></div>
   <div class="muted small" id="s-glass"></div>
   <div id="s-strength-wrap">
@@ -32,16 +36,22 @@
 </div>
 {% endblock %}
 {% block scripts %}
+<script src="{{ url_for('static', filename='drinkart.js') }}"></script>
 <script>
 const DRINKS = {{ drinks|tojson }};
 const LABELS = { virgin: "No alcohol", light: "Light", regular: "Regular", strong: "Strong (+{{ money(cfg.strong_surcharge or 0) }})" };
 let current = null, strength = "regular";
+document.querySelectorAll("[data-art]").forEach(el => {
+  const d = DRINKS.find(x => x.id === el.dataset.art);
+  el.innerHTML = DrinkArt.svg(d.art, { label: d.name });
+});
 const $ = id => document.getElementById(id);
 $("s-guest").value = localStorage.getItem("drinkbot-name") || "";
 
 function open(d) {
   current = d; strength = "regular";
   $("s-name").textContent = d.name;
+  $("s-art").innerHTML = DrinkArt.svg(d.art, { label: d.name });
   $("s-price").textContent = {{ (cfg.payment_mode != 'none')|tojson }} ? "{{ cfg.currency_symbol }}" + Number(d.price).toFixed(2) : "";
   $("s-glass").textContent = "Served in: " + d.glass;
   const seg = $("s-strength"); seg.innerHTML = "";

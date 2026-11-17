@@ -34,6 +34,13 @@ DRINKBOT_MOCK=1 python -m drinkbot
 
 Run the tests: `pytest -q`
 
+## Online demo (no Pi needed)
+
+**https://garage-drinkbot-baf257.netlify.app** — clickable ordering demo (robot simulated)
+and the full [drink list with pictures](https://garage-drinkbot-baf257.netlify.app/drinks.html).
+It's built from `config.yaml` by `scripts/build_site.py`; after changing recipes run
+`bash scripts/deploy_netlify.sh` to update it.
+
 ## On the Raspberry Pi
 
 ```bash
@@ -57,6 +64,8 @@ drinkbot/
   machine.py    pours one order at a time in a background thread, e-stop
   orders.py     SQLite order queue (survives restarts)
   server.py     Flask routes: guest, bartender, admin
+  static/drinkart.js  draws each drink's picture from its recipe
+site/           static demo website (scripts/build_site.py)
   templates/    phone-first pages
 ```
 

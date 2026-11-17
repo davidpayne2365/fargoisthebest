@@ -80,6 +80,7 @@ def create_app(config_path=None, data_dir=None, mock=None):
                 "strengths": R.allowed_strengths(cfg, r),
                 "alcoholic": R.is_alcoholic(cfg, r),
                 "groups": R.menu_groups(cfg, r),
+                "art": R.art_spec(cfg, r),
             })
         order = ["Vodka", "Gin", "Rum", "Tequila", "Whiskey", "Amaretto", "Other", "No alcohol"]
         present = {g for d in drinks for g in d["groups"]}

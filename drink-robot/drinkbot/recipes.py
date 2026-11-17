@@ -112,6 +112,36 @@ def menu_groups(cfg, recipe):
     return groups or ["Other"]
 
 
+GARNISHES = ("lime", "lemon", "orange", "cherry", "pineapple", "none")
+
+
+def art_spec(cfg, recipe):
+    """Everything static/drinkart.js needs to draw a picture of this drink."""
+    glass_key, _ = glass_for(cfg, recipe)
+    last = set(recipe.get("pour_last") or [])
+    layers = []
+    for ing, ml in list(recipe["ingredients"].items()) + list((recipe.get("top_with") or {}).items()):
+        info = cfg["ingredients"][ing]
+        layers.append({"color": info.get("color", "#eeeeee"), "tint": float(info.get("tint", 0.1)),
+                       "ml": float(ml), "last": ing in last})
+    garnish = recipe.get("garnish")
+    if garnish not in GARNISHES:
+        ings = set(recipe["ingredients"])
+        if "grenadine" in last or (ings == {"grenadine"}):
+            garnish = "cherry"
+        elif "pineapple_juice" in ings and "orange_juice" not in ings:
+            garnish = "pineapple"
+        elif "orange_juice" in ings:
+            garnish = "orange"
+        elif "lime_juice" in ings:
+            garnish = "lime"
+        elif "lemon_juice" in ings:
+            garnish = "lemon"
+        else:
+            garnish = "none"
+    return {"glass": glass_key, "layers": layers, "garnish": garnish}
+
+
 def display_ingredients(cfg, recipe):
     names = [cfg["ingredients"][i]["name"] for i in recipe["ingredients"]]
     return names + [cfg["ingredients"][i]["name"] for i in (recipe.get("top_with") or {})]

@@ -1,0 +1,41 @@
+<div class="wrap">
+  <div class="intro">
+    <div>
+      <h1>Garage Bar drink list</h1>
+      <p class="muted">Every drink the robot can pour from its 16 bottles. Amounts are for a Regular pour; guests can also pick Light, Strong or No alcohol on most drinks.</p>
+    </div>
+    <div class="real"><div class="navlinks" style="margin-top:0"><a href="__DEMO_URL__">← Try the ordering demo</a></div></div>
+  </div>
+  <div class="filters" id="filters"></div>
+  <div class="cards" id="cards"></div>
+  <p class="foot">Pictures are drawn from each recipe: the liquid color is mixed from the real ingredients, in the glass the app tells the bartender to use. 1 oz ≈ 30 ml.</p>
+</div>
+<script>
+const DRINKS = __DRINKS__;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const oz = ml => { const v = Math.round(ml / 30 * 4) / 4; return (v % 1 === 0 ? v : v.toFixed(2).replace(/0$/, "")) + " oz"; };
+const STR = { virgin: "No alcohol", light: "Light", regular: "Regular", strong: "Strong" };
+const order = ["Vodka", "Rum", "Tequila", "Whiskey", "Amaretto", "Other", "No alcohol"];
+const groups = [...new Set(DRINKS.flatMap(d => d.groups))].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+let tab = "";
+function render() {
+  document.getElementById("filters").innerHTML = ["", ...groups].map(g =>
+    `<button type="button" data-g="${esc(g)}" class="${g === tab ? "on" : ""}">${g || "All " + DRINKS.length}</button>`).join("");
+  document.querySelectorAll("#filters button").forEach(b => b.onclick = () => { tab = b.dataset.g; render(); });
+  document.getElementById("cards").innerHTML = DRINKS.filter(d => !tab || d.groups.includes(tab)).map(d => {
+    const p = d.plans.regular || Object.values(d.plans)[0];
+    return `<article class="dcard">
+      <div class="big-art">${DrinkArt.svg(d.art, { label: d.name })}</div>
+      <div class="body">
+        <div class="row"><h2>${esc(d.name)}</h2><span class="price">$${Number(d.price).toFixed(2)}</span></div>
+        <div class="chips">${d.groups.map(g => `<span class="chip ${g === "No alcohol" ? "na" : ""}">${esc(g)}</span>`).join("")}</div>
+        <div class="muted">${esc(d.desc)}</div>
+        <ul class="recipe">${p.steps.map(s => `<li><span>${esc(s.n)}${s.last ? " <span class='muted small'>(poured last)</span>" : ""}</span><span class="amt">${Math.round(s.ml)} ml · ${oz(s.ml)}</span></li>`).join("")}</ul>
+        ${d.finish ? `<div class="finish">✋ ${esc(d.finish)}</div>` : ""}
+        <div class="meta"><span>${esc(d.glass)}</span><span>${Object.keys(d.plans).map(k => STR[k]).join(" · ")}</span></div>
+      </div>
+    </article>`;
+  }).join("");
+}
+render();
+</script>

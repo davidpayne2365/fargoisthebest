@@ -188,3 +188,13 @@ def test_emergency_stop_flags_order(tmp_path):
     o = app.config["STORE"].get(oid)
     assert o["status"] == "queued" and "dump" in o["note"]
     assert app.config["MACHINE"].snapshot()["status"] == "stopped"
+
+
+def test_every_drink_has_picture_spec(fizzy_cfg):
+    for r in R.available_recipes(fizzy_cfg):
+        art = R.art_spec(fizzy_cfg, r)
+        assert art["glass"] in fizzy_cfg["glasses"]
+        assert art["garnish"] in R.GARNISHES
+        assert art["layers"] and all(layer["color"].startswith("#") for layer in art["layers"])
+    sunrise = R.art_spec(fizzy_cfg, R.get_recipe(fizzy_cfg, "tequila_sunrise"))
+    assert any(layer["last"] for layer in sunrise["layers"]) and sunrise["garnish"] == "cherry"

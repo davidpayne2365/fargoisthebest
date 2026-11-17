@@ -1,0 +1,272 @@
+<div class="wrap">
+  <div class="intro">
+    <div>
+      <h1>DrinkBot demo</h1>
+      <p class="muted">Try the full flow: order on the guest phone, approve and pour on the bartender screen. The robot is simulated and pours 5× faster than real pumps.</p>
+    </div>
+    <div class="real">Real app, once the Pi is set up:<br><b class="mono">http://drinkbot.local:8080</b> <span class="muted">· bartender at <span class="mono">/bar</span></span>
+      <div class="navlinks"><a href="__DRINKS_URL__">See all __COUNT__ drinks with pictures →</a></div></div>
+  </div>
+
+  <div class="switch" role="tablist">
+    <button id="sw-guest" class="on" type="button">Guest phone</button>
+    <button id="sw-bar" type="button">Bartender <span id="sw-badge"></span></button>
+  </div>
+
+  <div class="panes">
+    <section class="pane" id="pane-guest">
+      <p class="pane-label">Guest phone (scanned the QR code)</p>
+      <div class="phone" id="phone"></div>
+    </section>
+    <section class="pane" id="pane-bar">
+      <p class="pane-label">Bartender tablet</p>
+      <div class="tablet" id="tablet"></div>
+      <div class="opts">
+        <span>Cup mode</span>
+        <div class="seg" id="opt-cup"><button type="button" data-v="glass" class="on">Glass</button><button type="button" data-v="stack">Cup stack</button></div>
+        <span>Payment</span>
+        <div class="seg" id="opt-pay"><button type="button" data-v="tab" class="on">Tab / approve</button><button type="button" data-v="none">Free</button></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+const DRINKS = __DRINKS__;
+const SPEED = 5;
+const STR_LABEL = { virgin: "No alcohol", light: "Light", regular: "Regular", strong: "Strong +$1" };
+const STR_SHORT = { virgin: "NO alcohol", light: "Light", regular: "", strong: "STRONG" };
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const money = v => "$" + Number(v).toFixed(2);
+
+const state = {
+  cup: "glass", pay: "tab",
+  orders: [], nextId: 1,
+  machine: { status: "idle", label: "", progress: 0, orderId: null },
+  guest: { view: "menu", tab: "", sheet: null, strength: "regular", name: "Sam", err: "", watching: null, mine: [] },
+  pane: "guest",
+};
+let timer = null;
+
+// ---------- seed with two example orders from other guests so the bar isn't empty ----------
+function addOrder(drinkId, strength, guest, status) {
+  const d = DRINKS.find(x => x.id === drinkId);
+  const plan = d.plans[strength] || d.plans.regular;
+  const o = { id: state.nextId++, drink: d, strength, guest, status, steps: plan.steps, sec: plan.sec, price: plan.price, note: "" };
+  state.orders.push(o);
+  return o;
+}
+addOrder("margarita", "regular", "Jess (example)", "queued");
+addOrder("rum_punch", "strong", "Mike (example)", "new");
+
+// ---------- guest phone ----------
+function renderGuest() {
+  const g = state.guest, el = $("#phone");
+  if (g.view === "status") return renderStatus(el);
+  const groups = [...new Set(DRINKS.flatMap(d => d.groups))];
+  const order = ["Vodka", "Rum", "Tequila", "Whiskey", "Amaretto", "Other", "No alcohol"];
+  groups.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  const shown = DRINKS.filter(d => !g.tab || d.groups.includes(g.tab));
+  const oldList = el.querySelector(".list"), keepScroll = oldList ? oldList.scrollTop : 0;
+  el.innerHTML = `
+    <div class="topbar"><h2>Garage Bar</h2><span class="small muted">${DRINKS.length} drinks</span></div>
+    <div class="small muted">Tap a drink to order.</div>
+    <div class="tabs">${["", ...groups].map(t => `<button type="button" data-tab="${esc(t)}" class="${g.tab === t ? "on" : ""}">${t || "All"}</button>`).join("")}</div>
+    <div class="list">${shown.map(d => `
+      <button type="button" class="drink" data-drink="${d.id}">
+        <span class="art">${DrinkArt.svg(d.art)}</span>
+        <span class="row"><h3>${esc(d.name)}</h3>${state.pay !== "none" ? `<span class="price">${money(d.price)}</span>` : ""}</span>
+        <span class="small muted">${esc(d.desc)}</span>
+        <span>${d.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</span>
+        <span class="small muted">Served in: ${esc(state.cup === "stack" ? "16 oz party cup" : d.glass)}</span>
+      </button>`).join("")}</div>
+    ${g.mine.length ? `<div class="myorders"><div class="small muted">Your orders</div>${g.mine.map(id => {
+      const o = state.orders.find(x => x.id === id);
+      return `<button type="button" class="mini" data-watch="${o.id}"><span>#${o.id} ${esc(o.drink.name)}</span><span class="st-${o.status}">${statusText(o)[0]}</span></button>`;
+    }).join("")}</div>` : ""}
+    ${g.sheet ? sheetHtml() : ""}`;
+  el.querySelector(".list").scrollTop = keepScroll;
+  el.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { g.tab = b.dataset.tab; el.querySelector(".list").scrollTop = 0; renderGuest(); });
+  el.querySelectorAll("[data-drink]").forEach(b => b.onclick = () => {
+    g.sheet = DRINKS.find(d => d.id === b.dataset.drink); g.strength = "regular"; g.err = ""; renderGuest();
+  });
+  el.querySelectorAll("[data-watch]").forEach(b => b.onclick = () => { g.watching = +b.dataset.watch; g.view = "status"; renderGuest(); });
+  if (g.sheet) wireSheet(el);
+}
+
+function sheetHtml() {
+  const g = state.guest, d = g.sheet, strengths = Object.keys(d.plans);
+  const p = d.plans[g.strength];
+  return `<div class="sheet-bg" id="sbg"></div>
+    <div class="sheet" role="dialog" aria-label="Order ${esc(d.name)}">
+      <div class="sheet-art">${DrinkArt.svg(d.art, { label: d.name })}</div>
+      <div class="row"><h2 style="font-size:1.35rem">${esc(d.name)}</h2>${state.pay !== "none" ? `<span class="price">${money(p.price)}</span>` : ""}</div>
+      <div class="small muted">Served in: ${esc(state.cup === "stack" ? "16 oz party cup" : d.glass)}</div>
+      ${strengths.length > 1 ? `<label>Strength</label><div class="seg">${strengths.map(s => `<button type="button" data-str="${s}" class="${s === g.strength ? "on" : ""}">${STR_LABEL[s]}</button>`).join("")}</div>` : ""}
+      <label for="g-name">Your name</label>
+      <input type="text" id="g-name" maxlength="30" value="${esc(g.name)}">
+      <div class="small muted">Drink responsibly. By ordering you confirm you're of legal drinking age.</div>
+      <button type="button" class="primary big" id="g-order">Order</button>
+      <div class="err">${esc(g.err)}</div>
+    </div>`;
+}
+function wireSheet(el) {
+  const g = state.guest;
+  el.querySelector("#sbg").onclick = () => { g.sheet = null; renderGuest(); };
+  el.querySelectorAll("[data-str]").forEach(b => b.onclick = () => { g.name = el.querySelector("#g-name").value; g.strength = b.dataset.str; renderGuest(); });
+  el.querySelector("#g-order").onclick = () => {
+    const name = el.querySelector("#g-name").value.trim();
+    if (!name) { g.err = "Please enter your name."; return renderGuest(); }
+    g.name = name;
+    const o = addOrder(g.sheet.id, g.strength, name, state.pay === "none" ? "queued" : "new");
+    g.mine.unshift(o.id); g.watching = o.id; g.sheet = null; g.view = "status";
+    renderAll();
+  };
+}
+
+function position(o) {
+  const waiting = state.orders.filter(x => x.status === "new" || x.status === "queued");
+  return waiting.findIndex(x => x.id === o.id) + 1;
+}
+function statusText(o) {
+  switch (o.status) {
+    case "new": return ["Waiting for bartender", "Pay the bartender (cash or tab). They'll start your drink once it's sorted."];
+    case "queued": return ["In line", position(o) === 1 ? "You're next!" : `Position ${position(o)} in line.`];
+    case "pouring": return ["Pouring now", "The robot is making your drink."];
+    case "ready": return ["Ready!", `Grab your ${(state.cup === "stack" ? "cup" : o.drink.glass.toLowerCase())} at the bar.`];
+    case "done": return ["Enjoy!", "Picked up. Cheers."];
+    default: return ["Cancelled", "Talk to the bartender."];
+  }
+}
+function renderStatus(el) {
+  const g = state.guest, o = state.orders.find(x => x.id === g.watching);
+  const [t, d] = statusText(o);
+  const pouring = o.status === "pouring";
+  el.innerHTML = `
+    <div class="topbar"><h2>Order #${o.id}</h2><button type="button" class="ghost" id="g-back">Order another</button></div>
+    <div class="card ${o.status === "ready" ? "flash" : ""}" style="margin-top:10px">
+      <div class="small muted">${esc(o.guest)}</div>
+      <h3 style="font-size:1.15rem;margin-top:2px">${esc(o.drink.name)}${STR_SHORT[o.strength] ? ` · ${STR_SHORT[o.strength]}` : ""}</h3>
+      <div class="status st-${o.status}">${t}</div>
+      <div class="muted">${esc(d)}</div>
+      ${pouring ? `<div class="bar" style="margin-top:10px"><div style="width:${state.machine.progress * 100}%"></div></div>` : ""}
+    </div>
+    ${o.status === "new" && state.pay !== "none" ? `<div class="card" style="margin-top:10px"><div class="row"><strong>Total</strong><span class="price">${money(o.price)}</span></div></div>` : ""}
+    <p class="small muted" style="margin-top:14px">This page updates by itself, and the phone buzzes when the drink is ready.</p>
+    <p class="small muted">Now switch to the bartender screen to approve and pour it.</p>`;
+  el.querySelector("#g-back").onclick = () => { g.view = "menu"; renderGuest(); };
+}
+
+// ---------- bartender ----------
+function renderBar() {
+  const m = state.machine, el = $("#tablet"), stack = state.cup === "stack";
+  const by = s => state.orders.filter(o => o.status === s);
+  const ready = by("ready"), queued = by("queued"), fresh = by("new");
+  const nxt = queued[0], blocked = stack && ready.length > 0;
+  const head = o => `<div class="row"><strong>#${o.id} ${esc(o.drink.name)}</strong>${state.pay !== "none" ? `<span class="price">${money(o.price)}</span>` : ""}</div>
+    <div>${esc(o.guest)}${STR_SHORT[o.strength] ? ` · <b>${STR_SHORT[o.strength]}</b>` : ""}</div>`;
+  const steps = o => `<ul class="steps">${o.steps.map(s => `<li>${esc(s.n)}: ${s.ml} ml${s.last ? " (poured last)" : ""}</li>`).join("")}</ul>`;
+  const names = { idle: "Idle", pouring: "Pouring", stopped: "Stopped" };
+  el.innerHTML = `
+    <div class="card machine">
+      <div class="grow">
+        <div class="small muted">Robot</div>
+        <div class="status ${m.status === "pouring" ? "st-pouring" : m.status === "idle" ? "st-ready" : "st-cancelled"}" style="font-size:1.25rem">${names[m.status]}</div>
+        <div class="small muted">${esc(m.label)}${m.status === "stopped" ? ` · <button type="button" class="ghost" id="b-clear" style="padding:3px 10px">Clear</button>` : ""}</div>
+        <div class="bar" style="margin-top:6px"><div style="width:${m.progress * 100}%"></div></div>
+      </div>
+      <button type="button" class="estop" id="b-stop">■ STOP</button>
+    </div>
+    <div class="sec">Next to pour</div>
+    ${nxt ? `<div class="card">${head(nxt)}
+        <div class="callout">${stack ? "Make sure the cup stack is under the nozzle" : `Put a <u>${esc(nxt.drink.glass)}</u> under the nozzle`}</div>
+        ${nxt.note ? `<div class="warnnote">⚠ ${esc(nxt.note)}</div>` : ""}
+        ${blocked ? `<div class="warnnote">Top cup is still full. Hand it out and tap Picked up first.</div>` : ""}
+        ${steps(nxt)}
+        ${nxt.drink.finish ? `<div class="note">✋ Before handing over: ${esc(nxt.drink.finish)}</div>` : ""}
+        <div class="small muted">About ${Math.round(nxt.sec)} s with real pumps</div>
+        <div class="actions"><button type="button" class="primary big" id="b-pour" ${m.status === "pouring" || blocked ? "disabled" : ""}>POUR</button></div>
+      </div>` : `<div class="card empty">Nothing waiting.</div>`}
+    <div class="sec">Ready for pickup</div>
+    <div class="grid">${ready.map(o => `<div class="card flash">${head(o)}<div class="small muted">${esc(stack ? "16 oz party cup" : o.drink.glass)}</div>
+      <div class="actions"><button type="button" class="ok" data-act="pickup" data-id="${o.id}">Picked up</button></div></div>`).join("") || `<div class="empty">None</div>`}</div>
+    ${state.pay !== "none" ? `<div class="sec">Needs approval</div>
+    <div class="grid">${fresh.map(o => `<div class="card">${head(o)}${steps(o)}
+      <div class="actions"><button type="button" class="primary" data-act="approve" data-id="${o.id}">Paid / Approve</button>
+      <button type="button" class="bad" data-act="cancel" data-id="${o.id}">Cancel</button></div></div>`).join("") || `<div class="empty">None</div>`}</div>` : ""}
+    <div class="sec">Queue</div>
+    <div class="grid">${queued.slice(1).map(o => `<div class="card">${head(o)}<div class="small muted">${esc(o.drink.glass)}</div></div>`).join("") || `<div class="empty">None</div>`}</div>`;
+
+  el.querySelector("#b-stop").onclick = stopPour;
+  const clr = el.querySelector("#b-clear"); if (clr) clr.onclick = () => { m.status = "idle"; m.label = ""; renderAll(); };
+  const pour = el.querySelector("#b-pour"); if (pour) pour.onclick = () => startPour(nxt);
+  el.querySelectorAll("[data-act]").forEach(b => b.onclick = () => {
+    const o = state.orders.find(x => x.id === +b.dataset.id);
+    if (b.dataset.act === "approve") o.status = "queued";
+    if (b.dataset.act === "cancel") o.status = "cancelled";
+    if (b.dataset.act === "pickup") o.status = "done";
+    renderAll();
+  });
+  const pending = fresh.length + ready.length;
+  $("#sw-badge").textContent = pending ? `(${pending})` : "";
+}
+
+function startPour(o) {
+  const m = state.machine;
+  o.note = ""; o.status = "pouring";
+  Object.assign(m, { status: "pouring", label: `#${o.id} ${o.drink.name} for ${o.guest}`, progress: 0, orderId: o.id });
+  const total = Math.max(1.5, o.sec / SPEED) * 1000, t0 = performance.now();
+  clearInterval(timer);
+  timer = setInterval(() => {
+    m.progress = Math.min(1, (performance.now() - t0) / total);
+    if (m.progress >= 1) {
+      clearInterval(timer); o.status = "ready";
+      Object.assign(m, { status: "idle", label: "", progress: 0, orderId: null });
+    }
+    renderAll();
+  }, 200);
+  renderAll();
+}
+function stopPour() {
+  const m = state.machine;
+  if (m.status !== "pouring") return;
+  clearInterval(timer);
+  const o = state.orders.find(x => x.id === m.orderId);
+  if (o) { o.status = "queued"; o.note = "Stopped mid-pour. Dump the cup before re-pouring."; }
+  Object.assign(m, { status: "stopped", label: "Emergency stop pressed", progress: 0, orderId: null });
+  renderAll();
+}
+
+// ---------- chrome ----------
+function setPane(p) {
+  state.pane = p;
+  $("#pane-guest").dataset.hide = p === "guest" ? "0" : "1";
+  $("#pane-bar").dataset.hide = p === "bar" ? "0" : "1";
+  $("#sw-guest").classList.toggle("on", p === "guest");
+  $("#sw-bar").classList.toggle("on", p === "bar");
+}
+$("#sw-guest").onclick = () => setPane("guest");
+$("#sw-bar").onclick = () => setPane("bar");
+function seg(id, key) {
+  document.querySelectorAll(`#${id} button`).forEach(b => b.onclick = () => {
+    state[key] = b.dataset.v;
+    document.querySelectorAll(`#${id} button`).forEach(x => x.classList.toggle("on", x === b));
+    if (key === "pay" && state.pay === "none") state.orders.forEach(o => { if (o.status === "new") o.status = "queued"; });
+    renderAll();
+  });
+}
+seg("opt-cup", "cup"); seg("opt-pay", "pay");
+
+function renderAll() {
+  const g = state.guest;
+  // keep typed name and focus if the sheet is open while the timer re-renders
+  const input = document.getElementById("g-name");
+  if (input) g.name = input.value;
+  const focused = document.activeElement && document.activeElement.id === "g-name";
+  if (!(g.sheet && focused)) renderGuest();
+  renderBar();
+}
+setPane("guest");
+renderAll();
+</script>
