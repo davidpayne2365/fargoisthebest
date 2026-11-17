@@ -10,26 +10,25 @@ Laptop ──USB──► USB relay board ──switches 12 V──► pumps ─
 
 The same relay board plugs into the Pi later, so nothing is wasted.
 
-## Cheapest MVP (~$45–65): 4 pumps, 3 drinks, zero upkeep
+## MVP: one 8-channel board, 8 pumps, 10 drinks (~$100–130)
 
 | Qty | Item | ~$ |
 |---|---|---|
-| 1 | 4-channel USB relay board (LCUS-4 / CH340) — or the 8-channel one if you'll grow soon (+~$5) | 10–20 |
-| 4 | Cheap 12 V peristaltic pumps (often sold in 2-packs; most include a little tubing) | 30–40 |
-| 1 | 12 V **2 A** wall adapter with barrel plug + screw-terminal adapter (or reuse an old 12 V adapter) | 0–10 |
-| — | Extra matching silicone tubing, a few wires, tape | 0–10 |
+| 1 | 8-channel USB relay board (LCUS-8 / CH340) | 15–25 |
+| 8 | Cheap 12 V peristaltic pumps (optional: make #4, the water pump, a fast one, +~$25) | 60–80 |
+| 1 | 12 V **5 A** power adapter + barrel-jack screw adapter | 12–18 |
+| — | Matching silicone tubing, wire, Wago connectors | 10–15 |
 
-Already have: laptop, bottles, a cup, a shoebox/cutting board to mount things on.
-Bottles: **vodka, whiskey, amaretto, coffee liqueur** (liquor only — nothing to spoil
-or refill) → Black Russian, Godfather, Godmother. With an 8-relay board, add water +
-orange & cranberry syrup + peach schnapps for Screwdriver, Madras, Sex on the Beach,
-Fuzzy Navel. Run it with:
+Bottles (nothing perishable): **vodka, whiskey, amaretto, water jug, orange syrup,
+cranberry syrup, lime syrup, pure cane syrup** → Screwdriver, Vodka Cranberry, Madras,
+Whiskey Sour, Old Fashioned, Amaretto Sour, Godfather, Amaretto Cranberry, Godmother,
+Cran-Orange Cooler. Run it with:
 
 ```
 python -m drinkbot --config config.mvp.yaml
 ```
 
-## Buy for the full laptop test (~$110–150 for 8 pumps)
+## Parts list details
 
 | Qty | Item | What to check in the listing |
 |---|---|---|

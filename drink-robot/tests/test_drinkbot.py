@@ -239,9 +239,9 @@ def test_usb_relay_needs_enough_boards():
 
 def test_mvp_config_extends_base(tmp_path):
     cfg = R.load_config(os.path.join(ROOT, "config.mvp.yaml"))
-    assert len(cfg["pumps"]) == 4 and cfg["pump_driver"] == "usb_relay"
+    assert len(cfg["pumps"]) == 8 and cfg["pump_driver"] == "usb_relay"
     names = {r["name"] for r in R.available_recipes(cfg)}
-    assert names == {"Black Russian", "Godfather", "Godmother"}
+    assert len(names) == 10 and {"Screwdriver", "Whiskey Sour", "Godfather"} <= names
     cfg["pump_driver"] = "mock"  # app boots with it
     app = create_app(os.path.join(ROOT, "config.mvp.yaml"), str(tmp_path), mock=True)
     assert app.test_client().get("/").status_code == 200

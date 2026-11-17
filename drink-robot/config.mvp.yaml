@@ -1,11 +1,13 @@
 # =====================================================================
-#  MVP config: laptop + 4-relay USB board + 4 cheap pumps.
+#  MVP config: laptop + ONE 8-channel USB relay board + 8 pumps.
 #  Everything else (recipes, glasses, PIN...) comes from config.yaml.
 #
 #  Run:   python -m drinkbot --config config.mvp.yaml
 #
-#  4 bottles, all liquor -> nothing to spoil, nothing to refill but the bottles:
-#  Black Russian, Godfather, Godmother.
+#  Nothing perishable: 3 liquors, 4 shelf-stable syrups, 1 water jug -> 10 drinks:
+#    Screwdriver, Vodka Cranberry, Madras, Whiskey Sour, Old Fashioned,
+#    Amaretto Sour, Godfather, Amaretto Cranberry, Godmother,
+#    Cran-Orange Cooler (no alcohol)   (+ Light / Strong / No-alcohol options)
 # =====================================================================
 extends: config.yaml
 
@@ -14,16 +16,17 @@ usb_relay:
   ports: ["COM3"]           # find yours: python -m drinkbot.relaytest
   baud: 9600
 
-max_simultaneous_pumps: 4   # all at once ≈ 1.5 A on a 12 V 2 A adapter
+max_simultaneous_pumps: 6   # up to ~3 A with cheap pumps -> use a 12 V 5 A adapter
 
 pumps:   # pump N is wired to relay N
-  - { id: 1, gpio: 17, ingredient: vodka,          ml_per_sec: 1.6 }
-  - { id: 2, gpio: 27, ingredient: whiskey,        ml_per_sec: 1.6 }
-  - { id: 3, gpio: 22, ingredient: amaretto,       ml_per_sec: 1.6 }
-  - { id: 4, gpio: 23, ingredient: coffee_liqueur, ml_per_sec: 1.6 }
+  - { id: 1, gpio: 17, ingredient: vodka,           ml_per_sec: 1.6 }
+  - { id: 2, gpio: 27, ingredient: whiskey,         ml_per_sec: 1.6 }
+  - { id: 3, gpio: 22, ingredient: amaretto,        ml_per_sec: 1.6 }
+  - { id: 4, gpio: 23, ingredient: water,           ml_per_sec: 1.6 }   # a FAST pump here cuts pours to ~30 s; calibrate it
+  - { id: 5, gpio: 24, ingredient: orange_syrup,    ml_per_sec: 1.6 }
+  - { id: 6, gpio: 25, ingredient: cranberry_syrup, ml_per_sec: 1.6 }
+  - { id: 7, gpio: 12, ingredient: lime_syrup,      ml_per_sec: 1.6 }
+  - { id: 8, gpio: 13, ingredient: simple_syrup,    ml_per_sec: 1.6 }   # pure cane syrup
 
-# Bigger MVP on an 8-relay board — add one of these 5th..8th pump sets:
-#   + simple_syrup                          -> + Old Fashioned
-#   + water, orange_syrup, cranberry_syrup, peach_schnapps
-#                                           -> + Screwdriver, Madras, Sex on the Beach, Fuzzy Navel
-#   + water, lime_syrup, simple_syrup       -> + Whiskey Sour, Amaretto Sour, Old Fashioned
+# Prefer cocktails over juice drinks? Swap pump 5 (orange_syrup) for triple_sec:
+#   loses Screwdriver, Madras, Cran-Orange Cooler; gains Cosmopolitan, Lemon Drop, Kamikaze.
