@@ -21,10 +21,46 @@ def cal(tmp_path):
     return R.Calibration(str(tmp_path / "cal.json"))
 
 
+def test_every_recipe_plans_at_every_strength(cfg, cal):
+    avail = R.available_recipes(cfg)
+    assert len(avail) == len(cfg["recipes"])  # default config: everything is loaded
+    for r in avail:
+        for st in R.allowed_strengths(cfg, r):
+            assert R.plan_pour(cfg, r, st, cal)
+
+
 def test_menu_hides_drinks_without_loaded_ingredients(cfg):
+    cfg["pumps"] = [p for p in cfg["pumps"] if p["ingredient"] != "gin"]
     ids = {r["id"] for r in R.available_recipes(cfg)}
     assert "margarita" in ids
-    assert "gin_tonic" not in ids  # no gin/tonic pump
+    assert "gin_tonic" not in ids and "long_island" not in ids
+
+
+def test_out_of_stock_hand_pour_hides_drinks(cfg):
+    cfg["ingredients"]["cola"]["in_stock"] = False
+    ids = {r["id"] for r in R.available_recipes(cfg)}
+    assert "rum_coke" not in ids and "long_island" not in ids
+    assert "gin_tonic" in ids
+
+
+def test_top_with_leaves_room_in_glass(cfg, cal):
+    r = dict(R.get_recipe(cfg, "gin_tonic"))
+    r["ingredients"] = {"gin": 400}
+    robot = sum(s["ml"] for s in R.plan_pour(cfg, r, "regular", cal))
+    assert robot + 150 <= cfg["glasses"]["highball"]["max_ml"] + 0.5
+    extras = R.bartender_extras(cfg, r)
+    assert extras["top_with"] == [{"name": "Tonic Water", "ml": 150.0}]
+
+
+def test_pour_last_gets_later_phase(cfg, cal):
+    steps = R.plan_pour(cfg, R.get_recipe(cfg, "tequila_sunrise"), "regular", cal)
+    phase = {s["ingredient"]: s["phase"] for s in steps}
+    assert phase == {"tequila": 0, "orange_juice": 0, "grenadine": 1}
+
+
+def test_no_virgin_option_when_robot_pours_only_alcohol(cfg):
+    assert "virgin" not in R.allowed_strengths(cfg, R.get_recipe(cfg, "captain_coke"))
+    assert R.allowed_strengths(cfg, R.get_recipe(cfg, "shirley_temple")) == ["regular"]
 
 
 def test_strength_scales_only_alcohol(cfg, cal):
@@ -66,6 +102,19 @@ def test_pumpbank_respects_simultaneous_limit():
     assert all(d.value == 0 for d in bank.outputs.values())
 
 
+def test_pumpbank_phases_run_in_order():
+    bank = PumpBank([{"id": 1, "gpio": 1}, {"id": 2, "gpio": 2}], max_simultaneous=4, mock=True)
+    overlap = False
+
+    def cb(_):
+        nonlocal overlap
+        if bank.outputs[1].value and bank.outputs[2].value:
+            overlap = True
+
+    assert bank.run([(1, 0.3, 0), (2, 0.2, 1)], progress_cb=cb)
+    assert not overlap
+
+
 def test_full_order_flow(tmp_path):
     app = create_app(os.path.join(ROOT, "config.yaml"), str(tmp_path), mock=True)
     c = app.test_client()
@@ -96,6 +145,9 @@ def test_full_order_flow(tmp_path):
             break
         time.sleep(0.05)
     assert c.get(f"/api/orders/{oid}?t={tok}").json["status"] == "ready"
+    rc = c.post("/api/orders", json={"recipe_id": "rum_coke", "guest": "Jo"}).json
+    extras = c.get(f"/api/orders/{rc['id']}?t={rc['token']}").json["extras"]
+    assert extras["top_with"][0]["name"] == "Cola"
     assert c.post(f"/api/bar/orders/{oid}/picked_up").status_code == 200
     assert c.get(f"/api/orders/{oid}?t={tok}").json["status"] == "done"
 

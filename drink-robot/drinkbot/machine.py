@@ -46,7 +46,7 @@ class Machine:
             return False, "Robot is busy"
         if not self._cup_ok():
             return False, "No cup detected under the nozzle"
-        jobs = [(s["pump_id"], s["seconds"]) for s in order["steps"]]
+        jobs = [(s["pump_id"], s["seconds"], s.get("phase", 0)) for s in order["steps"]]
         self.store.set_status(order_id, "pouring", note="")
         self._set(status="pouring", order_id=order_id, progress=0.0,
                   label=f"#{order_id} {order['recipe_name']} for {order['guest']}", message="")

@@ -62,7 +62,7 @@ def create_app(config_path=None, data_dir=None, mock=None):
             "id": o["id"], "guest": o["guest"], "recipe": o["recipe_name"],
             "glass": o["glass_name"], "glass_key": o["glass_key"], "strength": o["strength"],
             "price": o["price"], "status": o["status"], "note": o["note"],
-            "steps": o["steps"], "created": o["created"],
+            "steps": o["steps"], "created": o["created"], "extras": o["extras"],
             "position": store.queue_position(o["id"]),
             "est_seconds": R.estimate_seconds(cfg, o["steps"]),
         }
@@ -76,11 +76,15 @@ def create_app(config_path=None, data_dir=None, mock=None):
             drinks.append({
                 "id": r["id"], "name": r["name"], "description": r.get("description", ""),
                 "glass": g["name"], "price": r.get("price", 0),
-                "ingredients": [cfg["ingredients"][i]["name"] for i in r["ingredients"]],
+                "ingredients": R.display_ingredients(cfg, r),
                 "strengths": R.allowed_strengths(cfg, r),
                 "alcoholic": R.is_alcoholic(cfg, r),
+                "groups": R.menu_groups(cfg, r),
             })
-        return render_template("menu.html", drinks=drinks)
+        order = ["Vodka", "Gin", "Rum", "Tequila", "Whiskey", "Other", "No alcohol"]
+        present = {g for d in drinks for g in d["groups"]}
+        tabs = [g for g in order if g in present] + sorted(present - set(order))
+        return render_template("menu.html", drinks=drinks, tabs=tabs)
 
     @app.post("/api/orders")
     def place_order():
@@ -99,7 +103,8 @@ def create_app(config_path=None, data_dir=None, mock=None):
         gkey, g = R.glass_for(cfg, recipe)
         status = "queued" if cfg.get("payment_mode", "tab") == "none" else "new"
         o = store.create(guest, recipe, gkey, g["name"], strength, steps,
-                         R.price_for(cfg, recipe, strength), status)
+                         R.price_for(cfg, recipe, strength), status,
+                         extras=R.bartender_extras(cfg, recipe))
         machine.maybe_autostart()
         return jsonify(id=o["id"], token=o["token"],
                        url=url_for("order_page", order_id=o["id"], t=o["token"]))

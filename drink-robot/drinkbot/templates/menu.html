@@ -2,9 +2,12 @@
 {% block body %}
 <p class="muted">Tap a drink to order. You'll get a page that tells you when it's ready.</p>
 {% if not drinks %}<div class="card">No drinks available — the bottles on the robot don't match any recipe yet.</div>{% endif %}
+<div class="seg tabs" id="tabs">
+  <button class="on" data-g="">All</button>{% for t in tabs %}<button data-g="{{ t }}">{{ t }}</button>{% endfor %}
+</div>
 <div class="grid">
   {% for d in drinks %}
-  <button class="card drink" data-id="{{ d.id }}">
+  <button class="card drink" data-id="{{ d.id }}" data-groups="{{ d.groups|join('|') }}">
     <div class="row"><h3>{{ d.name }}</h3>{% if cfg.payment_mode != 'none' %}<span class="price">{{ money(d.price) }}</span>{% endif %}</div>
     <div class="muted small">{{ d.description }}</div>
     <div style="margin-top:6px">{% for i in d.ingredients %}<span class="tag">{{ i }}</span>{% endfor %}</div>
@@ -54,6 +57,12 @@ function open(d) {
 }
 function close() { $("sheet").classList.remove("open"); $("bg").classList.remove("open"); }
 $("bg").onclick = close;
+document.querySelectorAll("#tabs button").forEach(t => t.onclick = () => {
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b === t));
+  document.querySelectorAll(".drink").forEach(d => {
+    d.style.display = !t.dataset.g || d.dataset.groups.split("|").includes(t.dataset.g) ? "" : "none";
+  });
+});
 document.querySelectorAll(".drink").forEach(el => el.onclick = () => open(DRINKS.find(d => d.id === el.dataset.id)));
 $("s-submit").onclick = async () => {
   const guest = $("s-guest").value.trim();

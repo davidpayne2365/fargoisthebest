@@ -74,45 +74,53 @@ class PumpBank:
         self.all_off()
 
     def run(self, jobs, progress_cb=None):
-        """Run pumps. jobs = [(pump_id, seconds), ...].
+        """Run pumps. jobs = [(pump_id, seconds), ...] or [(pump_id, seconds, phase), ...].
 
-        Longest jobs start first; at most max_simultaneous run at once.
-        Blocks until finished. Returns True if completed, False if stopped.
+        Phases run in order (phase 1 starts only after every phase-0 pump has
+        stopped). Within a phase the longest jobs start first and at most
+        max_simultaneous run at once. Blocks until finished.
+        Returns True if completed, False if stopped.
         """
         if not self._lock.acquire(blocking=False):
             raise RuntimeError("Pumps are already running")
         try:
             self._stop.clear()
-            merged = {}
-            for pid, sec in jobs:
+            merged = {}  # (phase, pid) -> seconds
+            for job in jobs:
+                pid, sec = job[0], float(job[1])
+                phase = int(job[2]) if len(job) > 2 else 0
                 if pid not in self.outputs:
                     raise ValueError(f"Unknown pump {pid}")
-                merged[pid] = merged.get(pid, 0.0) + float(sec)
-            pending = sorted(merged.items(), key=lambda j: -j[1])
-            pending = [(pid, min(sec, self.max_seconds)) for pid, sec in pending if sec > 0]
-            total = sum(sec for _, sec in pending) or 1.0
+                merged[(phase, pid)] = merged.get((phase, pid), 0.0) + sec
+            phases = {}
+            for (phase, pid), sec in merged.items():
+                if sec > 0:
+                    phases.setdefault(phase, []).append((pid, min(sec, self.max_seconds)))
+            total = sum(sec for p in phases.values() for _, sec in p) or 1.0
             done = 0.0
-            active = {}  # pid -> (start, duration)
             last_report = 0.0
 
-            while pending or active:
-                if self._stop.is_set():
-                    return False
-                now = time.monotonic()
-                for pid, (start, dur) in list(active.items()):
-                    if now - start >= dur:
-                        self.outputs[pid].off()
-                        done += dur
-                        del active[pid]
-                while pending and len(active) < self.max_simultaneous:
-                    pid, dur = pending.pop(0)
-                    self.outputs[pid].on()
-                    active[pid] = (time.monotonic(), dur)
-                if progress_cb and now - last_report > 0.25:
-                    partial = sum(min(now - s, d) for s, d in active.values())
-                    progress_cb(min(1.0, (done + partial) / total))
-                    last_report = now
-                self._stop.wait(0.01)
+            for phase in sorted(phases):
+                pending = sorted(phases[phase], key=lambda j: -j[1])
+                active = {}  # pid -> (start, duration)
+                while pending or active:
+                    if self._stop.is_set():
+                        return False
+                    now = time.monotonic()
+                    for pid, (start, dur) in list(active.items()):
+                        if now - start >= dur:
+                            self.outputs[pid].off()
+                            done += dur
+                            del active[pid]
+                    while pending and len(active) < self.max_simultaneous:
+                        pid, dur = pending.pop(0)
+                        self.outputs[pid].on()
+                        active[pid] = (time.monotonic(), dur)
+                    if progress_cb and now - last_report > 0.25:
+                        partial = sum(min(now - s, d) for s, d in active.values())
+                        progress_cb(min(1.0, (done + partial) / total))
+                        last_report = now
+                    self._stop.wait(0.01)
             if progress_cb:
                 progress_cb(1.0)
             return True

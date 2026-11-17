@@ -42,6 +42,12 @@ $("estop").onclick = () => act("/api/bar/stop");
 
 const STR = { virgin: "NO alcohol", light: "Light", regular: "", strong: "STRONG" };
 function steps(o) { return "<ul class='steps small muted'>" + o.steps.map(s => `<li>${esc(s.name)} — ${s.ml} ml</li>`).join("") + "</ul>"; }
+function hand(o, when) {
+  const x = o.extras || {}, parts = [];
+  (x.top_with || []).forEach(t => parts.push(`top with ~${Math.round(t.ml)} ml <u>${esc(t.name)}</u>`));
+  if (x.finish) parts.push(esc(x.finish));
+  return parts.length ? `<div class="handadd">✋ ${when}: ${parts.join(" · ")}</div>` : "";
+}
 function head(o) {
   return `<div class="row"><strong>#${o.id} ${esc(o.recipe)}</strong><span class="price">{{ cfg.currency_symbol }}${o.price.toFixed(2)}</span></div>
           <div>${esc(o.guest)} ${STR[o.strength] ? "· <b>" + STR[o.strength] + "</b>" : ""}</div>`;
@@ -71,12 +77,12 @@ function render(st) {
       <div class="glass-callout">${what}</div>
       ${nxt.note ? `<div class="note">⚠ ${esc(nxt.note)}</div>` : ""}
       ${blocked ? '<div class="note">Top cup is still full — hand it out and tap Picked up first.</div>' : ""}
-      ${steps(nxt)}<div class="small muted">~${nxt.est_seconds}s</div>
+      ${steps(nxt)}${hand(nxt, "After the robot")}<div class="small muted">~${nxt.est_seconds}s</div>
       <div class="actions"><button class="primary big" id="pour" ${m.status === "pouring" || blocked ? "disabled" : ""}>POUR</button></div></div>`;
     $("pour").onclick = () => act(`/api/bar/orders/${nxt.id}/pour`);
   }
 
-  $("ready").innerHTML = ready.map(o => `<div class="card ready-flash">${head(o)}<div class="small muted">${esc(o.glass)}</div>
+  $("ready").innerHTML = ready.map(o => `<div class="card ready-flash">${head(o)}<div class="small muted">${esc(o.glass)}</div>${hand(o, "Before handing over")}
      <div class="actions"><button class="ok" data-a="picked_up" data-id="${o.id}">Picked up</button></div></div>`).join("") || '<div class="muted small">—</div>';
   $("new-title").style.display = st.payment_mode === "none" ? "none" : "";
   $("new").innerHTML = fresh.map(o => `<div class="card">${head(o)}${steps(o)}

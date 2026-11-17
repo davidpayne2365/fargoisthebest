@@ -24,12 +24,24 @@ def load_config(path):
     for p in cfg["pumps"]:
         if p.get("ingredient") and p["ingredient"] not in cfg["ingredients"]:
             raise ValueError(f"Pump {p['id']} uses unknown ingredient {p['ingredient']!r}")
+    seen = set()
     for r in cfg["recipes"]:
+        if r["id"] in seen:
+            raise ValueError(f"Duplicate recipe id {r['id']!r}")
+        seen.add(r["id"])
         if r["glass"] not in cfg["glasses"]:
             raise ValueError(f"Recipe {r['id']} uses unknown glass {r['glass']!r}")
         for ing in r["ingredients"]:
             if ing not in cfg["ingredients"]:
                 raise ValueError(f"Recipe {r['id']} uses unknown ingredient {ing!r}")
+            if cfg["ingredients"][ing].get("hand_pour"):
+                raise ValueError(f"Recipe {r['id']}: {ing} is hand-poured — put it under top_with")
+        for ing in (r.get("top_with") or {}):
+            if not cfg["ingredients"].get(ing, {}).get("hand_pour"):
+                raise ValueError(f"Recipe {r['id']}: top_with {ing!r} must be a hand_pour ingredient")
+        for ing in r.get("pour_last") or []:
+            if ing not in r["ingredients"]:
+                raise ValueError(f"Recipe {r['id']}: pour_last {ing!r} isn't in its ingredients")
     return cfg
 
 
@@ -68,9 +80,41 @@ def is_alcoholic(cfg, recipe):
     return any(cfg["ingredients"][i].get("alcoholic") for i in recipe["ingredients"])
 
 
+def hand_stock(cfg):
+    """Hand-poured (fizzy) ingredients the bartender has on hand."""
+    return {k for k, v in cfg["ingredients"].items()
+            if v.get("hand_pour") and v.get("in_stock", True)}
+
+
 def available_recipes(cfg):
     loaded = loaded_ingredients(cfg)
-    return [r for r in cfg["recipes"] if set(r["ingredients"]) <= loaded]
+    stock = hand_stock(cfg)
+    return [r for r in cfg["recipes"]
+            if set(r["ingredients"]) <= loaded and set(r.get("top_with") or {}) <= stock]
+
+
+def bartender_extras(cfg, recipe):
+    """What the bartender adds by hand after the robot pours."""
+    top = [{"name": cfg["ingredients"][k]["name"], "ml": float(v)}
+           for k, v in (recipe.get("top_with") or {}).items()]
+    return {"top_with": top, "finish": recipe.get("finish", "")}
+
+
+def menu_groups(cfg, recipe):
+    """Filter tabs for the menu: base spirits, 'Other', or 'No alcohol'."""
+    if not is_alcoholic(cfg, recipe):
+        return ["No alcohol"]
+    groups = []
+    for i in recipe["ingredients"]:
+        g = cfg["ingredients"][i].get("group")
+        if g and g not in groups:
+            groups.append(g)
+    return groups or ["Other"]
+
+
+def display_ingredients(cfg, recipe):
+    names = [cfg["ingredients"][i]["name"] for i in recipe["ingredients"]]
+    return names + [cfg["ingredients"][i]["name"] for i in (recipe.get("top_with") or {})]
 
 
 def get_recipe(cfg, recipe_id):
@@ -111,7 +155,9 @@ def plan_pour(cfg, recipe, strength, calibration):
     """Return a list of steps: {ingredient, name, pump_id, ml, seconds}.
 
     - alcoholic ingredients are scaled by the strength multiplier
-    - the whole drink is scaled down to fit the glass and max_pour_ml
+    - the robot's part is scaled down so robot + hand top-up fits the glass,
+      and the robot never pours more than max_pour_ml
+    - pour_last ingredients get phase 1 (they start after everything else)
     """
     if strength not in allowed_strengths(cfg, recipe):
         raise ValueError(f"Strength {strength!r} not allowed for {recipe['id']}")
@@ -123,7 +169,10 @@ def plan_pour(cfg, recipe, strength, calibration):
         amounts[ing] = float(ml) * (mult if alc else 1.0)
 
     _, glass = glass_for(cfg, recipe)
-    limit = min(float(glass["max_ml"]), float(cfg.get("max_pour_ml", 300)))
+    top_ml = sum(float(v) for v in (recipe.get("top_with") or {}).values())
+    limit = min(float(glass["max_ml"]) - top_ml, float(cfg.get("max_pour_ml", 300)))
+    if limit <= 0:
+        raise ValueError(f"{recipe['id']}: top_with alone overfills the {glass['name']}")
     total = sum(amounts.values())
     if total > limit:
         scale = limit / total
@@ -146,6 +195,7 @@ def plan_pour(cfg, recipe, strength, calibration):
             "pump_id": pump["id"],
             "ml": round(ml, 1),
             "seconds": round(seconds, 2),
+            "phase": 1 if ing in (recipe.get("pour_last") or []) else 0,
         })
     return steps
 
@@ -153,8 +203,11 @@ def plan_pour(cfg, recipe, strength, calibration):
 def estimate_seconds(cfg, steps):
     """Rough wall-clock time for a pour given the simultaneous-pump limit."""
     n = max(1, int(cfg.get("max_simultaneous_pumps", 4)))
-    lanes = [0.0] * n
-    for s in sorted((st["seconds"] for st in steps), reverse=True):
-        i = lanes.index(min(lanes))
-        lanes[i] += s
-    return round(max(lanes), 1)
+    total = 0.0
+    for phase in sorted({st.get("phase", 0) for st in steps}):
+        lanes = [0.0] * n
+        for s in sorted((st["seconds"] for st in steps if st.get("phase", 0) == phase), reverse=True):
+            i = lanes.index(min(lanes))
+            lanes[i] += s
+        total += max(lanes)
+    return round(total, 1)

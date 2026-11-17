@@ -36,8 +36,12 @@ class OrderStore:
                     steps TEXT NOT NULL,
                     price REAL NOT NULL,
                     status TEXT NOT NULL,
-                    note TEXT NOT NULL DEFAULT ''
+                    note TEXT NOT NULL DEFAULT '',
+                    extras TEXT NOT NULL DEFAULT '{}'
                 )""")
+            cols = {r[1] for r in self.db.execute("PRAGMA table_info(orders)")}
+            if "extras" not in cols:  # upgrade a database from an older version
+                self.db.execute("ALTER TABLE orders ADD COLUMN extras TEXT NOT NULL DEFAULT '{}'")
             # A crash mid-pour leaves a half-filled cup: flag it for the bartender.
             self.db.execute(
                 "UPDATE orders SET status='queued', note='Interrupted (restart) — dump the cup before re-pouring' "
@@ -49,17 +53,18 @@ class OrderStore:
             return None
         d = dict(r)
         d["steps"] = json.loads(d["steps"])
+        d["extras"] = json.loads(d.get("extras") or "{}")
         return d
 
-    def create(self, guest, recipe, glass_key, glass_name, strength, steps, price, status):
+    def create(self, guest, recipe, glass_key, glass_name, strength, steps, price, status, extras=None):
         now = time.time()
         token = secrets.token_urlsafe(8)
         with self.lock:
             cur = self.db.execute(
                 "INSERT INTO orders (token, created, updated, guest, recipe_id, recipe_name, glass_key,"
-                " glass_name, strength, steps, price, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                " glass_name, strength, steps, price, status, extras) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (token, now, now, guest, recipe["id"], recipe["name"], glass_key, glass_name,
-                 strength, json.dumps(steps), price, status))
+                 strength, json.dumps(steps), price, status, json.dumps(extras or {})))
             self.db.commit()
             return self.get(cur.lastrowid)
 

@@ -69,3 +69,7 @@ table { width: 100%; border-collapse: collapse; }
 td, th { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
 td input { max-width: 90px; }
 .mockbanner { background: #2a2a55; color: #cdd2ff; text-align: center; padding: 6px; font-size: .85rem; }
+.tabs { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 8px 0 12px; flex-wrap: nowrap;
+  overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tabs button { flex: 0 0 auto; padding: 8px 14px; border-radius: 99px; font-size: .9rem; }
+.handadd { background: #102a3b; border: 1px solid #1f5878; color: #bfe6ff; border-radius: 10px; padding: 8px 10px; margin: 8px 0; font-weight: 650; }
