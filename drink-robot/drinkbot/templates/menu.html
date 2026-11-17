@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block body %}
+<p class="muted">Tap a drink to order. You'll get a page that tells you when it's ready.</p>
+{% if not drinks %}<div class="card">No drinks available — the bottles on the robot don't match any recipe yet.</div>{% endif %}
+<div class="grid">
+  {% for d in drinks %}
+  <button class="card drink" data-id="{{ d.id }}">
+    <div class="row"><h3>{{ d.name }}</h3>{% if cfg.payment_mode != 'none' %}<span class="price">{{ money(d.price) }}</span>{% endif %}</div>
+    <div class="muted small">{{ d.description }}</div>
+    <div style="margin-top:6px">{% for i in d.ingredients %}<span class="tag">{{ i }}</span>{% endfor %}</div>
+    <div class="small muted" style="margin-top:4px">Served in: {{ d.glass }}</div>
+  </button>
+  {% endfor %}
+</div>
+
+<div class="sheet-bg" id="bg"></div>
+<div class="sheet" id="sheet">
+  <div class="row"><h2 id="s-name" style="margin:0"></h2><span class="price" id="s-price"></span></div>
+  <div class="muted small" id="s-glass"></div>
+  <div id="s-strength-wrap">
+    <label>Strength</label>
+    <div class="seg" id="s-strength"></div>
+  </div>
+  <label for="s-guest">Your name</label>
+  <input type="text" id="s-guest" maxlength="30" placeholder="So the bartender can call you" autocomplete="given-name">
+  <p class="small muted">🍸 Drink responsibly. By ordering you confirm you're of legal drinking age.</p>
+  <button class="primary big" id="s-submit">Order</button>
+  <div class="error" id="s-err"></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const DRINKS = {{ drinks|tojson }};
+const LABELS = { virgin: "No alcohol", light: "Light", regular: "Regular", strong: "Strong (+{{ money(cfg.strong_surcharge or 0) }})" };
+let current = null, strength = "regular";
+const $ = id => document.getElementById(id);
+$("s-guest").value = localStorage.getItem("drinkbot-name") || "";
+
+function open(d) {
+  current = d; strength = "regular";
+  $("s-name").textContent = d.name;
+  $("s-price").textContent = {{ (cfg.payment_mode != 'none')|tojson }} ? "{{ cfg.currency_symbol }}" + Number(d.price).toFixed(2) : "";
+  $("s-glass").textContent = "Served in: " + d.glass;
+  const seg = $("s-strength"); seg.innerHTML = "";
+  $("s-strength-wrap").style.display = d.strengths.length > 1 ? "" : "none";
+  d.strengths.forEach(s => {
+    const b = document.createElement("button");
+    b.textContent = LABELS[s]; b.className = s === strength ? "on" : "";
+    b.onclick = () => { strength = s; [...seg.children].forEach(c => c.className = ""); b.className = "on"; };
+    seg.appendChild(b);
+  });
+  $("s-err").textContent = "";
+  $("sheet").classList.add("open"); $("bg").classList.add("open");
+}
+function close() { $("sheet").classList.remove("open"); $("bg").classList.remove("open"); }
+$("bg").onclick = close;
+document.querySelectorAll(".drink").forEach(el => el.onclick = () => open(DRINKS.find(d => d.id === el.dataset.id)));
+$("s-submit").onclick = async () => {
+  const guest = $("s-guest").value.trim();
+  if (!guest) { $("s-err").textContent = "Please enter your name."; return; }
+  localStorage.setItem("drinkbot-name", guest);
+  $("s-submit").disabled = true;
+  try {
+    const r = await api("/api/orders", { recipe_id: current.id, strength, guest });
+    location.href = r.url;
+  } catch (e) { $("s-err").textContent = e.message; $("s-submit").disabled = false; }
+};
+</script>
+{% endblock %}

@@ -1,0 +1,17 @@
+# systemd unit — starts DrinkBot at boot and restarts it if it crashes.
+# Installed by scripts/install.sh. Edit User/WorkingDirectory if your paths differ.
+[Unit]
+Description=DrinkBot cocktail robot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/drink-robot
+ExecStart=/home/pi/drink-robot/.venv/bin/python -m drinkbot
+Restart=always
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

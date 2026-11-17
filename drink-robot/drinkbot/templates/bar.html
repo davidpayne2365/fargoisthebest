@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Bar · {{ cfg.bar_name }}{% endblock %}
+{% block heading %}Bar{% endblock %}
+{% block nav %}<a href="/admin">Admin</a><a href="/qr">QR</a><a href="/logout">Log out</a>{% endblock %}
+{% block body %}
+<div id="mock"></div>
+<div class="card machine">
+  <div class="grow">
+    <div class="muted small">Robot</div>
+    <div id="m-status" class="status-big" style="font-size:1.3rem">…</div>
+    <div id="m-label" class="small muted"></div>
+    <div class="bar" style="margin-top:6px"><div id="m-bar"></div></div>
+    <div id="m-cup" class="small muted" style="margin-top:6px"></div>
+  </div>
+  <button class="estop" id="estop">■ STOP</button>
+</div>
+<button id="sound" class="small" style="margin-top:8px">🔔 Tap to enable sound alerts</button>
+
+<div class="section-title">Next to pour</div>
+<div id="next"></div>
+<div class="section-title">Ready for pickup</div>
+<div id="ready" class="grid"></div>
+<div class="section-title" id="new-title">Needs approval</div>
+<div id="new" class="grid"></div>
+<div class="section-title">Queue</div>
+<div id="queue" class="grid"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+const $ = id => document.getElementById(id);
+let audio = null, seen = new Set(), seenReady = new Set(), first = true;
+$("sound").onclick = () => { audio = new (window.AudioContext || window.webkitAudioContext)(); beep(660); $("sound").remove(); };
+function beep(f) {
+  if (!audio) return;
+  const o = audio.createOscillator(), g = audio.createGain();
+  o.frequency.value = f; o.connect(g); g.connect(audio.destination);
+  g.gain.setValueAtTime(.2, audio.currentTime); g.gain.exponentialRampToValueAtTime(.001, audio.currentTime + .5);
+  o.start(); o.stop(audio.currentTime + .5);
+}
+async function act(url) { try { await api(url, {}); } catch (e) { alert(e.message); } refresh(); }
+$("estop").onclick = () => act("/api/bar/stop");
+
+const STR = { virgin: "NO alcohol", light: "Light", regular: "", strong: "STRONG" };
+function steps(o) { return "<ul class='steps small muted'>" + o.steps.map(s => `<li>${esc(s.name)} — ${s.ml} ml</li>`).join("") + "</ul>"; }
+function head(o) {
+  return `<div class="row"><strong>#${o.id} ${esc(o.recipe)}</strong><span class="price">{{ cfg.currency_symbol }}${o.price.toFixed(2)}</span></div>
+          <div>${esc(o.guest)} ${STR[o.strength] ? "· <b>" + STR[o.strength] + "</b>" : ""}</div>`;
+}
+
+function render(st) {
+  const m = st.machine, orders = st.orders, stack = st.cup_mode === "stack";
+  $("mock").innerHTML = m.mock ? '<div class="mockbanner">MOCK MODE — no GPIO, pumps are simulated</div>' : "";
+  const names = { idle: "Idle", pouring: "Pouring", stopped: "Stopped", error: "Error" };
+  $("m-status").textContent = names[m.status] || m.status;
+  $("m-status").className = "status-big " + (m.status === "pouring" ? "st-pouring" : m.status === "idle" ? "st-ready" : "st-cancelled");
+  $("m-label").innerHTML = esc(m.label || m.message || "") + (["stopped","error"].includes(m.status) ? ' <a href="#" id="clr">clear</a>' : "");
+  if ($("clr")) $("clr").onclick = e => { e.preventDefault(); act("/api/bar/clear"); };
+  $("m-bar").style.width = (m.progress * 100) + "%";
+  $("m-cup").textContent = m.cup_present === null ? "" : (m.cup_present ? "✔ Cup detected" : "✖ No cup under nozzle");
+
+  const by = s => orders.filter(o => o.status === s);
+  const ready = by("ready"), queued = by("queued"), fresh = by("new");
+
+  // NEXT
+  const nxt = queued[0];
+  const blocked = stack && ready.length > 0;
+  if (!nxt) $("next").innerHTML = '<div class="card muted">Nothing waiting.</div>';
+  else {
+    const what = stack ? "Make sure the cup stack is under the nozzle" : `Put a <u>${esc(nxt.glass)}</u> under the nozzle`;
+    $("next").innerHTML = `<div class="card">${head(nxt)}
+      <div class="glass-callout">${what}</div>
+      ${nxt.note ? `<div class="note">⚠ ${esc(nxt.note)}</div>` : ""}
+      ${blocked ? '<div class="note">Top cup is still full — hand it out and tap Picked up first.</div>' : ""}
+      ${steps(nxt)}<div class="small muted">~${nxt.est_seconds}s</div>
+      <div class="actions"><button class="primary big" id="pour" ${m.status === "pouring" || blocked ? "disabled" : ""}>POUR</button></div></div>`;
+    $("pour").onclick = () => act(`/api/bar/orders/${nxt.id}/pour`);
+  }
+
+  $("ready").innerHTML = ready.map(o => `<div class="card ready-flash">${head(o)}<div class="small muted">${esc(o.glass)}</div>
+     <div class="actions"><button class="ok" data-a="picked_up" data-id="${o.id}">Picked up</button></div></div>`).join("") || '<div class="muted small">—</div>';
+  $("new-title").style.display = st.payment_mode === "none" ? "none" : "";
+  $("new").innerHTML = fresh.map(o => `<div class="card">${head(o)}${steps(o)}
+     <div class="actions"><button class="primary" data-a="approve" data-id="${o.id}">Paid / Approve</button>
+     <button class="bad" data-a="cancel" data-id="${o.id}">Cancel</button></div></div>`).join("") || '<div class="muted small">—</div>';
+  $("queue").innerHTML = queued.slice(1).map(o => `<div class="card">${head(o)}<div class="small muted">${esc(o.glass)}</div>
+     <div class="actions"><button class="bad" data-a="cancel" data-id="${o.id}">Cancel</button></div></div>`).join("") || '<div class="muted small">—</div>';
+  document.querySelectorAll("[data-a]").forEach(b => b.onclick = () => {
+    if (b.dataset.a === "cancel" && !confirm("Cancel this order?")) return;
+    act(`/api/bar/orders/${b.dataset.id}/${b.dataset.a}`);
+  });
+
+  // alerts
+  orders.forEach(o => {
+    if (!seen.has(o.id)) { seen.add(o.id); if (!first) beep(880); }
+    if (o.status === "ready" && !seenReady.has(o.id)) { seenReady.add(o.id); if (!first) beep(520); }
+  });
+  first = false;
+}
+async function refresh() {
+  try { render(await api("/api/bar/state")); }
+  catch (e) { if (String(e.message).includes("login")) location.href = "/login?next=/bar"; }
+}
+refresh(); setInterval(refresh, 1500);
+</script>
+{% endblock %}

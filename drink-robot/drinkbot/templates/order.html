@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Order #{{ order.id }}{% endblock %}
+{% block nav %}<a href="/">Order another</a>{% endblock %}
+{% block body %}
+<div class="card" id="card">
+  <div class="muted">Order #{{ order.id }} · {{ order.guest }}</div>
+  <h2 style="margin:4px 0">{{ order.recipe_name }}</h2>
+  <div class="status-big" id="status">…</div>
+  <div id="detail" class="muted"></div>
+  <div class="bar" id="barwrap" style="display:none;margin-top:10px"><div id="bar"></div></div>
+</div>
+
+{% if cfg.payment_mode != 'none' %}
+<div class="card" style="margin-top:12px" id="paybox">
+  <div class="row"><strong>Total</strong><span class="price">{{ money(order.price) }}</span></div>
+  {% if venmo %}
+    <p class="small muted">Pay with Venmo, then the bartender will start your drink.</p>
+    <a class="btn primary" style="width:100%" href="{{ venmo }}">Pay with Venmo</a>
+  {% else %}
+    <p class="small muted">Pay the bartender (cash or tab). They'll start your drink once it's sorted.</p>
+  {% endif %}
+</div>
+{% endif %}
+<p class="small muted" style="margin-top:16px">Keep this page open — it updates by itself. Your phone will buzz when it's ready.</p>
+{% endblock %}
+{% block scripts %}
+<script>
+const URL_ = "/api/orders/{{ order.id }}?t={{ order.token }}";
+let buzzed = false;
+const TEXT = {
+  new: ["Waiting for the bartender", o => "Payment / approval pending."],
+  queued: ["In line", o => o.position === 1 ? "You're next!" : `Position ${o.position} in line.`],
+  pouring: ["Pouring now…", o => "The robot is making your drink."],
+  ready: ["Ready! 🎉", o => `Grab your ${o.glass.toLowerCase()} at the bar.`],
+  done: ["Enjoy!", o => "Picked up. Cheers."],
+  cancelled: ["Cancelled", o => o.note || "Talk to the bartender."],
+};
+async function tick() {
+  try {
+    const o = await api(URL_);
+    const [t, d] = TEXT[o.status] || [o.status, () => ""];
+    const s = document.getElementById("status");
+    s.textContent = t; s.className = "status-big st-" + o.status;
+    document.getElementById("detail").textContent = d(o);
+    document.getElementById("card").classList.toggle("ready-flash", o.status === "ready");
+    const pay = document.getElementById("paybox");
+    if (pay) pay.style.display = o.status === "new" ? "" : "none";
+    if (o.status === "ready" && !buzzed) { buzzed = true; if (navigator.vibrate) navigator.vibrate([300, 150, 300, 150, 600]); }
+    if (o.status === "done" || o.status === "cancelled") return;
+  } catch (e) {}
+  setTimeout(tick, 2500);
+}
+tick();
+</script>
+{% endblock %}

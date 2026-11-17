@@ -1,0 +1,6 @@
+flask>=3.0
+pyyaml>=6.0
+qrcode[pil]>=7.4
+waitress>=3.0
+# On the Raspberry Pi, gpiozero + lgpio come with Raspberry Pi OS.
+# If you use a venv, create it with --system-site-packages so they're visible.

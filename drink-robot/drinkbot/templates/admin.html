@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Admin · {{ cfg.bar_name }}{% endblock %}
+{% block heading %}Admin{% endblock %}
+{% block nav %}<a href="/bar">Bar</a><a href="/logout">Log out</a>{% endblock %}
+{% block body %}
+<div class="card">
+  <div class="row"><strong>Robot:</strong> <span id="m-status">…</span>
+    <button class="estop" onclick="post('/api/bar/stop',{})">■ STOP</button></div>
+  <div class="bar" style="margin-top:8px"><div id="m-bar"></div></div>
+</div>
+
+<div class="section-title">Pumps</div>
+<div class="card" style="overflow-x:auto">
+  <p class="small muted" style="margin-top:0"><b>Prime:</b> after loading a bottle, run its pump until liquid reaches the nozzle.
+  <b>Calibrate:</b> put a measuring cup (or a cup on a kitchen scale — 1 g ≈ 1 ml for juice) under the nozzle,
+  tap <i>Run 10s</i>, then type how many ml came out and tap <i>Save</i>.</p>
+  <table>
+    <tr><th>#</th><th>Bottle</th><th>GPIO</th><th>ml/s</th><th>Prime</th><th>Calibrate</th></tr>
+    {% for p in pumps %}
+    <tr>
+      <td>{{ p.id }}</td><td>{{ p.ingredient }}</td><td>{{ p.gpio }}</td><td id="rate-{{ p.id }}">{{ p.ml_per_sec }}</td>
+      <td><button onclick="run({{ p.id }},2)">2s</button> <button onclick="run({{ p.id }},5)">5s</button></td>
+      <td style="white-space:nowrap"><button onclick="run({{ p.id }},10)">Run 10s</button>
+        <input type="number" id="ml-{{ p.id }}" placeholder="ml" min="1">
+        <button class="primary" onclick="cal({{ p.id }})">Save</button></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<div class="section-title">Cleaning</div>
+<div class="card">
+  <p class="small muted" style="margin-top:0">End of night: move every intake tube into a jug of warm water, put a bucket under the nozzle,
+  and run all pumps. Then do it again with tubes in the air to blow them dry.</p>
+  <div class="actions">
+    <button onclick="run('all',20)">Run all 20s</button>
+    <button onclick="run('all',45)">Run all 45s</button>
+  </div>
+</div>
+
+<div class="section-title">Recent orders</div>
+<div class="card" style="overflow-x:auto">
+  <table>
+    <tr><th>#</th><th>Guest</th><th>Drink</th><th>Status</th><th>Price</th></tr>
+    {% for o in history %}
+    <tr><td>{{ o.id }}</td><td>{{ o.guest }}</td><td>{{ o.recipe_name }} <span class="small muted">{{ o.strength }}</span></td>
+        <td class="st-{{ o.status }}">{{ o.status }}</td><td>{{ money(o.price) }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+async function post(u, b) { try { return await api(u, b); } catch (e) { alert(e.message); } }
+function run(pump_id, seconds) { post("/api/admin/run", { pump_id, seconds }); }
+async function cal(pump_id) {
+  const ml = parseFloat(document.getElementById("ml-" + pump_id).value);
+  const r = await post("/api/admin/calibrate", { pump_id, seconds: 10, measured_ml: ml });
+  if (r && r.ok) document.getElementById("rate-" + pump_id).textContent = r.ml_per_sec;
+}
+async function tick() {
+  try {
+    const s = await api("/api/bar/state");
+    document.getElementById("m-status").textContent = s.machine.status + (s.machine.label ? " — " + s.machine.label : "") + (s.machine.mock ? " (mock)" : "");
+    document.getElementById("m-bar").style.width = (s.machine.progress * 100) + "%";
+  } catch (e) {}
+}
+tick(); setInterval(tick, 1000);
+</script>
+{% endblock %}
