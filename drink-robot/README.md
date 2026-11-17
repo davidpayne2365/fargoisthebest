@@ -6,14 +6,15 @@ QR code, pick a drink on their phone, and the bartender's screen says
 phone buzzes, the bartender hands it over.
 
 ```
- Guest phone ──Wi-Fi──►  Raspberry Pi (this code)  ──GPIO──► MOSFET boards ──12 V──► 8 pumps ──tubes──► nozzle ──► cup
+ Guest phone ──Wi-Fi──►  Raspberry Pi (this code)  ──GPIO──► MOSFET boards ──12 V──► 16 pumps ──tubes──► nozzle ──► cup
  Bartender tablet ─────►   web app + order queue
 ```
 
 | Doc | What's in it |
 |---|---|
+| [docs/BOTTLES.md](docs/BOTTLES.md) | **The 16 bottles + 5 fizzy mixers, and the 38 drinks they make** |
 | [docs/DESIGN.md](docs/DESIGN.md) | Decisions made, why, and **open questions to scheme on** |
-| [docs/SHOPPING_LIST.md](docs/SHOPPING_LIST.md) | What to buy (~$200–330) |
+| [docs/SHOPPING_LIST.md](docs/SHOPPING_LIST.md) | What to buy (~$330–750) |
 | [docs/WIRING.md](docs/WIRING.md) | How to connect it all together |
 | [docs/BUILD.md](docs/BUILD.md) | Step-by-step: frame, Pi setup, install, calibrate, clean |
 
@@ -43,7 +44,7 @@ bash scripts/install.sh        # installs deps + starts at boot
 ## What you'll edit
 
 Everything lives in **`config.yaml`**: which bottle is on which pump, recipes
-(in ml), glass sizes, the bartender PIN, payment mode (`none` / `tab` / `venmo`),
+(in ml, plus any fizzy `top_with` the bartender adds), glass sizes, the bartender PIN, payment mode (`none` / `tab` / `venmo`),
 and cup mode (`glass` or `stack`). Drinks only show on the menu when all of
 their ingredients are on a pump.
 

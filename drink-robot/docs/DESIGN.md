@@ -49,13 +49,21 @@ Recipes were picked to be "build" drinks that mix fine just from the streams
 landing together (several pumps run simultaneously). Shaken classics like the
 margarita/daiquiri are fine served over ice — or give it a quick swirl.
 
-### 6. Payments: no card processing
+### 6. 16 pumps, fizzy mixers poured by hand
+To cover the most-ordered drinks we went to **16 bottles** (9 spirits/liqueurs + 7
+still mixers — see [BOTTLES.md](BOTTLES.md)). Fizzy mixers (cola, tonic, soda, ginger
+beer, lemon-lime) foam and go flat in pumps, so they stay cold in a cooler and the
+bartender screen says **"After the robot: top with ~150 ml Cola"**. Grenadine can be
+set to pour *after* everything else (`pour_last`) so a Tequila Sunrise actually looks
+like a sunrise.
+
+### 7. Payments: no card processing
 Real card payments need internet, HTTPS, a Stripe account and a business — overkill
 for a garage. Modes: `none` (free), `tab` (bartender approves, settle in cash),
 `venmo` (guest gets a Venmo link with the amount pre-filled; bartender approves
 when it lands).
 
-### 7. Safety built into the software
+### 8. Safety built into the software
 * Hard caps: `max_pour_ml`, per-glass `max_ml`, `max_pump_seconds`.
 * **STOP** button on every bartender screen kills all pumps instantly.
 * A drink stopped mid-pour (or interrupted by a power cut) is flagged
@@ -66,11 +74,11 @@ when it lands).
 
 ## ❓ Open questions to scheme on
 
-1. **How many bottles?** Plan is 8. Going to 12 is easy software-wise (more GPIO pins), costs more pumps + a bigger power supply.
+1. ~~How many bottles?~~ **Decided: 16** + 5 hand-poured fizzy mixers. (Start with 8 if budget's tight — the menu adapts.)
 2. **Pump speed vs. price.** Start cheap (100 ml/min, ~$10 each) or go straight to ~400 ml/min (~$30–40 each)?
 3. **Ice.** Options: bartender scoops ice in before POUR (glass mode); pre-iced cups in the stack (melts); or chill all bottles/juices in a mini-fridge with tubes running out (nicest, more work).
 4. **Bottle layout.** Upside-down bottles on a shelf above (gravity helps, but they can siphon when idle!) vs. upright bottles with tubes dipped in (safer — recommended).
-5. **Carbonated mixers** (cola, tonic, ginger beer) lose fizz and foam through pumps. Pour them by hand, or accept flatter drinks?
+5. ~~Carbonated mixers?~~ **Decided: hand-poured** top-ups. v3 idea: a CO₂ soda gun with solenoid valves.
 6. **Juice freshness.** OJ/lime spoil in the tubes over a night — fine for a party, flush after.
 7. **Cup sensor?** A $3 IR sensor confirms a cup is there before pouring. Worth adding in v2.
 8. **Weight sensor?** A load cell (HX711) under the cup could measure exactly what poured and auto-detect pickup. Cool v3 upgrade.

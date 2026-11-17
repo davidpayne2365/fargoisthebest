@@ -34,7 +34,8 @@ is at `http://10.42.0.1:8080`). Print a Wi-Fi QR with
 A simple layout that works:
 ```
    ┌───────────────────────────────────────┐
-   │  [bottle][bottle][bottle][bottle] ... │  ← bottle shelf (upright bottles, tubes dip in)
+   │  [bottle][bottle][bottle][bottle] ... │  ← 2 rows × 8 bottles, upright, tubes dip in
+   │  [bottle][bottle][bottle][bottle] ... │    (back row raised ~10 cm so labels show)
    ├───────────────────────────────────────┤
    │  pump pump pump pump pump pump pump   │  ← pumps on the back panel, above cup height
    │  [electronics box]           ║        │
@@ -48,8 +49,9 @@ A simple layout that works:
 * **Pumps above the bottles' liquid level? Fine** — peristaltic pumps self-prime.
   Avoid bottles mounted *above* the nozzle (upside down): they can siphon through
   an idle pump tube.
-* Nozzle: tube ends **pointing straight down, ~2 cm above the cup rim**, all within
-  a ~2 cm circle so a narrow glass catches everything.
+* Nozzle: tube ends **pointing straight down, ~2 cm above the cup rim**, all 16 within
+  a ~3 cm circle (two rings of 8) so a narrow glass catches everything.
+* Put a small cooler/mini-fridge next to the bar for the 5 fizzy mixers.
 * Mark the cup spot on the drip tray (a small 3D-printed or wooden "U" stop) so the
   cup is always centered.
 * Seal the wood (polyurethane) — it will get sticky.
