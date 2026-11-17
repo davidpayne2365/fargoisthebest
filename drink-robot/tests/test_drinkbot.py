@@ -235,3 +235,13 @@ def test_usb_relay_needs_enough_boards():
     with pytest.raises(ValueError):
         PumpBank([{"id": 9, "gpio": 9}], mock=False, driver="usb_relay",
                  usb_relay={"ports": ["COM3"]}, serial_factory=FakeSerial)
+
+
+def test_mvp_config_extends_base(tmp_path):
+    cfg = R.load_config(os.path.join(ROOT, "config.mvp.yaml"))
+    assert len(cfg["pumps"]) == 4 and cfg["pump_driver"] == "usb_relay"
+    names = {r["name"] for r in R.available_recipes(cfg)}
+    assert names == {"Screwdriver", "Madras", "Sex on the Beach", "Fuzzy Navel"}
+    cfg["pump_driver"] = "mock"  # app boots with it
+    app = create_app(os.path.join(ROOT, "config.mvp.yaml"), str(tmp_path), mock=True)
+    assert app.test_client().get("/").status_code == 200

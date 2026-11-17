@@ -12,9 +12,21 @@ STRENGTHS = {
 }
 
 
-def load_config(path):
+def _read_config(path):
+    """Read a YAML config. `extends: other.yaml` loads that file first, then this
+    file's top-level keys replace the base's (used by config.mvp.yaml)."""
     with open(path) as f:
         cfg = yaml.safe_load(f)
+    base_name = cfg.pop("extends", None)
+    if base_name:
+        base = _read_config(os.path.join(os.path.dirname(os.path.abspath(path)), base_name))
+        base.update(cfg)
+        cfg = base
+    return cfg
+
+
+def load_config(path):
+    cfg = _read_config(path)
     ids = [p["id"] for p in cfg["pumps"]]
     if len(ids) != len(set(ids)):
         raise ValueError("Duplicate pump ids in config")

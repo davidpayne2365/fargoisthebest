@@ -274,8 +274,12 @@ def create_app(config_path=None, data_dir=None, mock=None):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser(prog="python -m drinkbot")
+    ap.add_argument("--config", help="config file (default: config.yaml; try config.mvp.yaml)")
+    args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
-    app = create_app()
+    app = create_app(config_path=os.path.abspath(args.config) if args.config else None)
     cfg = app.config["DRINKBOT"]
     port = int(os.environ.get("PORT", cfg.get("port", 8080)))
     mode = {"mock": "MOCK (pumps simulated)", "gpio": "Raspberry Pi GPIO",

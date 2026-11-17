@@ -10,7 +10,24 @@ Laptop ──USB──► USB relay board ──switches 12 V──► pumps ─
 
 The same relay board plugs into the Pi later, so nothing is wasted.
 
-## Buy for the laptop test (~$110–150 for 8 pumps)
+## Cheapest MVP (~$45–65): 4 pumps, 4 drinks
+
+| Qty | Item | ~$ |
+|---|---|---|
+| 1 | 4-channel USB relay board (LCUS-4 / CH340) — or the 8-channel one if you'll grow soon (+~$5) | 10–20 |
+| 4 | Cheap 12 V peristaltic pumps (often sold in 2-packs; most include a little tubing) | 30–40 |
+| 1 | 12 V **2 A** wall adapter with barrel plug + screw-terminal adapter (or reuse an old 12 V adapter) | 0–10 |
+| — | Extra matching silicone tubing, a few wires, tape | 0–10 |
+
+Already have: laptop, bottles, a cup, a shoebox/cutting board to mount things on.
+Bottles: **vodka, peach schnapps, orange juice, cranberry** → Screwdriver, Madras,
+Sex on the Beach, Fuzzy Navel. Run it with:
+
+```
+python -m drinkbot --config config.mvp.yaml
+```
+
+## Buy for the full laptop test (~$110–150 for 8 pumps)
 
 | Qty | Item | What to check in the listing |
 |---|---|---|
