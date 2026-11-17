@@ -198,3 +198,40 @@ def test_every_drink_has_picture_spec(fizzy_cfg):
         assert art["layers"] and all(layer["color"].startswith("#") for layer in art["layers"])
     sunrise = R.art_spec(fizzy_cfg, R.get_recipe(fizzy_cfg, "tequila_sunrise"))
     assert any(layer["last"] for layer in sunrise["layers"]) and sunrise["garnish"] == "cherry"
+
+
+class FakeSerial:
+    def __init__(self, port, baud, timeout=1):
+        self.port, self.written = port, []
+
+    def write(self, b):
+        self.written.append(bytes(b))
+
+    def flush(self):
+        pass
+
+    def close(self):
+        pass
+
+
+def test_usb_relay_driver_sends_lcus_commands():
+    pumps = [{"id": i, "gpio": i} for i in (1, 9)]
+    boards = []
+
+    def factory(port, baud, timeout=1):
+        s = FakeSerial(port, baud)
+        boards.append(s)
+        return s
+
+    bank = PumpBank(pumps, mock=False, driver="usb_relay",
+                    usb_relay={"ports": ["COM3", "COM4"]}, serial_factory=factory)
+    boards[0].written.clear(); boards[1].written.clear()
+    assert bank.run([(1, 0.05), (9, 0.05)])
+    assert bytes([0xA0, 1, 1, 0xA2]) in boards[0].written and bytes([0xA0, 1, 0, 0xA1]) in boards[0].written
+    assert bytes([0xA0, 1, 1, 0xA2]) in boards[1].written  # pump 9 -> board 2, relay 1
+
+
+def test_usb_relay_needs_enough_boards():
+    with pytest.raises(ValueError):
+        PumpBank([{"id": 9, "gpio": 9}], mock=False, driver="usb_relay",
+                 usb_relay={"ports": ["COM3"]}, serial_factory=FakeSerial)

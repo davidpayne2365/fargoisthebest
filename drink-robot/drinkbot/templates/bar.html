@@ -55,7 +55,7 @@ function head(o) {
 
 function render(st) {
   const m = st.machine, orders = st.orders, stack = st.cup_mode === "stack";
-  $("mock").innerHTML = m.mock ? '<div class="mockbanner">MOCK MODE — no GPIO, pumps are simulated</div>' : "";
+  $("mock").innerHTML = m.mock ? '<div class="mockbanner">MOCK MODE — pumps are simulated</div>' : "";
   const names = { idle: "Idle", pouring: "Pouring", stopped: "Stopped", error: "Error" };
   $("m-status").textContent = names[m.status] || m.status;
   $("m-status").className = "status-big " + (m.status === "pouring" ? "st-pouring" : m.status === "idle" ? "st-ready" : "st-cancelled");

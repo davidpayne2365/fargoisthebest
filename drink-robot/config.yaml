@@ -52,6 +52,21 @@ max_pump_seconds: 180         # hard cap for any single pump run
 allow_strong: true
 
 # ---------------------------------------------------------------------
+# What switches the pumps on and off
+#   gpio      : Raspberry Pi pins -> MOSFET modules (final build)
+#   usb_relay : USB relay board — lets you test real pumps from a LAPTOP
+#   mock      : no hardware, simulated pumps
+# ---------------------------------------------------------------------
+pump_driver: gpio
+
+usb_relay:
+  # One entry per 8-relay board. Find yours with:  python -m drinkbot.relaytest
+  #   Windows: "COM3"   Mac: "/dev/cu.usbserial-110"   Linux/Pi: "/dev/ttyUSB0"
+  ports: ["COM3"]
+  baud: 9600
+  # Pump N uses relay N (pumps 9-16 go on the 2nd board). Override per pump with  relay: 5
+
+# ---------------------------------------------------------------------
 # Optional cup-present sensor (IR obstacle module or micro-switch).
 # Set gpio to null if you don't have one.
 # ---------------------------------------------------------------------

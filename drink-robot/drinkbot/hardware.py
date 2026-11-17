@@ -1,7 +1,13 @@
-"""GPIO layer: pumps and the optional cup sensor.
+"""Hardware layer: pumps and the optional cup sensor.
 
-Runs in MOCK mode automatically when gpiozero isn't available (e.g. on a
-laptop) or when DRINKBOT_MOCK=1, so you can develop the app without a Pi.
+Pump drivers (config.yaml -> pump_driver):
+  gpio      : Raspberry Pi pins -> MOSFET modules (the final build)
+  usb_relay : a USB relay board (LCUS / CH340 type) -> works from a laptop
+              (Windows, Mac, Linux) or a Pi
+  mock      : no hardware, pumps are simulated
+
+GPIO falls back to MOCK automatically when gpiozero isn't installed (e.g. on a
+laptop), and DRINKBOT_MOCK=1 forces mock for every driver.
 """
 import logging
 import os
@@ -39,21 +45,91 @@ class _MockOutput:
         pass
 
 
+class UsbRelayBoard:
+    """One LCUS-style USB relay board (CH340 serial chip, up to 8 relays).
+
+    Protocol: 4 bytes per command -> 0xA0, channel (1-8), state (0/1), checksum.
+    """
+
+    def __init__(self, port, baud=9600, serial_factory=None):
+        if serial_factory is None:
+            import serial  # pyserial
+            serial_factory = serial.Serial
+        self.port = port
+        self.ser = serial_factory(port, baud, timeout=1)
+        self.lock = threading.Lock()
+
+    def set(self, channel, on):
+        state = 1 if on else 0
+        cmd = bytes([0xA0, channel, state, (0xA0 + channel + state) & 0xFF])
+        with self.lock:
+            self.ser.write(cmd)
+            self.ser.flush()
+        time.sleep(0.005)  # these boards drop commands sent back-to-back
+
+    def close(self):
+        self.ser.close()
+
+
+class _RelayOutput:
+    def __init__(self, board, channel):
+        self.board, self.channel, self.value = board, channel, 0
+
+    def on(self):
+        self.board.set(self.channel, True)
+        self.value = 1
+
+    def off(self):
+        self.board.set(self.channel, False)
+        self.value = 0
+
+    def close(self):
+        pass
+
+
+def relay_location(n):
+    """Relay number 1..N -> (board index, channel 1-8). Relays 9-16 are on the 2nd board."""
+    return (n - 1) // 8, (n - 1) % 8 + 1
+
+
 class PumpBank:
-    def __init__(self, pumps_cfg, max_simultaneous=4, max_seconds=180, mock=None):
-        self.mock = want_mock() if mock is None else mock
+    def __init__(self, pumps_cfg, max_simultaneous=4, max_seconds=180, mock=None,
+                 driver="gpio", usb_relay=None, serial_factory=None):
+        if mock is None:
+            if os.environ.get("DRINKBOT_MOCK") == "1" or driver == "mock":
+                mock = True
+            elif driver == "gpio":
+                mock = want_mock()
+            else:
+                mock = False
+        self.mock = mock
+        self.driver = "mock" if mock else driver
         self.max_simultaneous = max(1, int(max_simultaneous))
         self.max_seconds = float(max_seconds)
         self._stop = threading.Event()
         self._lock = threading.Lock()  # one run at a time
         self.outputs = {}
+        self.boards = []
+        if self.driver == "usb_relay":
+            cfg = usb_relay or {}
+            ports = cfg.get("ports") or []
+            if not ports:
+                raise ValueError("pump_driver is usb_relay but usb_relay.ports is empty in config.yaml")
+            self.boards = [UsbRelayBoard(p, cfg.get("baud", 9600), serial_factory) for p in ports]
         for p in pumps_cfg:
             if self.mock:
-                dev = _MockOutput(p["gpio"])
-            else:
+                dev = _MockOutput(p.get("relay", p["id"]) if driver == "usb_relay" else p["gpio"])
+            elif self.driver == "usb_relay":
+                b, ch = relay_location(int(p.get("relay", p["id"])))
+                if b >= len(self.boards):
+                    raise ValueError(f"Pump {p['id']} needs relay board #{b + 1} — add its port to usb_relay.ports")
+                dev = _RelayOutput(self.boards[b], ch)
+            elif self.driver == "gpio":
                 from gpiozero import OutputDevice
                 dev = OutputDevice(p["gpio"], active_high=not p.get("active_low", False),
                                    initial_value=False)
+            else:
+                raise ValueError(f"Unknown pump_driver {self.driver!r}")
             self.outputs[p["id"]] = dev
         self.all_off()
 
@@ -132,6 +208,8 @@ class PumpBank:
         self.all_off()
         for dev in self.outputs.values():
             dev.close()
+        for b in self.boards:
+            b.close()
 
 
 class CupSensor:

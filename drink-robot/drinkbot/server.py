@@ -26,7 +26,8 @@ def create_app(config_path=None, data_dir=None, mock=None):
     calibration = R.Calibration(os.path.join(data_dir, "calibration.json"))
     store = OrderStore(os.path.join(data_dir, "orders.db"))
     pumps = PumpBank(cfg["pumps"], cfg.get("max_simultaneous_pumps", 4),
-                     cfg.get("max_pump_seconds", 180), mock=mock)
+                     cfg.get("max_pump_seconds", 180), mock=mock,
+                     driver=cfg.get("pump_driver", "gpio"), usb_relay=cfg.get("usb_relay"))
     cs = cfg.get("cup_sensor") or {}
     cup = CupSensor(cs.get("gpio"), cs.get("active_low", True), mock=mock)
     machine = Machine(cfg, store, pumps, cup)
@@ -277,7 +278,8 @@ def main():
     app = create_app()
     cfg = app.config["DRINKBOT"]
     port = int(os.environ.get("PORT", cfg.get("port", 8080)))
-    mode = "MOCK (no GPIO)" if app.config["PUMPS"].mock else "REAL GPIO"
+    mode = {"mock": "MOCK (pumps simulated)", "gpio": "Raspberry Pi GPIO",
+            "usb_relay": "USB relay board"}[app.config["PUMPS"].driver]
     logging.getLogger("drinkbot").info("DrinkBot starting on port %s — %s", port, mode)
     try:
         from waitress import serve
