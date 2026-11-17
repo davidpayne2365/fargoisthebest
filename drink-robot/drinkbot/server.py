@@ -81,6 +81,7 @@ def create_app(config_path=None, data_dir=None, mock=None):
                 "alcoholic": R.is_alcoholic(cfg, r),
                 "groups": R.menu_groups(cfg, r),
                 "art": R.art_spec(cfg, r),
+                "photo": (lambda p: p and url_for("static", filename=p["file"]))(R.photo_info(r["id"])),
             })
         order = ["Vodka", "Gin", "Rum", "Tequila", "Whiskey", "Amaretto", "Other", "No alcohol"]
         present = {g for d in drinks for g in d["groups"]}

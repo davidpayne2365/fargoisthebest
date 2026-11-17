@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.."
 SITE_ID="${NETLIFY_SITE_ID:-1d808cf4-d70f-495e-8dc7-19f40a5bcd6b}"   # garage-drinkbot-baf257.netlify.app
 python3 scripts/build_site.py
 ZIP="$(mktemp -d)/site.zip"
-(cd site/dist && python3 -c "import zipfile,os; z=zipfile.ZipFile('$ZIP','w',zipfile.ZIP_DEFLATED); [z.write(f) for f in os.listdir('.')]; z.close()")
+(cd site/dist && python3 -c "import zipfile,os; z=zipfile.ZipFile('$ZIP','w',zipfile.ZIP_DEFLATED); [z.write(os.path.join(r,f)) for r,_,fs in os.walk('.') for f in fs]; z.close()")
 AUTH=()
 [ -n "${NETLIFY_AUTH_TOKEN:-}" ] && AUTH=(-H "Authorization: Bearer ${NETLIFY_AUTH_TOKEN}")
 curl -sS -X POST "https://api.netlify.com/api/v1/sites/${SITE_ID}/deploys" "${AUTH[@]}" \

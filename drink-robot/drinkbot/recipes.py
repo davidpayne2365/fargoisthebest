@@ -142,6 +142,22 @@ def art_spec(cfg, recipe):
     return {"glass": glass_key, "layers": layers, "garnish": garnish}
 
 
+PHOTO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "photos")
+
+
+def photo_info(recipe_id):
+    """{'file': 'photos/x.jpg', 'credit': {...}} if a real photo exists for this drink, else None."""
+    path = os.path.join(PHOTO_DIR, f"{recipe_id}.jpg")
+    if not os.path.exists(path):
+        return None
+    credits = {}
+    cpath = os.path.join(PHOTO_DIR, "credits.json")
+    if os.path.exists(cpath):
+        with open(cpath) as f:
+            credits = json.load(f)
+    return {"file": f"photos/{recipe_id}.jpg", "credit": credits.get(recipe_id)}
+
+
 def display_ingredients(cfg, recipe):
     names = [cfg["ingredients"][i]["name"] for i in recipe["ingredients"]]
     return names + [cfg["ingredients"][i]["name"] for i in (recipe.get("top_with") or {})]

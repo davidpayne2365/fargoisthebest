@@ -10,6 +10,7 @@ from config.yaml, so rebuild after changing recipes.
 import argparse
 import json
 import os
+import shutil
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -33,7 +34,8 @@ def drink_data(cfg):
         out.append({"id": r["id"], "name": r["name"], "desc": r.get("description", ""),
                     "glass": cfg["glasses"][r["glass"]]["name"], "price": r.get("price", 0),
                     "tags": R.display_ingredients(cfg, r), "groups": R.menu_groups(cfg, r),
-                    "plans": plans, "finish": r.get("finish", ""), "art": R.art_spec(cfg, r)})
+                    "plans": plans, "finish": r.get("finish", ""), "art": R.art_spec(cfg, r),
+                    "photo": R.photo_info(r["id"])})
     return out
 
 
@@ -54,6 +56,7 @@ def main():
     ap.add_argument("--out", default=os.path.join(ROOT, "site", "dist"))
     ap.add_argument("--fragment", help="also write a single body-only demo page here")
     ap.add_argument("--drinks-url", default="drinks.html", help="link from the demo to the drink list")
+    ap.add_argument("--photo-base", default="", help="URL prefix for photos in the --fragment page")
     a = ap.parse_args()
 
     cfg = R.load_config(os.path.join(ROOT, "config.yaml"))
@@ -65,14 +68,17 @@ def main():
     drinks = read("site/drinks.body.html").replace("__DRINKS__", data).replace("__DEMO_URL__", "index.html")
 
     os.makedirs(a.out, exist_ok=True)
+    if os.path.isdir(R.PHOTO_DIR):
+        shutil.copytree(R.PHOTO_DIR, os.path.join(a.out, "photos"), dirs_exist_ok=True)
     with open(os.path.join(a.out, "index.html"), "w") as f:
-        f.write(page("DrinkBot Demo", demo.replace("__DRINKS_URL__", "drinks.html"), css, js))
+        f.write(page("DrinkBot Demo", demo.replace("__DRINKS_URL__", "drinks.html").replace("__PHOTO_BASE__", ""), css, js))
     with open(os.path.join(a.out, "drinks.html"), "w") as f:
         f.write(page("Garage Bar Drinks", drinks, css, js))
     print("wrote", a.out, f"({count} drinks)")
     if a.fragment:
         with open(a.fragment, "w") as f:
-            f.write(page("DrinkBot Demo", demo.replace("__DRINKS_URL__", a.drinks_url), css, js, full=False))
+            frag = demo.replace("__DRINKS_URL__", a.drinks_url).replace("__PHOTO_BASE__", a.photo_base)
+            f.write(page("DrinkBot Demo", frag, css, js, full=False))
         print("wrote", a.fragment)
 
 

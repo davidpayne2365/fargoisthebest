@@ -41,9 +41,11 @@
 const DRINKS = {{ drinks|tojson }};
 const LABELS = { virgin: "No alcohol", light: "Light", regular: "Regular", strong: "Strong (+{{ money(cfg.strong_surcharge or 0) }})" };
 let current = null, strength = "regular";
+function picture(d) {
+  return d.photo ? `<img src="${d.photo}" alt="${esc(d.name)}" loading="lazy">` : DrinkArt.svg(d.art, { label: d.name });
+}
 document.querySelectorAll("[data-art]").forEach(el => {
-  const d = DRINKS.find(x => x.id === el.dataset.art);
-  el.innerHTML = DrinkArt.svg(d.art, { label: d.name });
+  el.innerHTML = picture(DRINKS.find(x => x.id === el.dataset.art));
 });
 const $ = id => document.getElementById(id);
 $("s-guest").value = localStorage.getItem("drinkbot-name") || "";
@@ -51,7 +53,7 @@ $("s-guest").value = localStorage.getItem("drinkbot-name") || "";
 function open(d) {
   current = d; strength = "regular";
   $("s-name").textContent = d.name;
-  $("s-art").innerHTML = DrinkArt.svg(d.art, { label: d.name });
+  $("s-art").innerHTML = picture(d);
   $("s-price").textContent = {{ (cfg.payment_mode != 'none')|tojson }} ? "{{ cfg.currency_symbol }}" + Number(d.price).toFixed(2) : "";
   $("s-glass").textContent = "Served in: " + d.glass;
   const seg = $("s-strength"); seg.innerHTML = "";

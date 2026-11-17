@@ -8,7 +8,7 @@
   </div>
   <div class="filters" id="filters"></div>
   <div class="cards" id="cards"></div>
-  <p class="foot">Pictures are drawn from each recipe: the liquid color is mixed from the real ingredients, in the glass the app tells the bartender to use. 1 oz ≈ 30 ml.</p>
+  <p class="foot">Photos come from Wikimedia Commons under the licenses credited on each card; a photo marked "similar drink" shows a drink that looks the same. Amounts: 1 oz ≈ 30 ml.</p>
 </div>
 <script>
 const DRINKS = __DRINKS__;
@@ -18,6 +18,12 @@ const STR = { virgin: "No alcohol", light: "Light", regular: "Regular", strong: 
 const order = ["Vodka", "Rum", "Tequila", "Whiskey", "Amaretto", "Other", "No alcohol"];
 const groups = [...new Set(DRINKS.flatMap(d => d.groups))].sort((a, b) => order.indexOf(a) - order.indexOf(b));
 let tab = "";
+function credit(d) {
+  const c = d.photo && d.photo.credit;
+  if (!c) return "";
+  const lic = c.license_url ? `<a href="${esc(c.license_url)}" rel="noopener">${esc(c.license)}</a>` : esc(c.license);
+  return `<div class="credit">${c.note ? esc(c.note) + " · " : ""}Photo: <a href="${esc(c.page)}" rel="noopener">${esc(c.artist || "Wikimedia Commons")}</a>, ${lic}</div>`;
+}
 function render() {
   document.getElementById("filters").innerHTML = ["", ...groups].map(g =>
     `<button type="button" data-g="${esc(g)}" class="${g === tab ? "on" : ""}">${g || "All " + DRINKS.length}</button>`).join("");
@@ -25,7 +31,7 @@ function render() {
   document.getElementById("cards").innerHTML = DRINKS.filter(d => !tab || d.groups.includes(tab)).map(d => {
     const p = d.plans.regular || Object.values(d.plans)[0];
     return `<article class="dcard">
-      <div class="big-art">${DrinkArt.svg(d.art, { label: d.name })}</div>
+      <div class="big-art">${d.photo ? `<img src="${d.photo.file}" alt="${esc(d.name)}" loading="lazy">` : DrinkArt.svg(d.art, { label: d.name })}</div>
       <div class="body">
         <div class="row"><h2>${esc(d.name)}</h2><span class="price">$${Number(d.price).toFixed(2)}</span></div>
         <div class="chips">${d.groups.map(g => `<span class="chip ${g === "No alcohol" ? "na" : ""}">${esc(g)}</span>`).join("")}</div>
@@ -33,6 +39,7 @@ function render() {
         <ul class="recipe">${p.steps.map(s => `<li><span>${esc(s.n)}${s.last ? " <span class='muted small'>(poured last)</span>" : ""}</span><span class="amt">${Math.round(s.ml)} ml · ${oz(s.ml)}</span></li>`).join("")}</ul>
         ${d.finish ? `<div class="finish">✋ ${esc(d.finish)}</div>` : ""}
         <div class="meta"><span>${esc(d.glass)}</span><span>${Object.keys(d.plans).map(k => STR[k]).join(" · ")}</span></div>
+        ${credit(d)}
       </div>
     </article>`;
   }).join("");

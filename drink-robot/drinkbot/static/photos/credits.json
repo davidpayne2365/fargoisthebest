@@ -1,0 +1,177 @@
+{
+ "amaretto_cranberry": {
+  "artist": "Unknown",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "note": "Similar drink (cranberry cocktail)",
+  "page": "https://www.rawpixel.com/image/3299387/free-photo-image-ice-juice-cream-soda"
+ },
+ "amaretto_sour": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/13731"
+ },
+ "amaretto_sunrise": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/14578"
+ },
+ "bay_breeze": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "Similar drink (Planter's Punch)",
+  "page": "https://www.thecocktaildb.com/drink/17191"
+ },
+ "cosmopolitan": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/17196"
+ },
+ "cran_orange_cooler": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "Similar drink (Cranberry Punch)",
+  "page": "https://www.thecocktaildb.com/drink/12890"
+ },
+ "daiquiri": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/11006"
+ },
+ "fuzzy_navel": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "Similar drink (Orangeade)",
+  "page": "https://www.thecocktaildb.com/drink/12618"
+ },
+ "godfather": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/11423"
+ },
+ "kamikaze": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/11600"
+ },
+ "lemon_drop": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/14366"
+ },
+ "madras": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "Similar drink (Sunny Holiday Punch)",
+  "page": "https://www.thecocktaildb.com/drink/13042"
+ },
+ "mai_tai": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/11690"
+ },
+ "malibu_bay_breeze": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "Similar drink (Planter\u2019s Punch)",
+  "page": "https://www.thecocktaildb.com/drink/178368"
+ },
+ "malibu_pineapple": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "Similar drink (Malibu Twister)",
+  "page": "https://www.thecocktaildb.com/drink/15224"
+ },
+ "margarita": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/11007"
+ },
+ "old_fashioned": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/11001"
+ },
+ "rum_punch": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/14978"
+ },
+ "screwdriver": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/12162"
+ },
+ "sex_on_the_beach": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/12754"
+ },
+ "tequila_sunrise": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/13621"
+ },
+ "tropical_cooler": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "Similar drink (Orange Whip)",
+  "page": "https://www.thecocktaildb.com/drink/16995"
+ },
+ "virgin_sunrise": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "Similar drink (Orange Crush)",
+  "page": "https://www.thecocktaildb.com/drink/15330"
+ },
+ "vodka_cranberry": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "Similar drink (Sea breeze)",
+  "page": "https://www.thecocktaildb.com/drink/13377"
+ },
+ "whiskey_sour": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/11004"
+ }
+}
