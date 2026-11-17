@@ -11,7 +11,7 @@ automatically as their bottles get a pump.
 | 1 | Raspberry Pi 4 (2 GB+) **or** Pi 5 (2 GB+) | "Raspberry Pi 4 Model B 2GB" | 45–60 |
 | 1 | Official Pi power supply (USB-C, 5 V 3 A for Pi 4 / 5 A for Pi 5) | "Raspberry Pi official power supply" | 8–12 |
 | 1 | microSD card 32 GB (A1/A2) | "SanDisk 32GB microSD A1" | 8 |
-| 16 | 12 V peristaltic pumps, food-grade silicone tube | budget: "12V peristaltic pump 100ml/min" · faster: "Kamoer KPHM400 12V" or "12V peristaltic pump 400ml/min" | 16×10 = 160 · or 16×35 = 560 |
+| 13 + 3 | 12 V peristaltic pumps, food-grade silicone tube — **cheap ones for spirits/syrups, 3 fast ones for orange, cranberry & pineapple** (juice is the slow part: this alone takes the slowest drink from ~99 s to ~36 s) | budget: "12V peristaltic pump 100ml/min" · faster: "Kamoer KPHM400 12V" or "12V peristaltic pump 400ml/min" | 16×10 = 160 · or 16×35 = 560 |
 | 16 | MOSFET switch modules, 3.3 V logic compatible | "D4184 MOSFET module" or "IRLZ44N MOSFET module" (two 10-packs) | 20 |
 | 16 | Flyback diodes (one per pump) | "1N5819 Schottky diode" or "1N4007" (pack of 50) | 5 |
 | 1 | 12 V DC power supply, **10 A** (enough for 4+ pumps at once with headroom) | "12V 10A power supply" (brick with barrel jack, or enclosed LED-strip PSU) | 20 |

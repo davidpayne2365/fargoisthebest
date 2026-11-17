@@ -16,9 +16,16 @@ Peristaltic pumps squeeze a silicone tube — **liquid never touches the motor**
 and the amount poured is very repeatable for a given run time. That's why the
 software pours by **time**, with a per-pump **calibration** (ml per second).
 
-Trade-off: cheap ones are slow (~100 ml/min). The software runs up to 4 pumps
-at once, so a 200 ml drink takes ~30–60 s. Upgrade to ~400 ml/min pumps later if
-that's annoying (only `ml_per_sec` changes).
+Every pump a drink needs runs at the same time (`max_simultaneous_pumps: 6`), so a
+drink takes as long as its biggest ingredient. Cheap pumps (~100 ml/min) are fine
+for spirits, but 135 ml of juice takes ~80 s — so the **3 big juices (orange,
+cranberry, pineapple) get fast ~400 ml/min pumps**. Result for the 25 drinks:
+
+| Setup | Average | Slowest | Under 60 s |
+|---|---|---|---|
+| All cheap pumps | 51 s | 99 s | 17 of 25 |
+| Cheap + 3 fast juice pumps (**chosen**) | 27 s | 36 s | 25 of 25 |
+| All fast pumps (~$400 more) | 13 s | 25 s | 25 of 25 |
 
 ### 3. Ordering flow: guests order, **bartender approves and presses POUR**
 You asked "guest orders & pays vs bartender places it — whichever is more

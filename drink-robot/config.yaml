@@ -47,7 +47,8 @@ strong_surcharge: 1.00
 # Safety limits
 # ---------------------------------------------------------------------
 max_pour_ml: 300              # never pour more than this into one cup
-max_simultaneous_pumps: 4     # limits current draw on the 12 V supply
+max_simultaneous_pumps: 6     # every pump a drink needs runs at once (most use 2–6).
+                              # 3 fast + 3 cheap pumps ≈ 4–5 A, fine on a 10 A supply
 max_pump_seconds: 180         # hard cap for any single pump run
 allow_strong: true
 
@@ -78,6 +79,8 @@ cup_sensor:
 # Pumps.  gpio = BCM pin number driving that pump's MOSFET/relay input.
 # All 16 pins below stay LOW while the Pi boots, so pumps can't twitch on.
 # ml_per_sec is a starting guess — run calibration from the Admin page.
+# Speed tip: put FAST (~400 ml/min) pumps on orange, cranberry and pineapple
+# (pumps 13–15). Juice is the slow part; with those, every drink pours in ≤ ~36 s.
 # active_low: false for MOSFET modules (recommended), true for relay boards.
 # ---------------------------------------------------------------------
 pumps:
