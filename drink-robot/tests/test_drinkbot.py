@@ -36,14 +36,14 @@ def test_default_menu_has_no_fizzy_drinks(cfg):
     ids = {r["id"] for r in avail}
     assert "margarita" in ids and "rum_coke" not in ids
     assert "amaretto_sour" in ids and "gimlet" not in ids
-    assert len(avail) == 25
+    assert len(avail) == 28
 
 
 def test_every_recipe_plans_at_every_strength(fizzy_cfg, cal):
     cfg = fizzy_cfg
     avail = R.available_recipes(cfg)
     missing = [r for r in cfg["recipes"] if r not in avail]
-    assert all("gin" in r["ingredients"] for r in missing)  # only gin isn't on a pump
+    assert all({"gin", "spiced_rum"} & set(r["ingredients"]) for r in missing)  # not on a pump
     for r in avail:
         for st in R.allowed_strengths(cfg, r):
             assert R.plan_pour(cfg, r, st, cal)
@@ -78,12 +78,12 @@ def test_top_with_leaves_room_in_glass(fizzy_cfg, cal):
 def test_pour_last_gets_later_phase(cfg, cal):
     steps = R.plan_pour(cfg, R.get_recipe(cfg, "tequila_sunrise"), "regular", cal)
     phase = {s["ingredient"]: s["phase"] for s in steps}
-    assert phase == {"tequila": 0, "orange_juice": 0, "grenadine": 1}
+    assert phase == {"tequila": 0, "orange_syrup": 0, "water": 0, "grenadine": 1}
 
 
 def test_no_virgin_option_when_robot_pours_only_alcohol(fizzy_cfg):
     cfg = fizzy_cfg
-    assert "virgin" not in R.allowed_strengths(cfg, R.get_recipe(cfg, "captain_coke"))
+    assert "virgin" not in R.allowed_strengths(cfg, R.get_recipe(cfg, "whiskey_coke"))
     assert R.allowed_strengths(cfg, R.get_recipe(cfg, "shirley_temple")) == ["regular"]
 
 
@@ -93,7 +93,7 @@ def test_strength_scales_only_alcohol(cfg, cal):
     strong = {s["ingredient"]: s["ml"] for s in R.plan_pour(cfg, r, "strong", cal)}
     virgin = {s["ingredient"]: s["ml"] for s in R.plan_pour(cfg, r, "virgin", cal)}
     assert strong["vodka"] > reg["vodka"]
-    assert strong["orange_juice"] == reg["orange_juice"]
+    assert strong["orange_syrup"] == reg["orange_syrup"] and strong["water"] == reg["water"]
     assert "vodka" not in virgin
 
 
@@ -241,7 +241,23 @@ def test_mvp_config_extends_base(tmp_path):
     cfg = R.load_config(os.path.join(ROOT, "config.mvp.yaml"))
     assert len(cfg["pumps"]) == 4 and cfg["pump_driver"] == "usb_relay"
     names = {r["name"] for r in R.available_recipes(cfg)}
-    assert names == {"Screwdriver", "Madras", "Sex on the Beach", "Fuzzy Navel"}
+    assert names == {"Black Russian", "Godfather", "Godmother"}
     cfg["pump_driver"] = "mock"  # app boots with it
     app = create_app(os.path.join(ROOT, "config.mvp.yaml"), str(tmp_path), mock=True)
     assert app.test_client().get("/").status_code == 200
+
+
+def test_juice_is_made_from_syrup_and_water(cfg, cal):
+    steps = {s["ingredient"]: s["ml"] for s in R.plan_pour(cfg, R.get_recipe(cfg, "screwdriver"), "regular", cal)}
+    assert steps == {"vodka": 45.0, "orange_syrup": 22.5, "water": 112.5}  # 135 ml "juice" = 1:5
+
+
+def test_real_juice_on_a_pump_wins_over_syrup(cfg, cal):
+    cfg["pumps"][10]["ingredient"] = "orange_juice"  # swap the orange syrup pump for real juice
+    steps = {s["ingredient"]: s["ml"] for s in R.plan_pour(cfg, R.get_recipe(cfg, "screwdriver"), "regular", cal)}
+    assert steps == {"vodka": 45.0, "orange_juice": 135.0}
+
+
+def test_nothing_perishable_on_default_pumps(cfg):
+    perishable = {"orange_juice", "cranberry_juice", "pineapple_juice", "lime_juice", "lemon_juice"}
+    assert not perishable & {p["ingredient"] for p in cfg["pumps"]}

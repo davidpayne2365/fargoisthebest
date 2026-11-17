@@ -10,7 +10,7 @@ Laptop ──USB──► USB relay board ──switches 12 V──► pumps ─
 
 The same relay board plugs into the Pi later, so nothing is wasted.
 
-## Cheapest MVP (~$45–65): 4 pumps, 4 drinks
+## Cheapest MVP (~$45–65): 4 pumps, 3 drinks, zero upkeep
 
 | Qty | Item | ~$ |
 |---|---|---|
@@ -20,8 +20,10 @@ The same relay board plugs into the Pi later, so nothing is wasted.
 | — | Extra matching silicone tubing, a few wires, tape | 0–10 |
 
 Already have: laptop, bottles, a cup, a shoebox/cutting board to mount things on.
-Bottles: **vodka, peach schnapps, orange juice, cranberry** → Screwdriver, Madras,
-Sex on the Beach, Fuzzy Navel. Run it with:
+Bottles: **vodka, whiskey, amaretto, coffee liqueur** (liquor only — nothing to spoil
+or refill) → Black Russian, Godfather, Godmother. With an 8-relay board, add water +
+orange & cranberry syrup + peach schnapps for Screwdriver, Madras, Sex on the Beach,
+Fuzzy Navel. Run it with:
 
 ```
 python -m drinkbot --config config.mvp.yaml

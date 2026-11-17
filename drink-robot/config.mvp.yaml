@@ -4,8 +4,8 @@
 #
 #  Run:   python -m drinkbot --config config.mvp.yaml
 #
-#  4 bottles -> 4 drinks: Screwdriver, Madras, Sex on the Beach, Fuzzy Navel
-#  (+ a "No alcohol" option on each).
+#  4 bottles, all liquor -> nothing to spoil, nothing to refill but the bottles:
+#  Black Russian, Godfather, Godmother.
 # =====================================================================
 extends: config.yaml
 
@@ -14,15 +14,16 @@ usb_relay:
   ports: ["COM3"]           # find yours: python -m drinkbot.relaytest
   baud: 9600
 
-max_simultaneous_pumps: 4   # all 4 at once ≈ 1.5 A on a 12 V 2 A adapter
+max_simultaneous_pumps: 4   # all at once ≈ 1.5 A on a 12 V 2 A adapter
 
 pumps:   # pump N is wired to relay N
-  - { id: 1, gpio: 17, ingredient: vodka,           ml_per_sec: 1.6 }
-  - { id: 2, gpio: 27, ingredient: peach_schnapps,  ml_per_sec: 1.6 }
-  - { id: 3, gpio: 22, ingredient: orange_juice,    ml_per_sec: 1.6 }
-  - { id: 4, gpio: 23, ingredient: cranberry_juice, ml_per_sec: 1.6 }
+  - { id: 1, gpio: 17, ingredient: vodka,          ml_per_sec: 1.6 }
+  - { id: 2, gpio: 27, ingredient: whiskey,        ml_per_sec: 1.6 }
+  - { id: 3, gpio: 22, ingredient: amaretto,       ml_per_sec: 1.6 }
+  - { id: 4, gpio: 23, ingredient: coffee_liqueur, ml_per_sec: 1.6 }
 
-# Other good 4-bottle sets (swap the ingredients above):
-#   whiskey, amaretto, lemon_juice, simple_syrup
-#       -> Whiskey Sour, Old Fashioned, Amaretto Sour, Godfather
-#   5th pump: lime_juice -> + Vodka Cranberry
+# Bigger MVP on an 8-relay board — add one of these 5th..8th pump sets:
+#   + simple_syrup                          -> + Old Fashioned
+#   + water, orange_syrup, cranberry_syrup, peach_schnapps
+#                                           -> + Screwdriver, Madras, Sex on the Beach, Fuzzy Navel
+#   + water, lime_syrup, simple_syrup       -> + Whiskey Sour, Amaretto Sour, Old Fashioned

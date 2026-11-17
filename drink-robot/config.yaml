@@ -84,24 +84,27 @@ cup_sensor:
 # active_low: false for MOSFET modules (recommended), true for relay boards.
 # ---------------------------------------------------------------------
 pumps:
-  # --- spirits & liqueurs ---
+  # Everything here is fine at room temperature for months after opening —
+  # no juice, nothing to spoil. Juices are made from bar syrup + water.
+  # --- spirits & liqueurs (never go bad) ---
   - { id: 1,  gpio: 17, ingredient: vodka,           ml_per_sec: 1.6, active_low: false }
-  - { id: 2,  gpio: 27, ingredient: amaretto,        ml_per_sec: 1.6, active_low: false }
-  - { id: 3,  gpio: 22, ingredient: white_rum,       ml_per_sec: 1.6, active_low: false }
-  - { id: 4,  gpio: 23, ingredient: spiced_rum,      ml_per_sec: 1.6, active_low: false }
-  - { id: 5,  gpio: 24, ingredient: coconut_rum,     ml_per_sec: 1.6, active_low: false }
-  - { id: 6,  gpio: 25, ingredient: tequila,         ml_per_sec: 1.6, active_low: false }
-  - { id: 7,  gpio: 12, ingredient: whiskey,         ml_per_sec: 1.6, active_low: false }
-  - { id: 8,  gpio: 13, ingredient: triple_sec,      ml_per_sec: 1.6, active_low: false }
-  - { id: 9,  gpio: 16, ingredient: peach_schnapps,  ml_per_sec: 1.6, active_low: false }
-  # --- still mixers ---
-  - { id: 10, gpio: 18, ingredient: lime_juice,      ml_per_sec: 1.6, active_low: false }
-  - { id: 11, gpio: 19, ingredient: lemon_juice,     ml_per_sec: 1.6, active_low: false }
-  - { id: 12, gpio: 20, ingredient: simple_syrup,    ml_per_sec: 1.6, active_low: false }
-  - { id: 13, gpio: 21, ingredient: orange_juice,    ml_per_sec: 1.6, active_low: false }
-  - { id: 14, gpio: 26, ingredient: cranberry_juice, ml_per_sec: 1.6, active_low: false }
-  - { id: 15, gpio: 10, ingredient: pineapple_juice, ml_per_sec: 1.6, active_low: false }
-  - { id: 16, gpio: 9,  ingredient: grenadine,       ml_per_sec: 1.6, active_low: false }
+  - { id: 2,  gpio: 27, ingredient: white_rum,       ml_per_sec: 1.6, active_low: false }
+  - { id: 3,  gpio: 22, ingredient: coconut_rum,     ml_per_sec: 1.6, active_low: false }
+  - { id: 4,  gpio: 23, ingredient: tequila,         ml_per_sec: 1.6, active_low: false }
+  - { id: 5,  gpio: 24, ingredient: whiskey,         ml_per_sec: 1.6, active_low: false }
+  - { id: 6,  gpio: 25, ingredient: triple_sec,      ml_per_sec: 1.6, active_low: false }
+  - { id: 7,  gpio: 12, ingredient: amaretto,        ml_per_sec: 1.6, active_low: false }
+  - { id: 8,  gpio: 13, ingredient: peach_schnapps,  ml_per_sec: 1.6, active_low: false }
+  - { id: 9,  gpio: 16, ingredient: coffee_liqueur,  ml_per_sec: 1.6, active_low: false }
+  # --- water: the biggest volume, so put a FAST pump here ---
+  - { id: 10, gpio: 18, ingredient: water,           ml_per_sec: 6.5, active_low: false }
+  # --- shelf-stable bar syrups (Monin / Torani style, no fridge needed) ---
+  - { id: 11, gpio: 19, ingredient: orange_syrup,    ml_per_sec: 1.6, active_low: false }
+  - { id: 12, gpio: 20, ingredient: cranberry_syrup, ml_per_sec: 1.6, active_low: false }
+  - { id: 13, gpio: 21, ingredient: pineapple_syrup, ml_per_sec: 1.6, active_low: false }
+  - { id: 14, gpio: 26, ingredient: lime_syrup,      ml_per_sec: 1.6, active_low: false }
+  - { id: 15, gpio: 10, ingredient: grenadine,       ml_per_sec: 1.6, active_low: false }
+  - { id: 16, gpio: 9,  ingredient: simple_syrup,    ml_per_sec: 1.6, active_low: false }
 
 # ---------------------------------------------------------------------
 # Ingredients.
@@ -117,18 +120,28 @@ ingredients:
   gin:             { name: Gin,             alcoholic: true, group: Gin, color: "#e8eef2", tint: 0.04 }   # not on a pump (swapped for amaretto)
   amaretto:        { name: Amaretto,        alcoholic: true, group: Amaretto, color: "#a85a1c", tint: 0.7 }
   white_rum:       { name: White Rum,       alcoholic: true, group: Rum, color: "#efece4", tint: 0.05 }
-  spiced_rum:      { name: Spiced Rum,      alcoholic: true, group: Rum, color: "#9a5a2a", tint: 0.6 }
+  spiced_rum:      { name: Spiced Rum,      alcoholic: true, group: Rum, color: "#9a5a2a", tint: 0.6 }   # not on a pump
   coconut_rum:     { name: Coconut Rum,     alcoholic: true, group: Rum, color: "#f2efe6", tint: 0.06 }
   tequila:         { name: Tequila,         alcoholic: true, group: Tequila, color: "#efe8cc", tint: 0.08 }
   whiskey:         { name: Whiskey,         alcoholic: true, group: Whiskey, color: "#b8661f", tint: 0.75 }
   triple_sec:      { name: Triple Sec,      alcoholic: true, color: "#f0ead8", tint: 0.05 }
   peach_schnapps:  { name: Peach Schnapps,  alcoholic: true, color: "#f3d9b5", tint: 0.15 }
-  lime_juice:      { name: Lime Juice,      alcoholic: false, color: "#cfe0a0", tint: 0.35 }
-  lemon_juice:     { name: Lemon Juice,     alcoholic: false, color: "#f1e7a0", tint: 0.35 }
-  simple_syrup:    { name: Simple Syrup,    alcoholic: false, color: "#f5f2ea", tint: 0.02 }
-  orange_juice:    { name: Orange Juice,    alcoholic: false, color: "#ff9d1c", tint: 1.0 }
-  cranberry_juice: { name: Cranberry Juice, alcoholic: false, color: "#b8152f", tint: 1.0 }
-  pineapple_juice: { name: Pineapple Juice, alcoholic: false, color: "#f5cf3b", tint: 0.9 }
+  coffee_liqueur:  { name: Coffee Liqueur,  alcoholic: true, color: "#2b170c", tint: 1.4 }
+  # "Juices" below are made by the robot from syrup + water (made_from), so nothing
+  # perishable sits in a bottle. Load real juice on a pump instead and it's used directly.
+  # Tweak the ratios to taste: more syrup = stronger/sweeter.
+  lime_juice:      { name: Lime,            alcoholic: false, color: "#cfe0a0", tint: 0.35, made_from: { lime_syrup: 1, water: 2 } }
+  lemon_juice:     { name: Citrus (lime),   alcoholic: false, color: "#f1e7a0", tint: 0.35, made_from: { lime_syrup: 1, water: 2 } }
+  simple_syrup:    { name: Cane Syrup,      alcoholic: false, color: "#f5f2ea", tint: 0.02 }
+  orange_juice:    { name: Orange,          alcoholic: false, color: "#ff9d1c", tint: 1.0, made_from: { orange_syrup: 1, water: 5 } }
+  cranberry_juice: { name: Cranberry,       alcoholic: false, color: "#b8152f", tint: 1.0, made_from: { cranberry_syrup: 1, water: 5 } }
+  pineapple_juice: { name: Pineapple,       alcoholic: false, color: "#f5cf3b", tint: 0.9, made_from: { pineapple_syrup: 1, water: 5 } }
+  # what's actually in the bottles
+  water:           { name: Water,           alcoholic: false, color: "#eef4f8", tint: 0.0 }
+  orange_syrup:    { name: Orange Syrup,    alcoholic: false, color: "#ff8c00", tint: 3.0 }
+  cranberry_syrup: { name: Cranberry Syrup, alcoholic: false, color: "#a3102a", tint: 3.0 }
+  pineapple_syrup: { name: Pineapple Syrup, alcoholic: false, color: "#f2c230", tint: 3.0 }
+  lime_syrup:      { name: Lime Syrup,      alcoholic: false, color: "#b9d77a", tint: 1.0 }
   grenadine:       { name: Grenadine,       alcoholic: false, color: "#b80f2a", tint: 1.6 }
   # Fizzy mixers — TURNED OFF (in_stock: false) so the robot makes 100% of
   # every drink. Flip any of these to true to bring back the drinks that need
@@ -226,11 +239,11 @@ recipes:
       description: "Spiced rum, lime, ginger beer.",
       ingredients: { spiced_rum: 50, lime_juice: 10 }, top_with: { ginger_beer: 120 } }
   - { id: mai_tai, name: Garage Mai Tai, glass: rocks, price: 8,
-      description: "Two rums, triple sec, lime, pineapple.",
-      ingredients: { white_rum: 30, spiced_rum: 30, triple_sec: 15, lime_juice: 25, pineapple_juice: 30, simple_syrup: 10 } }
+      description: "Rum, coconut rum, triple sec, lime, pineapple.",
+      ingredients: { white_rum: 45, coconut_rum: 15, triple_sec: 15, lime_juice: 25, pineapple_juice: 30, simple_syrup: 10 } }
   - { id: rum_punch, name: Rum Punch, glass: highball, price: 7,
-      description: "Rums, orange, pineapple, lime, grenadine.",
-      ingredients: { white_rum: 30, spiced_rum: 20, orange_juice: 60, pineapple_juice: 60, lime_juice: 10, grenadine: 10 } }
+      description: "Rum, coconut rum, orange, pineapple, lime, grenadine.",
+      ingredients: { white_rum: 40, coconut_rum: 10, orange_juice: 60, pineapple_juice: 60, lime_juice: 10, grenadine: 10 } }
   - { id: malibu_pineapple, name: Coconut Rum & Pineapple, glass: highball, price: 5,
       description: "Coconut rum and pineapple (Malibu-style).",
       ingredients: { coconut_rum: 45, pineapple_juice: 135 } }
@@ -283,6 +296,17 @@ recipes:
   - { id: amaretto_cranberry, name: Amaretto Cranberry, glass: highball, price: 6,
       description: "Amaretto and cranberry, squeeze of lime.",
       ingredients: { amaretto: 45, cranberry_juice: 120, lime_juice: 5 } }
+
+  # ============================ COFFEE LIQUEUR (no mixers at all) ============================
+  - { id: black_russian, name: Black Russian, glass: rocks, price: 7,
+      description: "Vodka and coffee liqueur.",
+      ingredients: { vodka: 50, coffee_liqueur: 25 } }
+  - { id: brave_bull, name: Brave Bull, glass: rocks, price: 7,
+      description: "Tequila and coffee liqueur.",
+      ingredients: { tequila: 45, coffee_liqueur: 30 } }
+  - { id: godmother, name: Godmother, glass: rocks, price: 7,
+      description: "Vodka and amaretto.",
+      ingredients: { vodka: 45, amaretto: 20 }, garnish: none }
 
   # ============================ EVERYTHING ============================
   - { id: long_island, name: Long Island Iced Tea, glass: highball, price: 9,

@@ -24,7 +24,8 @@ cranberry, pineapple) get fast ~400 ml/min pumps**. Result for the 25 drinks:
 | Setup | Average | Slowest | Under 60 s |
 |---|---|---|---|
 | All cheap pumps | 51 s | 99 s | 17 of 25 |
-| Cheap + 3 fast juice pumps (**chosen**) | 27 s | 36 s | 25 of 25 |
+| Cheap + 3 fast juice pumps | 27 s | 36 s | 25 of 25 |
+| Syrups + water, cheap + 1 fast water pump (**chosen**) | 29 s | 38 s | 28 of 28 |
 | All fast pumps (~$400 more) | 13 s | 25 s | 25 of 25 |
 
 ### 3. Ordering flow: guests order, **bartender approves and presses POUR**
@@ -56,9 +57,14 @@ Recipes were picked to be "build" drinks that mix fine just from the streams
 landing together (several pumps run simultaneously). Shaken classics like the
 margarita/daiquiri are fine served over ice — or give it a quick swirl.
 
-### 6. 16 pumps, no fizzy drinks
+### 6. Hands-off: nothing perishable, room temperature
+No juice on the robot. Bar syrups (no fridge needed) + water make the "juices"
+(`made_from` in config.yaml), so the only refills are empty bottles and a water jug.
+Only one fast pump is needed — on the water.
+
+### 6b. 16 pumps, no fizzy drinks
 **16 bottles** (9 spirits/liqueurs + 7 still mixers — see [BOTTLES.md](BOTTLES.md))
-make **25 drinks**, and the robot pours 100% of each one. Fizzy mixers foam and go
+make **28 drinks**, and the robot pours 100% of each one. Fizzy mixers foam and go
 flat in pumps, so they're **switched off**: no bartender top-ups, and cup-stack mode
 works with zero hand work. The fizzy recipes are still in the config (off) in case
 we add a CO₂ soda system later. Grenadine pours *after* everything else

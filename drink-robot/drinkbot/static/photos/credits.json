@@ -27,6 +27,20 @@
   "note": "Similar drink (Planter's Punch)",
   "page": "https://www.thecocktaildb.com/drink/17191"
  },
+ "black_russian": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/11102"
+ },
+ "brave_bull": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "Similar drink (Black Russian)",
+  "page": "https://www.thecocktaildb.com/drink/11102"
+ },
  "cosmopolitan": {
   "artist": "TheCocktailDB",
   "license": "free for non-commercial use",
@@ -61,6 +75,13 @@
   "license_url": "https://www.thecocktaildb.com/api.php",
   "note": "",
   "page": "https://www.thecocktaildb.com/drink/11423"
+ },
+ "godmother": {
+  "artist": "TheCocktailDB",
+  "license": "free for non-commercial use",
+  "license_url": "https://www.thecocktaildb.com/api.php",
+  "note": "",
+  "page": "https://www.thecocktaildb.com/drink/11424"
  },
  "kamikaze": {
   "artist": "TheCocktailDB",

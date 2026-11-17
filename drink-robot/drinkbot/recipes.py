@@ -36,6 +36,12 @@ def load_config(path):
     for p in cfg["pumps"]:
         if p.get("ingredient") and p["ingredient"] not in cfg["ingredients"]:
             raise ValueError(f"Pump {p['id']} uses unknown ingredient {p['ingredient']!r}")
+    for k, v in cfg["ingredients"].items():
+        for comp, part in (v.get("made_from") or {}).items():
+            if comp not in cfg["ingredients"] or cfg["ingredients"][comp].get("made_from"):
+                raise ValueError(f"Ingredient {k}: made_from {comp!r} must be a plain (pumped) ingredient")
+            if float(part) <= 0:
+                raise ValueError(f"Ingredient {k}: made_from parts must be positive")
     seen = set()
     for r in cfg["recipes"]:
         if r["id"] in seen:
@@ -88,6 +94,22 @@ def loaded_ingredients(cfg):
     return {p["ingredient"] for p in cfg["pumps"] if p.get("ingredient")}
 
 
+def components(cfg, ing):
+    """How the robot makes an ingredient: [(pumped ingredient, fraction), ...] or None.
+
+    A pump loaded with the real thing wins; otherwise `made_from` (e.g. orange
+    "juice" = 1 part orange syrup + 5 parts water) is used if all its parts are loaded.
+    """
+    loaded = loaded_ingredients(cfg)
+    if ing in loaded:
+        return [(ing, 1.0)]
+    recipe = cfg["ingredients"].get(ing, {}).get("made_from")
+    if recipe and set(recipe) <= loaded:
+        total = sum(float(v) for v in recipe.values())
+        return [(k, float(v) / total) for k, v in recipe.items()]
+    return None
+
+
 def is_alcoholic(cfg, recipe):
     return any(cfg["ingredients"][i].get("alcoholic") for i in recipe["ingredients"])
 
@@ -102,7 +124,7 @@ def available_recipes(cfg):
     loaded = loaded_ingredients(cfg)
     stock = hand_stock(cfg)
     return [r for r in cfg["recipes"]
-            if set(r["ingredients"]) <= loaded and set(r.get("top_with") or {}) <= stock]
+            if all(components(cfg, i) for i in r["ingredients"]) and set(r.get("top_with") or {}) <= stock]
 
 
 def bartender_extras(cfg, recipe):
@@ -236,13 +258,22 @@ def plan_pour(cfg, recipe, strength, calibration):
         scale = limit / total
         amounts = {k: v * scale for k, v in amounts.items()}
 
-    steps = []
+    # expand made_from ingredients (syrup + water) and merge per pump & phase
+    last = set(recipe.get("pour_last") or [])
+    pours = {}
     for ing, ml in amounts.items():
+        parts = components(cfg, ing)
+        if parts is None:
+            raise ValueError(f"No pump loaded with {ing}")
+        phase = 1 if ing in last else 0
+        for comp, frac in parts:
+            pours[(comp, phase)] = pours.get((comp, phase), 0.0) + ml * frac
+
+    steps = []
+    for (ing, phase), ml in pours.items():
         if ml <= 0.5:
             continue
         pump = pump_for(cfg, ing)
-        if pump is None:
-            raise ValueError(f"No pump loaded with {ing}")
         rate = calibration.ml_per_sec(pump)
         seconds = ml / rate
         if seconds > cfg.get("max_pump_seconds", 180):
@@ -253,7 +284,7 @@ def plan_pour(cfg, recipe, strength, calibration):
             "pump_id": pump["id"],
             "ml": round(ml, 1),
             "seconds": round(seconds, 2),
-            "phase": 1 if ing in (recipe.get("pour_last") or []) else 0,
+            "phase": phase,
         })
     return steps
 
