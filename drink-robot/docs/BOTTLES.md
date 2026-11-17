@@ -46,7 +46,7 @@ Ice (lots), limes/oranges for garnish, bitters for the Old Fashioned.
 The 5 fizzy mixers (cola, tonic, soda water, ginger beer, lemon-lime) and their 16
 recipes are still in `config.yaml`, just switched off. Change `in_stock: false` →
 `true` on any of them and those drinks return (Rum & Coke, Vodka Tonic, Moscow Mule,
-Long Island, …) — the bartender screen then says "top with ~150 ml Cola".
+Whiskey & Coke, …) — the bartender screen then says "top with ~150 ml Cola".
 The proper v2 fix is a CO₂ keg + solenoid valve so the robot pours soda itself.
 
 ## Future swap ideas
